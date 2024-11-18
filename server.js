@@ -21,13 +21,13 @@ http.createServer((request, response) => { // Create server
     } else {
         filePath = __dirname + '/index.html'; // If not, use "index.html"
     }
-
     fs.readFile(filePath, (err, data) => { // Gets appropriate file from server via filePath variable
         if (err) {
             throw err;
         }
-    response.writeHead(200, {'Content-Type': 'text/plain'}); // Set header with HTTP status code of 200
-    response.end('Hello Node! \n'); // Response to client
+        response.writeHead(200, {'Content-Type': 'text/html'}); // Set header with HTTP status code of 200
+        response.write(data);
+        response.end();
     });
 }).listen(8080); // Server listens on port 8080
 console.log('My 1st Node server is running on port 8080.');
