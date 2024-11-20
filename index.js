@@ -1,5 +1,5 @@
 const express = require('express'); // Import Express
-const morgan = ('morgan'); // Import Morgan for logging requests
+const morgan = require('morgan'); // Import Morgan for logging requests
 const app = express(); // Initialize Express app
 
 let topMovies = [
@@ -55,7 +55,7 @@ let topMovies = [
     }        
 ];
 
-app.use(morgan('')); // Use morgan middleware to log requests
+app.use(morgan('combined')); // Use morgan middleware to log requests
 app.use(express.static('public')); // Automatically serve all static files from "public"-folder
 
 app.get('/', (req, res) => {
