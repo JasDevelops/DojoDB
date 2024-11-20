@@ -54,6 +54,8 @@ let topMovies = [
     }        
 ];
 
+app.use(express.static('public')); // Automatically serve all static files from "public"-folder
+
 app.get('/', (req, res) => {
     res.send(`Welcome to DojoDB - Let's kick things off!`) // Sends response text for root - endpoint
 });
