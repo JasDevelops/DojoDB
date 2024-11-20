@@ -61,10 +61,15 @@ app.use(express.static('public')); // Automatically serve all static files from 
 app.get('/', (req, res) => {
     res.send(`Welcome to DojoDB - Let's kick things off!`) // Sends response text for root - endpoint
 });
-
 app.get('/movies', (req, res) => {
     res.json(topMovies); // Sends movie list as JSON response for /movies - endpoint
 });
+
+app.use((err,req,res,next) => {
+    console.error(err.stack); // Logs error
+    res.status(500).send('Something went wrong at the dojo. Try again later.') // sends error message
+}
+)
 
 app.listen(3000, () => { // Start server on port 3000
     console.log('Your server is running on port 3000');
