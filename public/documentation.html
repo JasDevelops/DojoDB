@@ -1,14 +1,210 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DojoDB - Documentation</title>
-</head>
-<body>
-    <h1>DojoDB - Documentation</h1>
-    <p>
-        This web application allows users to explore information on movies with a special focus on martial arts films. Users can sign up, update their personal profiles, and curate a list of their favorite movies.
-    </p>
-</body>
+    <style>
+        .EndpointTable {
+            width:100%;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            border-spacing: 1px;
+            text-align: left;
+        }
+        th, td {
+            border: 1px solid #eee;
+            padding: 8px;
+            vertical-align: top;
+        }
+        th {
+            background-color: #f4f4f4;
+            text-align: left;
+        }
+        pre {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+  </head>
+  <body>
+    <section>
+      <h1>DojoDB - Documentation</h1>
+      <p>
+        This web application allows users to explore information on movies with a special focus on
+        martial arts films. Users can sign up, update their personal profiles, and curate a list of
+        their favorite movies.
+      </p>
+    </section>
+    <section>
+      <div class="EndpointTable">
+        <table>
+            <thead>
+                <tr>
+                    <th>Request</th>
+                    <th>URL</th>
+                    <th>HTTP Method</th>
+                    <th>Request Body Data Format</th>
+                    <th>Response Body Data Format</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Get a list of all movies</th>
+                    <td>/movies</td>
+                    <td>GET</td>
+                    <td>none</td>
+                    <td>A JSON array of movies.  Example: 
+                        <pre>{
+                                title: 'Enter the Dragon (1973)',
+                                description: 'Bruce Lee stars as a [...]',
+                                genre: ['Action'],
+                                featured: true,
+                                director: {
+                                    name: 'Robert Clouse',
+                                    bio: 'Robert Clouse was an American film director [...]',
+                                    birthYear: 1928,
+                                    deathYear: 1997
+                                }
+                            },
+                            {
+                                title: 'Drunken Master (1978)',
+                                description: 'Jackie Chan stars as a young man who [...]',
+                                genre: ['Action', 'Comedy'],
+                                featured: true,
+                                director: {
+                                    name: 'Yuen Woo-ping',
+                                    bio: 'Yuen Woo-ping is a Hong Kong [...]',
+                                    birthYear: 1945,
+                                    deathYear: null
+                                }
+                            }, 
+                            [...]</pre>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Get data about a specific movie by title</th>
+                    <td>/movies/{title}</td>
+                    <td>GET</td>
+                    <td>none</td>
+                    <td>JSON object holding data about specific movie. Example: 
+                        <pre>{
+                                id: 1,
+                                title: 'Drunken Master (1978)',
+                                description: 'Jackie Chan stars as a young man who [...]',
+                                genre: ['Action', 'Comedy'],
+                                featured: true,
+                                director: {
+                                    name: 'Yuen Woo-ping',
+                                    bio: 'Yuen Woo-ping is a Hong Kong [...]',
+                                    birthYear: 1945,
+                                    deathYear: null
+                                
+                                }
+                            }</pre>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Get data about a genre by name</th>
+                    <td>/movies/genres/{genre}</td>
+                    <td>GET</td>
+                    <td>none</td>
+                    <td>JSON object with genre description. Example:
+                        <pre> {
+                                genre: 'Action',
+                                description: 'Action-packed movies'
+                            }</pre>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Get data about a director by name</th>
+                    <td>/movies/directors/{director}</td>
+                    <td>GET</td>
+                    <td>none</td>
+                    <td>JSON object with data about director. Example:
+                        <pre>{
+                                name: 'Bruce Lee',
+                                bio: 'Famous martial artist',
+                                birthYear: 1940,
+                                deathYear: 1973
+                            }</pre>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Add a new user</th>
+                    <td>/users</td>
+                    <td>POST</td>
+                    <td>JSON object with new user's data. Example:
+                        <pre>{ 
+                                name: 'Alex Ribeira',
+                                email: 'alex@example.com'
+                                password:'verystrongpassword123/' 
+                            }</pre>
+                    </td>
+                    <td>JSON object with new user's data, including an ID generated by the system. Example:
+                        <pre>{ 
+                                id: 1, <!--Autogenerated ID-->
+                                name: 'Alex Ribeira',
+                                email: 'alex@example.com'
+                                password:'verystrongpassword123/' 
+                            }</pre>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Update user information</th>
+                    <td>/users/{id}</td>
+                    <td>PUT</td>
+                    <td>JSON object with updated user data. Example: 
+                        <pre>{ 
+                                username: 'Shadow_Shinobi' 
+                            }</pre>
+                    </td>
+                    <td>JSON object with updated user data. Example:
+                        <pre>{
+                                id: 1,
+                                username: 'Shadow_Shinobi',
+                                name: 'Alex Ribeira',
+                                email: 'alex@example.com'
+                                password:'verystrongpassword123/' 
+                            }</pre>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Add a movie to user's favourites</th>
+                    <td>/users/{id}/favourites</td>
+                    <td>POST</td>
+                    <td>JSON object with movie data. Example:
+                        <pre>{ 
+                                title: 'Enter the Dragon (1973)' 
+                            }</pre>
+                    </td>
+                    <td>A text message indicating whether the movie was successfully added: 'Movie added to favourites.'</td>
+                </tr>
+                <tr>
+                    <th>Remove a movie from user's favourites</th>
+                    <td>/users/{id}/favourites/[movieId]</td>
+                    <td>DELETE</td>
+                    <td>None</td>
+                    <td>A text message indicating whether the movie was successfully removed: 'Movie removed from favourites.'</td>
+                </tr>
+                <tr>
+                    <th>Remove user</th>
+                    <td>/users/{id}</td>
+                    <td>DELETE</td>
+                    <td>None</td>
+                    <td>A text message indicating whether the user was successfully removed: 'User successfully deregistered.'</td>
+                </tr>
+            </tbody>    
+        </table>
+      </div>
+    </section>
+  </body>
 </html>
