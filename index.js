@@ -1,6 +1,10 @@
 const express = require('express'); // Import Express
 const morgan = require('morgan'); // Import Morgan for logging requests
+const fs = require('fs'); // Import built-in modules fs to help append logs to a file
+const path = require('path'); // Import built-in modeules path to help append logs to a file
 const app = express(); // Initialize Express app
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a'}); // Create a write stream (in append mode) and create a 'log.txt' file in the root directory. Appended via path.join
+
 
 let topMovies = [
     {
@@ -55,7 +59,7 @@ let topMovies = [
     }        
 ];
 
-app.use(morgan('combined')); // Use morgan middleware to log requests
+app.use(morgan('combined', {stream: accessLogStream})); // Use morgan middleware to log requests and view logs in log.txt
 app.use(express.static('public')); // Automatically serve all static files from "public"-folder
 
 app.get('/', (req, res) => {
