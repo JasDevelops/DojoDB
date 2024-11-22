@@ -8,7 +8,7 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {f
 
 let topMovies = [
     {
-        title: 'Enter the Dragon (1973)',
+        title: 'Enter the Dragon',
         description: `Bruce Lee stars as a martial artist recruited by a secret British agency to infiltrate a crime lord's island fortress for a deadly tournament. This classic is one of the most influential martial arts films ever.`,
         genre: ['Action'],
         imgURL: '',
@@ -21,7 +21,7 @@ let topMovies = [
         }
     },
     {
-        title: 'Drunken Master (1978)',
+        title: 'Drunken Master',
         description: `Jackie Chan stars as a young man who learns the unconventional Drunken Fist style of kung fu. The film mixes humor with martial arts in a unique blend that became a hallmark of Chan's career.`,
         genre: ['Action', 'Comedy'],
         imgURL: '',
@@ -34,7 +34,7 @@ let topMovies = [
         }
     },
     {
-        title: 'Crouching Tiger, Hidden Dragon (2000)',
+        title: 'Crouching Tiger, Hidden Dragon',
         description: `This epic film tells the story of a stolen sword, forbidden love, and a martial arts journey. It blends action with deep emotional storytelling.`,
         genre: ['Action', 'Drama', 'Adventure'],
         imgURL: '',
@@ -47,7 +47,7 @@ let topMovies = [
         }
     },
     {
-        title: 'Ip Man (2008)',
+        title: 'Ip Man',
         description: `The story of Ip Man, a legendary martial artist and the teacher of Bruce Lee. Set during the Japanese occupation of China, it explores his fight for dignity and justice.`,
         genre: ['Action', 'Biography', 'Drama'],
         imgURL: '',
@@ -60,7 +60,7 @@ let topMovies = [
         }
     },
     {
-        title: 'The 36th Chamber of Shaolin (1978)',
+        title: 'The 36th Chamber of Shaolin',
         description: `A young man seeks revenge for his family's death and trains at the Shaolin Temple, mastering the martial arts techniques that help him defeat his enemies.`,
         genre: ['Action', 'Drama'],
         imgURL: '',
@@ -73,7 +73,7 @@ let topMovies = [
         }
     },
     {
-        title: 'Kung Fu Hustle (2004)',
+        title: 'Kung Fu Hustle',
         description: `A comedic action film that blends martial arts with slapstick humor. It is set in a 1940s Chinese neighborhood where a small-time gangster tries to prove himself.`,
         genre: ['Action', 'Comedy'],
         imgURL: '',
@@ -86,7 +86,7 @@ let topMovies = [
         }
     },
     {
-        title: 'The Way of the Dragon (1972)',
+        title: 'The Way of the Dragon',
         description: `Bruce Lee directs and stars in this film as a martial artist who fights against a local gang and defends his family, culminating in an iconic battle against Chuck Norris in the Colosseum.`,
         genre: ['Action', 'Comedy'],
         imgURL: '',
@@ -99,7 +99,7 @@ let topMovies = [
         }
     },
     {
-        title: 'The Monkey King (2014)',
+        title: 'The Monkey King',
         description: `A fantasy adventure film based on the Chinese classic Journey to the West, following the Monkey King as he battles gods, demons, and discovers his true powers.`,
         genre: ['Action', 'Adventure', 'Fantasy'],
         imgURL: '',
@@ -112,7 +112,7 @@ let topMovies = [
         }
     },   
     {
-        title: 'Ong Bak: The Thai Warrior (2003)',
+        title: 'Ong Bak: The Thai Warrior',
         description: `A young Thai man travels to Bangkok to recover a stolen artifact and uncovers a plot involving criminals and corruption. The film is known for its intense martial arts sequences.`,
         genre: ['Action', 'Thriller'],
         imgURL: '',
@@ -125,7 +125,7 @@ let topMovies = [
         }
     },
     {
-        title: 'Once Upon a Time in China (1991)',
+        title: 'Once Upon a Time in China',
         description: `Jet Li stars as the legendary martial artist Wong Fei-hung, defending the country and upholding justice during a turbulent time in late 19th-century China.`,
         genre: ['Action', 'Drama'],
         imgURL: '',
