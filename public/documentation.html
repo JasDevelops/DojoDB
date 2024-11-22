@@ -1,207 +1,208 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DojoDB - Documentation</title>
     <style>
-        .EndpointTable {
-            width:100%;
-            overflow-x: auto;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
-            border-spacing: 1px;
-            text-align: left;
-        }
-        th, td {
-            border: 1px solid #eee;
-            padding: 8px;
-            vertical-align: top;
-        }
-        th {
-            background-color: #f4f4f4;
-            text-align: left;
-        }
-        pre {
-            background-color: #f8f8f8;
-            padding: 10px;
-            border-radius: 5px;
-            overflow-x: auto;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
+    .EndpointTable {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        border-spacing: 1px;
+        text-align: left;
+    }
+
+    th,
+    td {
+        border: 1px solid #eee;
+        padding: 8px;
+        vertical-align: top;
+    }
+
+    th {
+        background-color: #f4f4f4;
+        text-align: left;
+    }
+
+    pre {
+        background-color: #f8f8f8;
+        padding: 10px;
+        border-radius: 5px;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
     </style>
-  </head>
-  <body>
+</head>
+
+<body>
     <section>
-      <h1>DojoDB - Documentation</h1>
-      <p>
-        This web application allows users to explore information on movies with a special focus on
-        martial arts films. Users can sign up, update their personal profiles, and curate a list of
-        their favorite movies.
-      </p>
+        <h1>DojoDB - Documentation</h1>
+        <p>This web application allows users to explore information on movies with a special focus on martial arts films. Users can sign up, update their personal profiles, and curate a list of their favorite movies.</p>
     </section>
+
     <section>
-      <div class="EndpointTable">
-        <table>
-            <thead>
-                <tr>
-                    <th>Request</th>
-                    <th>URL</th>
-                    <th>HTTP Method</th>
-                    <th>Request Body Data Format</th>
-                    <th>Response Body Data Format</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th>Get a list of all movies</th>
-                    <td>/movies</td>
-                    <td>GET</td>
-                    <td>none</td>
-                    <td>A JSON array of movies.  Example: 
-                        <pre>{
-                                title: 'Enter the Dragon (1973)',
-                                description: 'Bruce Lee stars as a [...]',
-                                genre: ['Action'],
-                                featured: true,
-                                director: {
-                                    name: 'Robert Clouse',
-                                    bio: 'Robert Clouse was an American film director [...]',
-                                    birthYear: 1928,
-                                    deathYear: 1997
-                                }
-                            },
-                            {
-                                title: 'Drunken Master (1978)',
-                                description: 'Jackie Chan stars as a young man who [...]',
-                                genre: ['Action', 'Comedy'],
-                                featured: true,
-                                director: {
-                                    name: 'Yuen Woo-ping',
-                                    bio: 'Yuen Woo-ping is a Hong Kong [...]',
-                                    birthYear: 1945,
-                                    deathYear: null
-                                }
-                            }, 
-                            [...]</pre>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Get data about a specific movie by title</th>
-                    <td>/movies/{title}</td>
-                    <td>GET</td>
-                    <td>none</td>
-                    <td>JSON object holding data about the one specific movie. Example: 
-                        <pre>{
-                                id: 1,
-                                title: 'Drunken Master (1978)',
-                                description: 'Jackie Chan stars as a young man who [...]',
-                                genre: ['Action', 'Comedy'],
-                                featured: true,
-                                director: {
-                                    name: 'Yuen Woo-ping',
-                                    bio: 'Yuen Woo-ping is a Hong Kong [...]',
-                                    birthYear: 1945,
-                                    deathYear: null
-                                
-                                }
-                            }</pre>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Get data about a genre by name</th>
-                    <td>/movies/genres/{genre}</td>
-                    <td>GET</td>
-                    <td>none</td>
-                    <td>JSON object with genre description. Example:
-                        <pre> {
-                                genre: 'Action',
-                                description: 'Action-packed movies'
-                            }</pre>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Get data about a director by name</th>
-                    <td>/movies/directors/{director}</td>
-                    <td>GET</td>
-                    <td>none</td>
-                    <td>JSON object with data about director. Example:
-                        <pre>{
-                                name: 'Bruce Lee',
-                                bio: 'Famous martial artist',
-                                birthYear: 1940,
-                                deathYear: 1973
-                            }</pre>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Add a new user</th>
-                    <td>/users</td>
-                    <td>POST</td>
-                    <td>JSON object with new user's data. Example:
-                        <pre>{ 
-                                name: 'Alex Ribeira',
-                                email: 'alex@example.com'
-                            }</pre>
-                    </td>
-                    <td>JSON object with new user's data, including an ID generated by the system. Example:
-                        <pre>{ 
-                                id: 1, <!--Autogenerated ID-->
-                                name: 'Alex Ribeira',
-                                email: 'alex@example.com'
-                            }</pre>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Update user information</th>
-                    <td>/users/{id}</td>
-                    <td>PUT</td>
-                    <td>JSON object with updated user data. Example: 
-                        <pre>{ 
-                                username: 'Shadow_Shinobi' 
-                            }</pre>
-                    </td>
-                    <td>JSON object with updated user data. Example:
-                        <pre>{
-                                id: 1,
-                                username: 'Shadow_Shinobi',
-                                name: 'Alex Ribeira',
-                                email: 'alex@example.com'
-                            }</pre>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Add a movie to user's favourites</th>
-                    <td>/users/{id}/favourites</td>
-                    <td>POST</td>
-                    <td>JSON object with movie data. Example:
-                        <pre>{ 
-                                title: 'Enter the Dragon (1973)' 
-                            }</pre>
-                    </td>
-                    <td>A text message indicating whether the movie was successfully added: '${movie.title} added to favourites.'</td>
-                </tr>
-                <tr>
-                    <th>Remove a movie from user's favourites</th>
-                    <td>/users/{id}/favourites/{movieTitle}</td>
-                    <td>DELETE</td>
-                    <td>None</td>
-                    <td>A text message indicating whether the movie was successfully removed:'${movie.title} removed from favourites.'</td>
-                </tr>
-                <tr>
-                    <th>Remove user</th>
-                    <td>/users/{id}</td>
-                    <td>DELETE</td>
-                    <td>None</td>
-                    <td>A text message indicating whether the user was successfully removed: 'User with ID: ${userId} successfully removed.'</td>
-                </tr>
-            </tbody>    
-        </table>
-      </div>
+        <div class="EndpointTable">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Request</th>
+                        <th>URL</th>
+                        <th>HTTP Method</th>
+                        <th>Request Body Data Format</th>
+                        <th>Response Body Data Format</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Return a list of all movies</td>
+                        <td>/movies</td>
+                        <td>GET</td>
+                        <td>none</td>
+                        <td>
+                            Returns a JSON array of movies. If successful, the response contains the list of movies. If no movies are available, returns a 404 error. Example:
+                            <pre>
+{
+    "title": "Enter the Dragon (1973)",
+    "description": "Bruce Lee stars as a [...]",
+    "genre": ["Action"],
+    "featured": true,
+    "director": {
+        "name": "Robert Clouse",
+        "bio": "Robert Clouse was an American film director [...]",
+        "birthYear": 1928,
+        "deathYear": 1997
+    }
+}
+                            </pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Get a specific movie by title</td>
+                        <td>/movies/{title}</td>
+                        <td>GET</td>
+                        <td>none</td>
+                        <td>
+                            Returns a JSON object of the specific movie. If the movie is not found, a 404 error is returned. Example:
+                            <pre>
+{
+    "id": 1,
+    "title": "Drunken Master (1978)",
+    "description": "Jackie Chan stars as a young man who [...]",
+    "genre": ["Action", "Comedy"],
+    "featured": true,
+    "director": {
+        "name": "Yuen Woo-ping",
+        "bio": "Yuen Woo-ping is a Hong Kong [...]",
+        "birthYear": 1945,
+        "deathYear": null
+    }
+}
+                            </pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Get details about a genre by name</td>
+                        <td>/movies/genres/{genre}</td>
+                        <td>GET</td>
+                        <td>none</td>
+                        <td>
+                            Returns a JSON object with the genre’s description. If the genre is not found, a 404 error is returned. Example:
+                            <pre>
+{
+    "name": "Action",
+    "description": "Action-packed movies [...]"
+}
+                            </pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Get details about a director by name</td>
+                        <td>/movies/directors/{director}</td>
+                        <td>GET</td>
+                        <td>none</td>
+                        <td>
+                            Returns a JSON object with the director’s details. If the director is not found, a 404 error is returned. Example:
+                            <pre>
+{
+    "name": "Bruce Lee",
+    "bio": "Famous martial artist",
+    "birthYear": 1940,
+    "deathYear": 1973
+}
+                            </pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Add a new user</td>
+                        <td>/users</td>
+                        <td>POST</td>
+                        <td>
+                            JSON object with new user's data. Example:
+                            <pre>{ name: 'Alex Ribeira', email: 'alex@example.com' }</pre>
+                        </td>
+                        <td>
+                            If the 'name' and 'email' fields are present and valid, the new user is created and a 201 status is returned. If any required field is missing, or if the user already exists, a 400 error is returned. Example:
+                            <pre>{ message: 'User created with name: 'Alex Ribeira' and email: 'alex@example.com', name: 'Alex Ribeira', email: 'alex@example.com' }</pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Update user information by ID</td>
+                        <td>/users/{id}</td>
+                        <td>PUT</td>
+                        <td>
+                            JSON object with updated user data. Example:
+                            <pre>{ username: 'Shadow_Shinobi' }</pre>
+                        </td>
+                        <td>
+                            If the user exists, their data is updated and a 201 status with the updated user data is returned. If the user does not exist, a 404 error is returned. Example:
+                            <pre>{ message: 'Updated information for user with ID: 5', username: 'Shadow_Shinobi' }</pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Add a movie to user's favourites list</td>
+                        <td>/users/{id}/favourites</td>
+                        <td>POST</td>
+                        <td>
+                            JSON object with movie data. Example:
+                            <pre>{ title: 'Enter the Dragon (1973)' }</pre>
+                        </td>
+                        <td>
+                            If the user and movie both exist, the movie is added to the user's favorites list. If the movie is already on the list, a message is returned stating it is already added. If either the user or movie is not found, a 404 error is returned. Example:
+                            <pre>{ message: 'Movie added to favourites.' }</pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Remove a movie from user's favourites list</td>
+                        <td>/users/{id}/favourites/{movieTitle}</td>
+                        <td>DELETE</td>
+                        <td>None</td>
+                        <td>
+                            If the user and movie both exist, the movie is removed from the favorites list. If the movie is not in the list, a message is returned stating the movie was not found. If the user does not exist, a 404 error is returned. Example:
+                            <pre>{ message: 'Movie removed to favourites.' }</pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Remove user</td>
+                        <td>/users/{id}</td>
+                        <td>DELETE</td>
+                        <td>None</td>
+                        <td>
+                            If the user exists, they are removed and a confirmation message is returned. If the user does not exist, a 404 error is returned. Example:
+                            <pre>{ message: 'User with ID: 5 successfully removed.' }</pre>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </section>
-  </body>
+</body>
+
 </html>

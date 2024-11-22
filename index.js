@@ -1,10 +1,10 @@
-const express = require('express'); // Import Express
-const morgan = require('morgan'); // Import Morgan for logging requests
-const fs = require('fs'); // Import built-in modules fs to help append logs to a file
-const path = require('path'); // Import built-in modeules path to help append logs to a file
-const app = express(); // Initialize Express app
-const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a'}); // Create a write stream (in append mode) and create a 'log.txt' file in the root directory. Appended via path.join
-
+const express = require('express');     // Import Express
+const morgan = require('morgan');     // Import Morgan for logging requests
+const fs = require('fs');     // Import built-in modules fs to help to create and append logs
+const uuid = require('uuid');    // uuid package to generate unique IDs
+const path = require('path');     // Import built-in modules path to help file paths work
+const app = express();     // Initialize Express app
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a'});     // Create a write stream (in append mode) and create a 'log.txt' file in the root directory. Appended via path.join
 
 let topMovies = [
     {
@@ -138,23 +138,179 @@ let topMovies = [
         }
     },      
 ];
+let genres = [
+    {
+        name: 'Action',
+        description: `High-energy films packed with intense fight scenes, fast-paced choreography, and adrenaline-pumping sequences that showcase the power and skill of martial artists in combat.`,
+    },
+    {
+        name: 'Adventure',
+        description: `Action-packed martial arts stories set in exotic locations, where heroes embark on perilous quests, fight powerful foes, and explore new cultures while honing their fighting skills.`,
+    },
+    {
+        name: 'Biography',
+        description: `Inspirational stories based on the lives of real-life martial artists, focusing on their struggles, triumphs, and the personal experiences that led them to become legends in their craft.`,
+    },
+    {
+        name: 'Comedy',
+        description: `Light-hearted martial arts films with humor, slapstick fighting scenes, and exaggerated action, where the emphasis is on fun and entertaining antics rather than serious combat.`,
+    },
+    {
+        name: 'Drama',
+        description: `Martial arts movies with emotional depth, exploring personal struggles, growth, and complex relationships, often focusing on a martial artist's journey of self-discovery and redemption.`,
+    },
+    {
+        name: 'Fantasy',
+        description: `Martial arts set in magical or mythical worlds, where fighters wield extraordinary abilities, face mythical creatures, and engage in epic battles beyond the limits of reality.`,
+    },
+    {
+        name: 'Thriller',
+        description: `Suspenseful martial arts films that keep viewers on the edge of their seats with intense fight sequences, mind games, and dangerous confrontations, often featuring skilled fighters overcoming dark forces.`,
+    }
+];    
+let users = [];  // To store user data
 
-app.use(morgan('combined', {stream: accessLogStream})); // Use morgan middleware to log requests and view logs in log.txt
-app.use(express.static('public')); // Automatically serve all static files from "public"-folder
+app.use(morgan('combined', {stream: accessLogStream}));     // Use morgan middleware to log requests and view logs in log.txt
+app.use(express.static('public'));     // Automatically serve all static files from "public"-folder
+app.use(express.json());     // JSON middleware to parse JSON data
 
 app.get('/', (req, res) => {
-    res.send(`Welcome to DojoDB - Let's kick things off!`) // Sends response text for root - endpoint
-});
-app.get('/movies', (req, res) => {
-    res.json(topMovies); // Sends movie list as JSON response for /movies - endpoint
+    res.send(`Welcome to DojoDB - Let's kick things off!`)     // Sends response text for root - endpoint
 });
 
+// Get list of all movies
+app.get('/movies', (req, res) => {     
+    res.json(topMovies);     // Sends the whole array as JSON
+});
+
+// Get data about specific movie by title
+app.get('/movies/:title', (req, res) => {     
+    const movieTitle = req.params.title.trim().toLowerCase();     // Get cleaned-up title from URL
+    const movie = topMovies.find(m => m.title.trim().toLowerCase() === movieTitle);     // Find movie that matches 
+    if(movie) {
+        res.json(movie);     //Return movie data as JSON
+    } else {
+        res.status(404).send(`Movie with title "${title}" not found.`);    // Error message
+    }
+});
+
+// Get data about a genre by name
+app.get('/movies/genres/:genre', (req, res) => {    
+    const genre = req.params.genre.trim().toLowerCase();     // Get cleaned-up genre from URL
+    const genreDetails = genres.find(g => g.name.trim().toLowerCase() === genre);    // Find genre that matches
+    if(genreDetails) {
+        res.json(genreDetails);   // Return genre details
+    } else {
+        res.status(404).send(`Genre "${genre}" not found.`);   // Error message if no genre is found
+    }
+});
+
+// Get data about a director by name
+app.get('/movies/directors/:director', (req, res) => {     
+    const directorName = req.params.director.trim().toLowerCase();     // Get cleaned-up director name from URL
+    const directorDetails = topMovies
+        .map(movie => movie.director)
+        .find(director => director.name.trim().toLowerCase() === directorName);     // Find director in topMovies array
+    if (directorDetails) {
+        res.json(directorDetails);
+    } else {
+        res.status(404).send(`Director "${directorName}" not found.`);   // Error message 
+    }
+});
+
+// Add new user
+app.post('/users', (req, res) => {     
+    const newUser = req.body;
+    if (!newUser.name || !newUser.email) {    // Check if 'name' is provided in request body
+        return res.status(400).send('Missing "name" or "email".');   
+    }
+    const existingUser = users.find(u => u.email === newUser.email || u.name === newUser.name);
+    if (existingUser) {     // Check if user with same name or email already exists
+        return res.status(400).send(`User with this ${existingUser.email === newUser.email ? 'email' : 'name'} already exists.`);
+    }
+else {
+   newUser.id = uuid.v4();     // Generate unique ID
+   users.push(newUser);   // Add user to users array
+    res.status(201).send({
+        message: `User created with name: ${newUser.name} and email: ${newUser.email}`,
+        user: newUser,
+        });
+    }
+});
+
+// Update user info
+app.put('/users/:id', (req, res) => {     
+    const userId = req.params.id;     // Get user ID from URL
+    const updatedUser = req.body;     // Get updated user data
+    const user = users.find(u => u.id === userId);  // Find user by ID
+    if (!user){
+        res.status(404).send(`User with ID "${userId}" not found.`);   // Error message not found
+    }
+        user.username = updatedUser.username || user.username;  // If username is provided, update it. If not, keep current
+        res.status(200).send( {
+            message:`User with ID "${userId}" updated successfully.` , username: `${updatedUser.username}`
+        }); 
+});
+
+// Add movie to user's favourites list
+app.post('/users/:id/favourites', (req, res) => {     
+    const userId = req.params.id;     // Get user ID from URL
+    const movieTitle = req.body.title.trim().toLowerCase();     // Get movie title
+    const user = users.find(u => u.id === userId);      // Find user by ID
+    const movie = topMovies.find(m => m.title.trim().toLowerCase() === movieTitle);     // Find movie by title
+    if (user && movie) {
+        if (!user.favourites) {
+            user.favourites = [];   // Initialize favourites list (if it doesn't exist)
+        }
+        const movieExists = user.favourites.some(fav => fav.title.toLowerCase() === movie.title.toLowerCase());  // Check if movie is already in list
+        if (movieExists) {
+            res.send(`${movie.title} is already in favourites.`);   // Message if already added
+        } else {
+            user.favourites.push(movie);    // Adds movie to list
+            res.send(`${movie.title} added to favourites.`);    // Send success message
+        }
+    } else {
+        res.status(404).send('User or movie not found.');   // Error message 
+    }  
+});
+
+// Remove movie from user's favourites list
+app.delete('/users/:id/favourites/:movieTitle', (req, res) => {     
+    const userId = req.params.id;     // Get user ID from URL
+    const movieTitle = req.params.movieTitle.trim().toLowerCase();     // Get movie title
+    const user = users.find(u => u.id === userId);      // Find user by ID
+    if (user) {
+        const movieList = user.favourites.filter(fav => fav.title.toLowerCase() !== movieTitle.toLowerCase());    
+        if (movieList.length === user.favourites.length) {
+            res.status(404).send('Movie not found in favourites.');   // Error message if not in list (no changes made)   
+        } else {
+            user.favourites = movieList;
+            res.send(`${movieTitle} removed from favourites.`);    // Send success message
+        }
+    } else {
+        res.status(404).send('User not found.');
+    }
+});
+
+// Remove user
+app.delete('/users/:id', (req, res) => {     
+    const userId = req.params.id;     // Get user ID from URL
+    const updatedUsers = users.filter(u => u.id !== userId);
+    if(updatedUsers.length === users.length) {
+        res.status(404).send('No user was removed.');   // No change was made
+    } else {
+        users = updatedUsers;   // Update array removing User
+    res.send(`User with ID: ${userId} successfully removed.`);     // Send success message
+    }
+});
+
+// Log errors
 app.use((err,req,res,next) => {
-    console.error(err.stack); // Logs error
-    res.status(500).send('Something went wrong at the dojo. Try again later.') // sends error message
+    console.error(err.stack);     
+    res.status(500).send('Something went wrong at the dojo. Try again later.')     // Send error message
 }
-)
-
-app.listen(3000, () => { // Start server on port 3000
+);
+// Start server on port 3000
+app.listen(3000, () => {     
     console.log('Your server is running on port 3000');
 });
