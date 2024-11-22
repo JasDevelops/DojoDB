@@ -6,39 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DojoDB - Documentation</title>
     <style>
-    .EndpointTable {
-        width: 100%;
-        overflow-x: auto;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        table-layout: fixed;
-        border-spacing: 1px;
-        text-align: left;
-    }
-
-    th,
-    td {
-        border: 1px solid #eee;
-        padding: 8px;
-        vertical-align: top;
-    }
-
-    th {
-        background-color: #f4f4f4;
-        text-align: left;
-    }
-
-    pre {
-        background-color: #f8f8f8;
-        padding: 10px;
-        border-radius: 5px;
-        overflow-x: auto;
-        white-space: pre-wrap;
-        word-wrap: break-word;
-    }
+    table,th{text-align:left}pre,td,th{word-wrap:break-word}body{font-family:sans-serif}.EndpointTable{width:100%;overflow-x:auto}table{width:100%;border-collapse:collapse;table-layout:fixed;border-spacing:1px}td,th{border:1px solid #eee;padding:8px;vertical-align:top;white-space:normal}th{background-color:#f4f4f4}pre{background-color:#f8f8f8;padding:10px;border-radius:5px;overflow-x:auto;white-space:pre-wrap}@media (max-width:768px){table{width:100%;display:block;overflow-x:auto;white-space:nowrap}td,th{padding:10px;text-align:left}}@media (max-width:480px){td,th{padding:6px}}
     </style>
 </head>
 
@@ -67,10 +35,10 @@
                         <td>GET</td>
                         <td>none</td>
                         <td>
-                            Returns a JSON array of movies. If successful, the response contains the list of movies. If no movies are available, returns a 404 error. Example:
+                            Returns a **JSON array** of movies. If successful, the response contains the list of movies. If no movies are available, returns a 404 error. Example:
                             <pre>
 {
-    "title": "Enter the Dragon (1973)",
+    "title": "Enter the Dragon",
     "description": "Bruce Lee stars as a [...]",
     "genre": ["Action"],
     "featured": true,
@@ -90,11 +58,11 @@
                         <td>GET</td>
                         <td>none</td>
                         <td>
-                            Returns a JSON object of the specific movie. If the movie is not found, a 404 error is returned. Example:
+                            Returns a **JSON object** of the specific movie. If the movie is not found, a 404 error is returned. Example:
                             <pre>
 {
     "id": 1,
-    "title": "Drunken Master (1978)",
+    "title": "Drunken Master",
     "description": "Jackie Chan stars as a young man who [...]",
     "genre": ["Action", "Comedy"],
     "featured": true,
@@ -114,7 +82,7 @@
                         <td>GET</td>
                         <td>none</td>
                         <td>
-                            Returns a JSON object with the genre’s description. If the genre is not found, a 404 error is returned. Example:
+                            Returns a **JSON object** with the genre’s description. If the genre is not found, a 404 error is returned. Example:
                             <pre>
 {
     "name": "Action",
@@ -129,7 +97,7 @@
                         <td>GET</td>
                         <td>none</td>
                         <td>
-                            Returns a JSON object with the director’s details. If the director is not found, a 404 error is returned. Example:
+                            Returns a **JSON object** with the director’s details. If the director is not found, a 404 error is returned. Example:
                             <pre>
 {
     "name": "Bruce Lee",
@@ -145,7 +113,7 @@
                         <td>/users</td>
                         <td>POST</td>
                         <td>
-                            JSON object with new user's data. Example:
+                            **JSON object** with new user's data. Example:
                             <pre>{ name: 'Alex Ribeira', email: 'alex@example.com' }</pre>
                         </td>
                         <td>
@@ -158,7 +126,7 @@
                         <td>/users/{id}</td>
                         <td>PUT</td>
                         <td>
-                            JSON object with updated user data. Example:
+                            **JSON object** with updated user data. Example:
                             <pre>{ username: 'Shadow_Shinobi' }</pre>
                         </td>
                         <td>

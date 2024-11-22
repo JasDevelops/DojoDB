@@ -173,7 +173,6 @@ let users = [];  // To store user data
 app.use(morgan('combined', {stream: accessLogStream}));     // Use morgan middleware to log requests and view logs in log.txt
 app.use(express.static('public'));     // Automatically serve all static files from "public"-folder
 app.use(express.json());     // JSON middleware to parse JSON data
-
 app.get('/', (req, res) => {
     res.send(`Welcome to DojoDB - Let's kick things off!`)     // Sends response text for root - endpoint
 });
@@ -187,11 +186,10 @@ app.get('/movies', (req, res) => {
 app.get('/movies/:title', (req, res) => {     
     const movieTitle = req.params.title.trim().toLowerCase();     // Get cleaned-up title from URL
     const movie = topMovies.find(m => m.title.trim().toLowerCase() === movieTitle);     // Find movie that matches 
-    if(movie) {
-        res.json(movie);     //Return movie data as JSON
-    } else {
-        res.status(404).send(`Movie with title "${title}" not found.`);    // Error message
+    if(!movie) {
+        return res.status(404).send(`Movie with title "${movieTitle}" not found.`);    // Error message
     }
+        res.json(movie);     //Return movie data as JSON
 });
 
 // Get data about a genre by name
@@ -248,7 +246,8 @@ app.put('/users/:id', (req, res) => {
     }
         user.username = updatedUser.username || user.username;  // If username is provided, update it. If not, keep current
         res.status(200).send( {
-            message:`User with ID "${userId}" updated successfully.` , username: `${updatedUser.username}`
+            message:`User with ID "${userId}" updated successfully.` , username: `${updatedUser.username}`,
+            user: user  // Return the updated user object
         }); 
 });
 
@@ -280,12 +279,15 @@ app.delete('/users/:id/favourites/:movieTitle', (req, res) => {
     const movieTitle = req.params.movieTitle.trim().toLowerCase();     // Get movie title
     const user = users.find(u => u.id === userId);      // Find user by ID
     if (user) {
+        if (!user.favourites) {
+            user.favourites = [];   // Initialize favourites list (if it doesn't exist)
+        }
         const movieList = user.favourites.filter(fav => fav.title.toLowerCase() !== movieTitle.toLowerCase());    
         if (movieList.length === user.favourites.length) {
             res.status(404).send('Movie not found in favourites.');   // Error message if not in list (no changes made)   
         } else {
             user.favourites = movieList;
-            res.send(`${movieTitle} removed from favourites.`);    // Send success message
+            res.send(`${movieTitle} has been removed from favourites.`);    // Send success message
         }
     } else {
         res.status(404).send('User not found.');
