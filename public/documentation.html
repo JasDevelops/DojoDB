@@ -118,7 +118,7 @@
                         </td>
                         <td>
                             If the 'name' and 'email' fields are present and valid, the new user is created and a 201 status is returned. If any required field is missing, or if the user already exists, a 400 error is returned. Example:
-                            <pre>{ message: 'User created with name: 'Alex Ribeira' and email: 'alex@example.com', name: 'Alex Ribeira', email: 'alex@example.com' }</pre>
+                            <pre>{'User created with name: 'Alex Ribeira' and email: 'alex@example.com', name: 'Alex Ribeira', email: 'alex@example.com' }</pre>
                         </td>
                     </tr>
                     <tr>
@@ -131,20 +131,22 @@
                         </td>
                         <td>
                             If the user exists, their data is updated and a 201 status with the updated user data is returned. If the user does not exist, a 404 error is returned. Example:
-                            <pre>{ message: 'Updated information for user with ID: 5', username: 'Shadow_Shinobi' }</pre>
+                            <pre>{'Updated information for user with ID: 5', username: 'Shadow_Shinobi' }</pre>
                         </td>
                     </tr>
                     <tr>
                         <td>Add a movie to user's favourites list</td>
-                        <td>/users/{id}/favourites</td>
+                        <td>/users/{id}/favourites/{movieTitle}</td>
                         <td>POST</td>
                         <td>
-                            JSON object with movie data. Example:
-                            <pre>{ title: 'Enter the Dragon (1973)' }</pre>
+                            No body required. The movie title is passed as a URL parameter. Example:
+                            <pre>/users/{id}/favourites/Enter%20the%20Dragon%20</pre>    
                         </td>
                         <td>
                             If the user and movie both exist, the movie is added to the user's favorites list. If the movie is already on the list, a message is returned stating it is already added. If either the user or movie is not found, a 404 error is returned. Example:
-                            <pre>{ message: 'Movie added to favourites.' }</pre>
+                            <pre>{'Enter the Dragon added to favourites.' }</pre>
+                            if the movie is already in the list:
+                            <pre>{'Enter the Dragon is already in favourites.' }</pre>
                         </td>
                     </tr>
                     <tr>
@@ -154,7 +156,7 @@
                         <td>None</td>
                         <td>
                             If the user and movie both exist, the movie is removed from the favorites list. If the movie is not in the list, a message is returned stating the movie was not found. If the user does not exist, a 404 error is returned. Example:
-                            <pre>{ message: 'Movie removed to favourites.' }</pre>
+                            <pre>{'Movie removed to favourites.' }</pre>
                         </td>
                     </tr>
                     <tr>
@@ -164,7 +166,7 @@
                         <td>None</td>
                         <td>
                             If the user exists, they are removed and a confirmation message is returned. If the user does not exist, a 404 error is returned. Example:
-                            <pre>{ message: 'User with ID: 5 successfully removed.' }</pre>
+                            <pre>{'User with ID: 5 successfully removed.' }</pre>
                         </td>
                     </tr>
                 </tbody>

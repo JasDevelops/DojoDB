@@ -168,7 +168,7 @@ let genres = [
         description: `Suspenseful martial arts films that keep viewers on the edge of their seats with intense fight sequences, mind games, and dangerous confrontations, often featuring skilled fighters overcoming dark forces.`,
     }
 ];    
-let users = [];  // To store user data
+let users = []; // To store user data  
 
 app.use(morgan('combined', {stream: accessLogStream}));     // Use morgan middleware to log requests and view logs in log.txt
 app.use(express.static('public'));     // Automatically serve all static files from "public"-folder
@@ -252,25 +252,29 @@ app.put('/users/:id', (req, res) => {
 });
 
 // Add movie to user's favourites list
-app.post('/users/:id/favourites', (req, res) => {     
+app.post('/users/:id/favourites/:movieTitle', (req, res) => {     
     const userId = req.params.id;     // Get user ID from URL
-    const movieTitle = req.body.title.trim().toLowerCase();     // Get movie title
+    const movieTitle = req.params.movieTitle.trim().toLowerCase();     // Get movie title
+    if (!movieTitle) {
+        return res.status(400).send('Movie title is required.');
+    }
     const user = users.find(u => u.id === userId);      // Find user by ID
+    if (!user) {
+        return res.status(404).send('User not found.');
+    }
     const movie = topMovies.find(m => m.title.trim().toLowerCase() === movieTitle);     // Find movie by title
-    if (user && movie) {
-        if (!user.favourites) {
+    if (!movie) {
+        return res.status(404).send('Movie not found.');
+    }
+    if (!user.favourites) {
             user.favourites = [];   // Initialize favourites list (if it doesn't exist)
-        }
-        const movieExists = user.favourites.some(fav => fav.title.toLowerCase() === movie.title.toLowerCase());  // Check if movie is already in list
-        if (movieExists) {
-            res.send(`${movie.title} is already in favourites.`);   // Message if already added
-        } else {
-            user.favourites.push(movie);    // Adds movie to list
-            res.send(`${movie.title} added to favourites.`);    // Send success message
-        }
-    } else {
-        res.status(404).send('User or movie not found.');   // Error message 
-    }  
+    }
+    const movieExists = user.favourites.some(fav => fav.title.toLowerCase() === movie.title.toLowerCase());  // Check if movie is already in list
+    if (movieExists) {
+        return res.send(`${movie.title} is already in favourites.`);   // Message if already added
+        } 
+        user.favourites.push(movie);    // Adds movie to list
+        res.status(201).send(`${movie.title} added to favourites.`);    // Send success message
 });
 
 // Remove movie from user's favourites list
