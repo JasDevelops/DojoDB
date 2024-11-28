@@ -39,15 +39,17 @@
                             <pre>
 {
     "title": "Enter the Dragon",
-    "description": "Bruce Lee stars as a [...]",
+    "description": "Bruce Lee stars as a [...].",
     "genre": ["Action"],
     "featured": true,
     "director": {
         "name": "Robert Clouse",
-        "bio": "Robert Clouse was an American film director [...]",
+        "bio": "Robert Clouse was an American film director [...].",
         "birthYear": 1928,
         "deathYear": 1997
-    }
+    },
+    "actors": ["Bruce Lee", "John Saxon", "Jim Kelly"],
+    "releaseYear": 1973
 }
                             </pre>
                         </td>
@@ -61,17 +63,18 @@
                             Returns a **JSON object** of the specific movie. If the movie is not found, a 404 error is returned. Example:
                             <pre>
 {
-    "id": 1,
     "title": "Drunken Master",
-    "description": "Jackie Chan stars as a young man who [...]",
+    "description": "Jackie Chan stars as a [...].",
     "genre": ["Action", "Comedy"],
     "featured": true,
     "director": {
         "name": "Yuen Woo-ping",
-        "bio": "Yuen Woo-ping is a Hong Kong [...]",
+        "bio": "Yuen Woo-ping is a Hong Kong [...].",
         "birthYear": 1945,
         "deathYear": null
-    }
+    },
+    "actors": ["Jackie Chan", "Simon Yam"],
+    "releaseYear": 1978
 }
                             </pre>
                         </td>
@@ -108,6 +111,51 @@
                             </pre>
                         </td>
                     </tr>
+                    <tr>
+                        <td>Get all movies that feature a specific actor</td>
+                        <td>/movies/actors/{actor}</td>
+                        <td>GET</td>
+                        <td>none</td>
+                        <td>
+                            Returns a **JSON object** with the movies of an specific. If the actor is not found, a 404 error is returned. Example:
+                            <pre>
+{
+    {
+        "title": "Enter the Dragon",
+        "description": "Bruce Lee stars as a [...].",
+        "genre": ["Action"],
+        "actors": ["Bruce Lee", "John Saxon", "Jim Kelly"],
+        "releaseYear": 1973
+    },
+    {
+        "title": "The Way of the Dragon",
+        "description": "Bruce Lee [...].",
+        "genre": ["Action", "Martial Arts"],
+        "actors": ["Bruce Lee", "Chuck Norris"],
+        "releaseYear": 1972
+    }
+}
+                            </pre>
+                        </td>
+                    </tr>      
+                    <tr>
+                        <td>Get movies by release year</td>
+                        <td>/movies/year/{year}</td>
+                        <td>GET</td>
+                        <td>none</td>
+                        <td>
+                            Returns a **JSON array** of movies released in the specified year. If no movies are found for the year, a 404 error is returned. Example:
+                            <pre>
+{
+    "title": "Enter the Dragon",
+    "description": "Bruce Lee stars as a [...].",
+    "genre": ["Action"],
+    "actors": ["Bruce Lee", "John Saxon", "Jim Kelly"],
+    "releaseYear": 1973
+}
+                            </pre>
+                        </td>
+                    </tr>                                                     
                     <tr>
                         <td>Add a new user</td>
                         <td>/users</td>
