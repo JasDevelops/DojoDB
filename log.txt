@@ -191,3 +191,4 @@ Timestamp: Mon Nov 18 2024 18:15:43 GMT+0100 (Mitteleuropäische Normalzeit)
 ::1 - - [25/Nov/2024:09:06:00 +0000] "POST /users/1864d25a-cdd1-498a-9115-7291f4b4c2a9/favourites/Ip%20Cat HTTP/1.1" 404 16 "-" "PostmanRuntime/7.42.0"
 ::1 - - [25/Nov/2024:09:06:08 +0000] "POST /users/1864d25a-cdd1-498a-9115-7291f4b4c2a9/favourites/Ip%20Man HTTP/1.1" 200 32 "-" "PostmanRuntime/7.42.0"
 ::1 - - [25/Nov/2024:09:06:14 +0000] "POST /users/864d25a-cdd1-498a-9115-7291f4b4c2a9/favourites/Ip%20Man HTTP/1.1" 404 15 "-" "PostmanRuntime/7.42.0"
+::ffff:127.0.0.1 - - [29/Nov/2024:17:04:03 +0000] "GET / HTTP/1.1" 200 42 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:132.0) Gecko/20100101 Firefox/132.0"
