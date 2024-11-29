@@ -55,8 +55,8 @@ app.get("/movies/:title", async(req, res) => {
         const orderMovies = {      // Reorder to display nicely
             title: movie.title,
             description: movie.description,
-            genre: movie.genre,
-            director: movie.director,
+            genre: movie.genre.name,
+            director: movie.director.name,
             image: movie.image,
             releaseYear: movie.releaseYear,
             actors: movie.actors,
@@ -83,17 +83,45 @@ app.get("/movies/genres/:genre", async(req, res) => {
             genre: movie.genre,
             title: movie.title,
             description: movie.description,
-            director: movie.director,
+            director: movie.director.name,
             image: movie.image,
             releaseYear: movie.releaseYear,
             actors: movie.actors,
             _id: movie._id
         }));
-        res.status(200).json(orderMovies);
-    })      // Return all movies for that genre (ordered)
+        res.status(200).json(orderMovies);  // Return all movies for that genre (ordered)
+    })      
     .catch((err) => {
         console.error(err);
         res.status(500).json({ message: "Something went wrong while fetching the movies by genre. Please try again later."});
+    });
+});
+
+// GET movies by release year
+app.get("/movies/release-year/:year", async (req, res) => {
+    const year = req.params.year.trim(); // Cleaned-up year from URL
+
+    await Movies.find({ releaseYear: year })  // Find movies by release year
+    .then((movies) => {
+        if (movies.length === 0) {
+            return res.status(404).json({ message: `No movies found for the release year "${year}".` });
+        }
+
+        const orderedMovies = movies.map(movie => ({  // Reorder to display nicely
+            title: movie.title,
+            releaseYear: movie.releaseYear,
+            description: movie.description,
+            genre: movie.genre.name,  
+            director: movie.director.name, 
+            image: movie.image.imageUrl,  
+            actors: movie.actors,
+            _id: movie._id
+        }));
+        res.status(200).json(orderedMovies);  // Return all movies for that year
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).json({ message: "Something went wrong while fetching the movies by release year. Please try again later." });
     });
 });
 

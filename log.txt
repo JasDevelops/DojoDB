@@ -218,3 +218,6 @@ Timestamp: Mon Nov 18 2024 18:15:43 GMT+0100 (Mitteleuropäische Normalzeit)
 ::1 - - [29/Nov/2024:18:24:22 +0000] "GET /movies/genres/action HTTP/1.1" 404 51 "-" "PostmanRuntime/7.42.0"
 ::1 - - [29/Nov/2024:18:28:44 +0000] "GET /movies/genres/action HTTP/1.1" 200 11017 "-" "PostmanRuntime/7.42.0"
 ::1 - - [29/Nov/2024:18:30:32 +0000] "GET /movies/genres/fantasy HTTP/1.1" 200 1083 "-" "PostmanRuntime/7.42.0"
+::1 - - [29/Nov/2024:18:44:27 +0000] "GET /movies/release-year/1973 HTTP/1.1" 200 656 "-" "PostmanRuntime/7.42.0"
+::1 - - [29/Nov/2024:18:45:17 +0000] "GET /movies/release-year/1973 HTTP/1.1" 200 656 "-" "PostmanRuntime/7.42.0"
+::1 - - [29/Nov/2024:18:49:54 +0000] "GET /movies/release-year/1971 HTTP/1.1" 404 60 "-" "PostmanRuntime/7.42.0"
