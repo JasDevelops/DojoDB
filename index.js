@@ -1,4 +1,5 @@
 const express = require("express");     // Import Express
+const app = express();     // Initialize Express app
 app.use(express.json()); // Import body parser   
 app.use(express.urlencoded({extended:true}));   // Import body parser
 const morgan = require("morgan");     // Import Morgan for logging requests
@@ -10,12 +11,12 @@ mongoose.connect("mongodb://localhost:27017/db",{ useNewUrlParser: true, useUnif
 const Models = require("./models.js");  // Import Mongoose-Models
 const Movies = Models.Movie;    // Movie-Model
 const Users = Models.User;  // User-Model
-const app = express();     // Initialize Express app
+
 const accessLogStream = fs.createWriteStream(path.join(__dirname, "log.txt"), {flags: "a"});     // Create a write stream (in append mode) and create a "log.txt" file in the root directory. Appended via path.join
 
 app.use(morgan("combined", {stream: accessLogStream}));     // Use morgan middleware to log requests and view logs in log.txt
 app.use(express.static("public"));     // Automatically serve all static files from "public"-folder
-app.use(express.json());     // JSON middleware to parse JSON data
+
 app.get("/", (req, res) => {
     res.send(`Welcome to DojoDB - Let"s kick things off!`)     // Sends response text for root - endpoint
 });
