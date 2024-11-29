@@ -26,16 +26,16 @@ app.get("/movies", async(req, res) => {
     await Movies.find()
     .then((movies) => {
         const orderMovies = movies.map(movie => ({      // Reorder to display nicely
-            _id: movie._id,
             title: movie.title,
             description: movie.description,
             genre: movie.genre,
             director: movie.director,
             image: movie.image,
             releaseYear: movie.releaseYear,
-            actors: movie.actors
+            actors: movie.actors,
+            _id: movie._id
         }));
-        res.status(201).json(orderMovies);
+        res.status(200).json(orderMovies);
     })      // Return all movies (ordered)
     .catch((err) => {
         console.error(err);
@@ -53,16 +53,16 @@ app.get("/movies/:title", async(req, res) => {
             return res.status(404).json({ message: `Movie with the title "${movieTitle}" not found.` });    // Error in case movie not found
         }
         const orderMovies = {      // Reorder to display nicely
-            _id: movie._id,
             title: movie.title,
             description: movie.description,
             genre: movie.genre,
             director: movie.director,
             image: movie.image,
             releaseYear: movie.releaseYear,
-            actors: movie.actors
+            actors: movie.actors,
+            _id: movie._id
         };
-        res.json(orderMovies);    // Return found movie (ordered)
+        res.status(200).json(orderMovies);    // Return found movie (ordered)
     })
     .catch((err) => {
         console.error(err);
@@ -70,15 +70,31 @@ app.get("/movies/:title", async(req, res) => {
     });
 });
 
-// Get data about a genre by name
-app.get("/movies/genres/:genre", (req, res) => {    
+// GET all movies from a genre
+app.get("/movies/genres/:genre", async(req, res) => {    
     const genre = req.params.genre.trim().toLowerCase();     // Get cleaned-up genre from URL
-    const genreDetails = genres.find(g => g.name.trim().toLowerCase() === genre);    // Find genre that matches
-    if(genreDetails) {
-        res.json(genreDetails);   // Return genre details
-    } else {
-        res.status(404).send(`Genre "${genre}" not found.`);   // Error message if no genre is found
-    }
+
+    await Movies.find({"genre.name": {$regex: new RegExp("^" + genre + "$", "i")}})    // Find movies with the genre (case insensitive)
+    .then ((movies) => {
+        if(movies.length === 0) {
+            return res.status(404).json({ message: `No movies found for "${genre}" genre.`});
+        }
+        const orderMovies = movies.map(movie => ({      // Reorder to display nicely
+            genre: movie.genre,
+            title: movie.title,
+            description: movie.description,
+            director: movie.director,
+            image: movie.image,
+            releaseYear: movie.releaseYear,
+            actors: movie.actors,
+            _id: movie._id
+        }));
+        res.status(200).json(orderMovies);
+    })      // Return all movies for that genre (ordered)
+    .catch((err) => {
+        console.error(err);
+        res.status(500).json({ message: "Something went wrong while fetching the movies by genre. Please try again later."});
+    });
 });
 
 // Get data about a director by name
