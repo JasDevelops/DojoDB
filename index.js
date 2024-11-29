@@ -262,17 +262,20 @@ app.delete("/users/:username/favourites", async (req, res) => {
 });
 
 
-// Remove user
-app.delete("/users/:id", (req, res) => {     
-    const userId = req.params.id;     // Get user ID from URL
-    const updatedUsers = users.filter(u => u.id !== userId);
-    if(updatedUsers.length === users.length) {
-        res.status(404).send("No user was removed.");   // No change was made
-    } else {
-        users = updatedUsers;   // Update array removing User
-    res.send(`User with ID: ${userId} successfully removed.`);     // Send success message
+// Remove a user by username
+app.delete("/users/:username", async (req, res) => {
+    const { username } = req.params;  // Get the username from the URL
+    const existingUser = await Users.findOne({ username });     // Check if the user exists
+    if (!existingUser) {
+        return res.status(404).json({ message: "User not found." });  // User not found
     }
+    const deletedUser = await Users.deleteOne({ username });        // Remove the user from the database
+    if (deletedUser.deletedCount === 0) {
+        return res.status(500).json({ message: "Failed to delete the user. Please try again later." });  // Error if the delete failed
+    }
+    res.status(200).json({ message: `"${username}" has been successfully removed.` });     // Success response
 });
+
 
 // undefefined routes
 app.use((req, res) => {
