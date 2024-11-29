@@ -37,18 +37,37 @@ app.get("/movies", async(req, res) => {
         }));
         res.status(201).json(orderMovies);
     })      // Return all movies (ordered)
-    .catch((err) => {res.status(500).json ({ message: "Something went wrong while fetching the movies. Please try again later."});
+    .catch((err) => {
+        console.error(err);
+        res.status(500).json({ message: "Something went wrong while fetching the movies. Please try again later."});
     });     // Return server error
 });
 
-// Get data about specific movie by title
-app.get("/movies/:title", (req, res) => {     
-    const movieTitle = req.params.title.trim().toLowerCase();     // Get cleaned-up title from URL
-    const movie = topMovies.find(m => m.title.trim().toLowerCase() === movieTitle);     // Find movie that matches 
-    if(!movie) {
-        return res.status(404).send(`Movie with title "${movieTitle}" not found.`);    // Error message
-    }
-        res.json(movie);     //Return movie data as JSON
+// GET data about specific movie by title
+app.get("/movies/:title", async(req, res) => {     
+    const movieTitle = req.params.title.trim().toLowerCase();     // Clean up title from URL
+
+    await Movies.findOne({title: { $regex: new RegExp("^" + movieTitle + "$", "i") }})        // Find specific movie (case insensitive)
+    .then ((movie) => {
+        if(!movie) {
+            return res.status(404).json({ message: `Movie with the title "${movieTitle}" not found.` });    // Error in case movie not found
+        }
+        const orderMovies = {      // Reorder to display nicely
+            _id: movie._id,
+            title: movie.title,
+            description: movie.description,
+            genre: movie.genre,
+            director: movie.director,
+            image: movie.image,
+            releaseYear: movie.releaseYear,
+            actors: movie.actors
+        };
+        res.json(orderMovies);    // Return found movie (ordered)
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).json({ message: "Something went wrong while fetching the movie details. Please try again later."});
+    });
 });
 
 // Get data about a genre by name
