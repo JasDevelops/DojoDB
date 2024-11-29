@@ -20,9 +20,13 @@ app.get("/", (req, res) => {
     res.send(`Welcome to DojoDB - Let"s kick things off!`)     // Sends response text for root - endpoint
 });
 
-// Get list of all movies
-app.get("/movies", (req, res) => {     
-    res.json(topMovies);     // Sends the whole array as JSON
+// GET list of all movies
+app.get("/movies", async(req, res) => {     
+    await Movies.find()
+    .then((movies) => {res.status(201).json(movies);
+    })      // Return all movies
+    .catch((err) => {res.status(500).send("Error: " + err);
+    });     // Return server error
 });
 
 // Get data about specific movie by title
