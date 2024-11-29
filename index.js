@@ -37,7 +37,7 @@ app.get("/movies", async(req, res) => {
         }));
         res.status(201).json(orderMovies);
     })      // Return all movies (ordered)
-    .catch((err) => {res.status(500).send("Error: " + err);
+    .catch((err) => {res.status(500).json ({ message: "Something went wrong while fetching the movies. Please try again later."});
     });     // Return server error
 });
 
