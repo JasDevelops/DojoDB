@@ -24,8 +24,19 @@ app.get("/", (req, res) => {
 // GET list of all movies
 app.get("/movies", async(req, res) => {     
     await Movies.find()
-    .then((movies) => {res.status(201).json(movies);
-    })      // Return all movies
+    .then((movies) => {
+        const orderMovies = movies.map(movie => ({      // Reorder to display nicely
+            _id: movie._id,
+            title: movie.title,
+            description: movie.description,
+            genre: movie.genre,
+            director: movie.director,
+            image: movie.image,
+            releaseYear: movie.releaseYear,
+            actors: movie.actors
+        }));
+        res.status(201).json(orderMovies);
+    })      // Return all movies (ordered)
     .catch((err) => {res.status(500).send("Error: " + err);
     });     // Return server error
 });
