@@ -125,53 +125,106 @@ app.get("/movies/release-year/:year", async (req, res) => {
     });
 });
 
-// Get data about a director by name
-app.get("/movies/directors/:director", (req, res) => {     
-    const directorName = req.params.director.trim().toLowerCase();     // Get cleaned-up director name from URL
-    const directorDetails = topMovies
-        .map(movie => movie.director)
-        .find(director => director.name.trim().toLowerCase() === directorName);     // Find director in topMovies array
-    if (directorDetails) {
-        res.json(directorDetails);
-    } else {
-        res.status(404).send(`Director "${directorName}" not found.`);   // Error message 
-    }
+// GET data about a director by name
+app.get("/directors/:name", async (req, res) => {
+    const directorName = req.params.name.trim().toLowerCase(); // Cleaned-up director name from URL
+
+    await Movies.find({ "director.name": { $regex: new RegExp(directorName, "i") } })  // Find movies with matching director name (case insensitive)
+    .then((movies) => {
+        if (movies.length === 0) {
+            return res.status(404).json({ message: `No movies found for director "${directorName}".` });
+        }
+        const director = movies[0].director;  // Assume first movie's director as the reference
+        const directorData = {
+            name: director.name,
+            bio: director.bio,
+            birthYear: director.birthYear,
+            deathYear: director.deathYear,
+            movies: movies.map(movie => ({  // List of movies directed by this director
+                title: movie.title,
+                releaseYear: movie.releaseYear,
+                genre: movie.genre.name,
+                _id: movie._id
+            }))
+        };
+        res.status(200).json(directorData);  // Return director details with the list of movies
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).json({ message: "Something went wrong while fetching the director data. Please try again later." });
+    });
 });
+
 
 // Add new user
-app.post("/users", (req, res) => {     
-    const newUser = req.body;
-    if (!newUser.name || !newUser.email) {    // Check if "name" is provided in request body
-        return res.status(400).send("Missing 'name' or 'email'.");   
-    }
-    const existingUser = users.find(u => u.email === newUser.email || u.name === newUser.name);
-    if (existingUser) {     // Check if user with same name or email already exists
-        return res.status(400).send(`User with this ${existingUser.email === newUser.email ? "email" : "name"} already exists.`);
-    }
-else {
-   newUser.id = uuid.v4();     // Generate unique ID
-   users.push(newUser);   // Add user to users array
-    res.status(201).send({
-        message: `User created with name: ${newUser.name} and email: ${newUser.email}`,
-        user: newUser,
+app.post("/users", async(req, res) => {     
+    const {username, email, password} = req.body;   // Get user data from request body
+    if (!username|| !email || !password) {      // Validation   
+        return res.status(400).json({ message: "Please provide username, email, and password." });
+        }
+        const existingUserByEmail = await Users.findOne({ email });     // Check if user exists already by email
+        const existingUserByUsername = await Users.findOne({ username });        // Check if user already exists by username
+        if (existingUserByEmail) {
+            return res.status(400).json({ message: "User with this email already exists." });
+        }
+        if (existingUserByUsername) {
+            return res.status(400).json({ message: "User with this username already exists." });
+        }
+        const newUser = new User({ username, email, password });        // Create new user
+        newUser.save()      // Save user
+        .then(() => {
+            res.status(201).json({ message: "User created successfully", user: newUser });  // Success message
+        })
+        .catch((err) => {   // Error message
+            console.error(err); 
+            res.status(500).json({ message: "Failed to create user. Please try again later." });
         });
-    }
 });
 
-// Update user info
-app.put("/users/:id", (req, res) => {     
-    const userId = req.params.id;     // Get user ID from URL
-    const updatedUser = req.body;     // Get updated user data
-    const user = users.find(u => u.id === userId);  // Find user by ID
-    if (!user){
-        res.status(404).send(`User with ID "${userId}" not found.`);   // Error message not found
+// Update user info by username
+app.put("/users/:username", async (req, res) => {
+    const { username } = req.params;  // Get the username from the URL
+    const { newUsername, newEmail, newPassword, newBirthday, newFavourites } = req.body;  // Get data from request body
+
+    const existingUser = await Users.findOne({ username });     // Check if the user exists
+    if (!existingUser) {
+        return res.status(404).json({ message: "User not found." });  // If the user is not found, return an error
     }
-        user.username = updatedUser.username || user.username;  // If username is provided, update it. If not, keep current
-        res.status(200).send( {
-            message:`User with ID "${userId}" updated successfully.` , username: `${updatedUser.username}`,
-            user: user  // Return the updated user object
-        }); 
+    if (newUsername && newUsername !== username) {     // Check if the new username already exists
+        const usernameTaken = await Users.findOne({ username: newUsername });
+        if (usernameTaken) {
+            return res.status(400).json({ message: "Username is already taken." });  // If the new username is already taken, return an error
+        }
+    }
+    if (newEmail && newEmail !== existingUser.email) {      // Check if the new email already exists
+        const emailTaken = await Users.findOne({ email: newEmail });
+        if (emailTaken) {
+            return res.status(400).json({ message: "Email is already taken." });  // If the new email is already taken, return an error
+        }
+    }
+    const updatedUser = await Users.findOneAndUpdate(       // Update user data
+        { username },  // Find the user by the old username
+        { 
+            $set: { 
+                username: newUsername || username,  // If newUsername is provided, use it, otherwise keep the old username
+                email: newEmail || existingUser.email,  // If newEmail is provided, use it, otherwise keep the old email
+                password: newPassword || existingUser.password,  // If newPassword is provided, use it, otherwise keep the old password
+                birthday: newBirthday || existingUser.birthday,  // If newBirthday is provided, use it, otherwise keep the old birthday
+                favourites: newFavourites || existingUser.favourites,  // If newFavourites are provided, use them, otherwise keep the old favourites
+            }
+        },
+        { new: true }  // Return the updated user document
+    );
+    if (!updatedUser) {     // If the user was not found, return a 404 error
+        return res.status(404).json({ message: `User with username "${username}" not found.` });
+    }
+    const isModified = updatedUser.username !== username || updatedUser.email !== email || updatedUser.password !== password || updatedUser.birthday !== birthday || updatedUser.favourites !== favourites;     // If the user was found but no fields were updated, return a 400 error
+    if (!isModified) {
+        return res.status(400).json({ message: "No changes were made to the user." });  // No changes were made
+    }
+    res.status(200).json({ message: "User updated successfully.", user: updatedUser });     // Success response
 });
+
 
 // Add movie to user"s favourites list
 app.post("/users/:id/favourites/:movieTitle", (req, res) => {     
@@ -232,6 +285,10 @@ app.delete("/users/:id", (req, res) => {
     }
 });
 
+// undefefined routes
+app.use((req, res) => {
+    res.status(404).send("Route not found!");
+});
 // Log errors
 app.use((err,req,res,next) => {
     console.error(err.stack);     
