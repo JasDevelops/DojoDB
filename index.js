@@ -1,8 +1,15 @@
 const express = require("express");     // Import Express
+app.use(express.json()); // Import body parser   
+app.use(express.urlencoded({extended:true}));   // Import body parser
 const morgan = require("morgan");     // Import Morgan for logging requests
 const fs = require("fs");     // Import built-in modules fs to help to create and append logs
 const uuid = require("uuid");    // uuid package to generate unique IDs
 const path = require("path");     // Import built-in modules path to help file paths work
+const mongoose = require("mongoose");   // Import Mongoose
+mongoose.connect("mongodb://localhost:27017/db",{ useNewUrlParser: true, useUnifiedTopology: true });
+const Models = require("./models.js");  // Import Mongoose-Models
+const Movies = Models.Movie;    // Movie-Model
+const Users = Models.User;  // User-Model
 const app = express();     // Initialize Express app
 const accessLogStream = fs.createWriteStream(path.join(__dirname, "log.txt"), {flags: "a"});     // Create a write stream (in append mode) and create a "log.txt" file in the root directory. Appended via path.join
 
