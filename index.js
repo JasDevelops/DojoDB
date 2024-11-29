@@ -157,26 +157,24 @@ app.get("/directors/:name", async (req, res) => {
 
 
 // Add new user
-app.post("/users", async(req, res) => {     
-    const {username, email, password} = req.body;   // Get user data from request body
-    if (!username|| !email || !password) {      // Validation   
+app.post("/users", async (req, res) => {     
+    const { username, email, password } = req.body;   // Get user data from request body
+    if (!username || !email || !password) {      // Validation   
         return res.status(400).json({ message: "Please provide username, email, and password." });
-        }
-        const existingUserByEmail = await Users.findOne({ email });     // Check if user exists already by email
-        const existingUserByUsername = await Users.findOne({ username });        // Check if user already exists by username
-        if (existingUserByEmail) {
-            return res.status(400).json({ message: "User with this email already exists." });
-        }
-        if (existingUserByUsername) {
-            return res.status(400).json({ message: "User with this username already exists." });
-        }
-        const newUser = new User({ username, email, password });        // Create new user
-        newUser.save()      // Save user
+    }
+    if (await Users.findOne({ email })) {   // Check if user already exists by email
+        return res.status(400).json({ message: "User with this email already exists." });
+    }
+    if (await Users.findOne({ username })) {        // Check if user already exists by username
+        return res.status(400).json({ message: "User with this username already exists." });
+    }
+    const newUser = new Users({ username, email, password });           // Create new user
+    await newUser.save()        // Save user
         .then(() => {
-            res.status(201).json({ message: "User created successfully", user: newUser });  // Success message
+            res.status(201).json({ message: "User created successfully", user: newUser });
         })
-        .catch((err) => {   // Error message
-            console.error(err); 
+        .catch((err) => {
+            console.error(err);
             res.status(500).json({ message: "Failed to create user. Please try again later." });
         });
 });
@@ -185,93 +183,84 @@ app.post("/users", async(req, res) => {
 app.put("/users/:username", async (req, res) => {
     const { username } = req.params;  // Get the username from the URL
     const { newUsername, newEmail, newPassword, newBirthday, newFavourites } = req.body;  // Get data from request body
-
     const existingUser = await Users.findOne({ username });     // Check if the user exists
     if (!existingUser) {
-        return res.status(404).json({ message: "User not found." });  // If the user is not found, return an error
+        return res.status(404).json({ message: "User not found." });
     }
-    if (newUsername && newUsername !== username) {     // Check if the new username already exists
-        const usernameTaken = await Users.findOne({ username: newUsername });
-        if (usernameTaken) {
-            return res.status(400).json({ message: "Username is already taken." });  // If the new username is already taken, return an error
-        }
+    if (newUsername && newUsername !== username && await Users.findOne({ username: newUsername })) {        // Check if new username is taken
+        return res.status(400).json({ message: "Username is already taken." });
     }
-    if (newEmail && newEmail !== existingUser.email) {      // Check if the new email already exists
-        const emailTaken = await Users.findOne({ email: newEmail });
-        if (emailTaken) {
-            return res.status(400).json({ message: "Email is already taken." });  // If the new email is already taken, return an error
-        }
+    if (newEmail && newEmail !== existingUser.email && await Users.findOne({ email: newEmail })) {      // Check if new email is taken
+        return res.status(400).json({ message: "Email is already taken." });
     }
     const updatedUser = await Users.findOneAndUpdate(       // Update user data
         { username },  // Find the user by the old username
-        { 
-            $set: { 
-                username: newUsername || username,  // If newUsername is provided, use it, otherwise keep the old username
-                email: newEmail || existingUser.email,  // If newEmail is provided, use it, otherwise keep the old email
-                password: newPassword || existingUser.password,  // If newPassword is provided, use it, otherwise keep the old password
-                birthday: newBirthday || existingUser.birthday,  // If newBirthday is provided, use it, otherwise keep the old birthday
-                favourites: newFavourites || existingUser.favourites,  // If newFavourites are provided, use them, otherwise keep the old favourites
+        {
+            $set: {
+                username: newUsername || username,
+                email: newEmail || existingUser.email,
+                password: newPassword || existingUser.password,
+                birthday: newBirthday || existingUser.birthday,
+                favourites: newFavourites || existingUser.favourites,
             }
         },
         { new: true }  // Return the updated user document
     );
-    if (!updatedUser) {     // If the user was not found, return a 404 error
-        return res.status(404).json({ message: `User with username "${username}" not found.` });
+    const isModified = updatedUser.username !== username || updatedUser.email !== existingUser.email || updatedUser.password !== existingUser.password || updatedUser.birthday !== existingUser.birthday || updatedUser.favourites !== existingUser.favourites;
+    if (!isModified) {      // If no updates were made, return a 400 error
+        return res.status(400).json({ message: "No changes were made to the user." });
     }
-    const isModified = updatedUser.username !== username || updatedUser.email !== email || updatedUser.password !== password || updatedUser.birthday !== birthday || updatedUser.favourites !== favourites;     // If the user was found but no fields were updated, return a 400 error
-    if (!isModified) {
-        return res.status(400).json({ message: "No changes were made to the user." });  // No changes were made
+    res.status(200).json({ message: "User updated successfully.", user: updatedUser });     // Respond with the updated user
+});
+
+// Add movie to favourites
+app.put("/users/:username/favourites", async (req, res) => {
+    const { username } = req.params;  // Get the username from the URL
+    const { movieTitel } = req.body;  // Get movie title from request body
+
+    if (!movieTitel) {
+        return res.status(400).json({ message: "Please provide a movie name." });  // Validation
     }
-    res.status(200).json({ message: "User updated successfully.", user: updatedUser });     // Success response
+    const existingUser = await Users.findOne({ username });         // Check if the user exists
+    if (!existingUser) {
+        return res.status(404).json({ message: "User not found." });  // User not found
+    }
+    if (existingUser.favourites.includes(movieTitel)) {        // Check if the movie is already in the user's favourites
+        return res.status(400).json({ message: `"${movieTitle}" is already in the favourites list.` });
+    }
+    existingUser.favourites.push(movieTitel);      // Add the movie to the favourites
+    const updatedUser = await existingUser.save();          // Save the updated user document
+    if (!updatedUser) {
+        return res.status(500).json({ message: "Failed to add movie to favourites. Please try again later." });
+    }
+    res.status(200).json({ message: `"${movieTitle}" added to favourites successfully.`, user: updatedUser });        // Success response
 });
 
 
-// Add movie to user"s favourites list
-app.post("/users/:id/favourites/:movieTitle", (req, res) => {     
-    const userId = req.params.id;     // Get user ID from URL
-    const movieTitle = req.params.movieTitle.trim().toLowerCase();     // Get movie title
+
+// Remove movie by title from favourites
+app.delete("/users/:username/favourites", async (req, res) => {
+    const { username } = req.params;  // Get the username from the URL
+    const { movieTitle } = req.body;  // Get movie title from request body
+
     if (!movieTitle) {
-        return res.status(400).send("Movie title is required.");
+        return res.status(400).json({ message: "Please provide a movie title." });  // Validation
     }
-    const user = users.find(u => u.id === userId);      // Find user by ID
-    if (!user) {
-        return res.status(404).send("User not found.");
+    const existingUser = await Users.findOne({ username });         // Check if the user exists
+    if (!existingUser) {
+        return res.status(404).json({ message: "User not found." });  // User not found
     }
-    const movie = topMovies.find(m => m.title.trim().toLowerCase() === movieTitle);     // Find movie by title
-    if (!movie) {
-        return res.status(404).send("Movie not found.");
+    if (!existingUser.favourites.includes(movieTitle)) {            // Check if the movie is in the user's favourites
+        return res.status(400).json({ message: "Movie not found in favourites." });  // Movie not in favourites
     }
-    if (!user.favourites) {
-            user.favourites = [];   // Initialize favourites list (if it doesn"t exist)
+    existingUser.favourites.pull(movieTitle);       // Remove the movie from the favourites
+    const updatedUser = await existingUser.save();      // Save the updated user document
+    if (!updatedUser) {
+        return res.status(500).json({ message: "Failed to remove movie from favourites. Please try again later." });
     }
-    const movieExists = user.favourites.some(fav => fav.title.toLowerCase() === movie.title.toLowerCase());  // Check if movie is already in list
-    if (movieExists) {
-        return res.send(`${movie.title} is already in favourites.`);   // Message if already added
-        } 
-        user.favourites.push(movie);    // Adds movie to list
-        res.status(201).send(`${movie.title} added to favourites.`);    // Send success message
+    res.status(200).json({ message: `"${movieTitle}" has been removed from favourites successfully.`, user: updatedUser });        // Success response
 });
 
-// Remove movie from user"s favourites list
-app.delete("/users/:id/favourites/:movieTitle", (req, res) => {     
-    const userId = req.params.id;     // Get user ID from URL
-    const movieTitle = req.params.movieTitle.trim().toLowerCase();     // Get movie title
-    const user = users.find(u => u.id === userId);      // Find user by ID
-    if (user) {
-        if (!user.favourites) {
-            user.favourites = [];   // Initialize favourites list (if it doesn"t exist)
-        }
-        const movieList = user.favourites.filter(fav => fav.title.toLowerCase() !== movieTitle.toLowerCase());    
-        if (movieList.length === user.favourites.length) {
-            res.status(404).send("Movie not found in favourites.");   // Error message if not in list (no changes made)   
-        } else {
-            user.favourites = movieList;
-            res.send(`${movieTitle} has been removed from favourites.`);    // Send success message
-        }
-    } else {
-        res.status(404).send("User not found.");
-    }
-});
 
 // Remove user
 app.delete("/users/:id", (req, res) => {     
