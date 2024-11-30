@@ -1,226 +1,503 @@
 <!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DojoDB - Documentation</title>
-    <style>
-    table,th{text-align:left}pre,td,th{word-wrap:break-word}body{font-family:sans-serif}.EndpointTable{width:100%;overflow-x:auto}table{width:100%;border-collapse:collapse;table-layout:fixed;border-spacing:1px}td,th{border:1px solid #eee;padding:8px;vertical-align:top;white-space:normal}th{background-color:#f4f4f4}pre{background-color:#f8f8f8;padding:10px;border-radius:5px;overflow-x:auto;white-space:pre-wrap}@media (max-width:768px){table{width:100%;display:block;overflow-x:auto;white-space:nowrap}td,th{padding:10px;text-align:left}}@media (max-width:480px){td,th{padding:6px}}
-    </style>
-</head>
-
-<body>
-    <section>
-        <h1>DojoDB - Documentation</h1>
-        <p>This web application allows users to explore information on movies with a special focus on martial arts films. Users can sign up, update their personal profiles, and curate a list of their favorite movies.</p>
-    </section>
-
-    <section>
-        <div class="EndpointTable">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Request</th>
-                        <th>URL</th>
-                        <th>HTTP Method</th>
-                        <th>Request Body Data Format</th>
-                        <th>Response Body Data Format</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Return a list of all movies</td>
-                        <td>/movies</td>
-                        <td>GET</td>
-                        <td>none</td>
-                        <td>
-                            Returns a **JSON array** of movies. If successful, the response contains the list of movies. If no movies are available, returns a 404 error. Example:
-                            <pre>
-{
-    "title": "Enter the Dragon",
-    "description": "Bruce Lee stars as a [...].",
-    "genre": ["Action"],
-    "featured": true,
-    "director": {
-        "name": "Robert Clouse",
-        "bio": "Robert Clouse was an American film director [...].",
-        "birthYear": 1928,
-        "deathYear": 1997
-    },
-    "actors": ["Bruce Lee", "John Saxon", "Jim Kelly"],
-    "releaseYear": 1973
-}
-                            </pre>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Get a specific movie by title</td>
-                        <td>/movies/{title}</td>
-                        <td>GET</td>
-                        <td>none</td>
-                        <td>
-                            Returns a **JSON object** of the specific movie. If the movie is not found, a 404 error is returned. Example:
-                            <pre>
-{
-    "title": "Drunken Master",
-    "description": "Jackie Chan stars as a [...].",
-    "genre": ["Action", "Comedy"],
-    "featured": true,
-    "director": {
-        "name": "Yuen Woo-ping",
-        "bio": "Yuen Woo-ping is a Hong Kong [...].",
-        "birthYear": 1945,
-        "deathYear": null
-    },
-    "actors": ["Jackie Chan", "Simon Yam"],
-    "releaseYear": 1978
-}
-                            </pre>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Get details about a genre by name</td>
-                        <td>/movies/genres/{genre}</td>
-                        <td>GET</td>
-                        <td>none</td>
-                        <td>
-                            Returns a **JSON object** with the genre’s description. If the genre is not found, a 404 error is returned. Example:
-                            <pre>
-{
-    "name": "Action",
-    "description": "Action-packed movies [...]"
-}
-                            </pre>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Get details about a director by name</td>
-                        <td>/movies/directors/{director}</td>
-                        <td>GET</td>
-                        <td>none</td>
-                        <td>
-                            Returns a **JSON object** with the director’s details. If the director is not found, a 404 error is returned. Example:
-                            <pre>
-{
-    "name": "Bruce Lee",
-    "bio": "Famous martial artist",
-    "birthYear": 1940,
-    "deathYear": 1973
-}
-                            </pre>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Get all movies that feature a specific actor</td>
-                        <td>/movies/actors/{actor}</td>
-                        <td>GET</td>
-                        <td>none</td>
-                        <td>
-                            Returns a **JSON object** with the movies of an specific. If the actor is not found, a 404 error is returned. Example:
-                            <pre>
-{
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DojoDB - Documentation</title>
+        <style>
+      table,
+      th {
+        text-align: left;
+      }
+      pre,
+      td,
+      th {
+        word-wrap: break-word;
+      }
+      body {
+        font-family: sans-serif;
+      }
+      .EndpointTable {
+        width: 100%;
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        border-spacing: 1px;
+      }
+      td,
+      th {
+        border: 1px solid #eee;
+        padding: 8px;
+        vertical-align: top;
+        white-space: normal;
+      }
+      th {
+        background-color: #f4f4f4;
+      }
+      pre {
+        background-color: #f8f8f8;
+        padding: 10px;
+        border-radius: 5px;
+        overflow-x: auto;
+        white-space: pre-wrap;
+      }
+      @media (max-width: 768px) {
+        table {
+          width: 100%;
+          display: block;
+          overflow-x: auto;
+          white-space: nowrap;
+        }
+        td,
+        th {
+          padding: 10px;
+          text-align: left;
+        }
+      }
+      @media (max-width: 480px) {
+        td,
+        th {
+          padding: 6px;
+        }
+      }
+        </style>
+    </head>
+    <body>
+        <section>
+            <h1>DojoDB - Documentation</h1>
+            <p>
+                This web application allows users to explore information on movies with a special focus on martial arts films. Users can sign up, update their personal profiles, and curate a list of their favorite movies.
+            </p>
+        </section>
+        <section>
+            <div class="EndpointTable">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Request</th>
+                            <th>URL</th>
+                            <th>HTTP Method</th>
+                            <th>Request Body Data Format</th>
+                            <th>Response Body Data Format</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Return a list of all movies</td>
+                            <td>/movies</td>
+                            <td>GET</td>
+                            <td>none</td>
+                            <td>
+                                A **JSON array** of all movies. If no movies are available, returns a 500 error.
+                                <br>
+                                Example:
+                                <pre>
+[
     {
         "title": "Enter the Dragon",
-        "description": "Bruce Lee stars as a [...].",
-        "genre": ["Action"],
-        "actors": ["Bruce Lee", "John Saxon", "Jim Kelly"],
-        "releaseYear": 1973
+        "description": "Bruce Lee stars as a martial artist recruited by a secret British agency to infiltrate a crime lord's island fortress for a deadly tournament. This classic is one of the most influential martial arts films ever.",
+        "genre": {
+            "name": "Action",
+            "description": "High-energy films packed with intense fight scenes, fast-paced choreography, and adrenaline-pumping sequences that showcase the power and skill of martial artists in combat."
+        },
+        "director": {
+            "name": "Robert Clouse",
+            "bio": "Robert Clouse was an American film director, best known for his martial arts films, most notably Enter the Dragon.",
+            "birthYear": 1928,
+            "deathYear": 1997
+        },
+        "image": {
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Saxon_and_Kelly.jpg",
+            "imageAttribution": "Public domain, via Wikimedia Commons"
+        },
+        "releaseYear": 1973,
+        "actors": [
+            {
+                "_id": "674a36ef7e337550f02dcda5",
+                "name": "Bruce Lee",
+                "role": "Lee"
+            },
+            {
+                "_id": "674a36ef7e337550f02dcda6",
+                "name": "John Saxon",
+                "role": "Roper"
+            },
+            {
+                "_id": "674a36ef7e337550f02dcda7",
+                "name": "Jim Kelly",
+                "role": "Williams"
+            }
+        ],
+        "_id": "67488ec6f9495208cdfdecf3"
     },
     {
-        "title": "The Way of the Dragon",
-        "description": "Bruce Lee [...].",
-        "genre": ["Action", "Martial Arts"],
-        "actors": ["Bruce Lee", "Chuck Norris"],
-        "releaseYear": 1972
-    }
-}
-                            </pre>
-                        </td>
-                    </tr>      
-                    <tr>
-                        <td>Get movies by release year</td>
-                        <td>/movies/year/{year}</td>
-                        <td>GET</td>
-                        <td>none</td>
-                        <td>
-                            Returns a **JSON array** of movies released in the specified year. If no movies are found for the year, a 404 error is returned. Example:
-                            <pre>
+        "title": "Drunken Master",
+        "description": "Jackie Chan stars as a young man who learns the unconventional Drunken Fist style of kung fu. The film mixes humor with martial arts in a unique blend that became a hallmark of Chan's career.",
+        "genre": {
+            "name": "Action",
+            "description": "High-energy films packed with intense fight scenes, fast-paced choreography, and adrenaline-pumping sequences that showcase the power and skill of martial artists in combat."
+        },
+        "director": {
+            "name": "Yuen Woo-Ping",
+            "bio": "Yuen Woo-ping is a Hong Kong martial arts film director, choreographer, and producer. He is renowned for his work on action choreography in films like The Matrix and Crouching Tiger, Hidden Dragon.",
+            "birthYear": 1945,
+            "deathYear": null
+        },
+        "image": {
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/77/Yueng_Siu-tien.jpg",
+            "imageAttribution": "Yueng Siu-tien by Yuen Siu-tien, licensed under CC BY-SA 4.0"
+        },
+        "releaseYear": 1978,
+        "actors": [
+            {
+                "_id": "674a36ef7e337550f02dcda8",
+                "name": "Jackie Chan",
+                "role": "Wong Fei-hung"
+            },
+            {
+                "_id": "674a36ef7e337550f02dcda9",
+                "name": "Yuen Siu-tien",
+                "role": "Beggar So"
+            }
+        ],
+        "_id": "67488fd4f9495208cdfdecf4"
+    }, 
+    {...}
+]
+                                </pre>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Get a specific movie by title</td>
+                            <td>/movies/{title}</td>
+                            <td>GET</td>
+                            <td>none</td>
+                            <td>
+                                A **JSON object** of the specific movie. If the movie is not found, a 404 error is  returned.
+                                <br>
+                                Example:
+                                <pre>
 {
     "title": "Enter the Dragon",
-    "description": "Bruce Lee stars as a [...].",
-    "genre": ["Action"],
-    "actors": ["Bruce Lee", "John Saxon", "Jim Kelly"],
-    "releaseYear": 1973
+    "description": "Bruce Lee stars as a martial artist recruited by a secret British agency to infiltrate a crime lord's island fortress for a deadly tournament. This classic is one of the most influential martial arts films ever.",
+    "genre": "Action",
+    "director": "Robert Clouse",
+    "image": {
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Saxon_and_Kelly.jpg",
+        "imageAttribution": "Public domain, via Wikimedia Commons"
+    },
+    "releaseYear": 1973,
+    "actors": [
+        {
+            "_id": "674a36c37e337550f02dcda1",
+            "name": "Bruce Lee",
+            "role": "Lee"
+        },
+        {
+            "_id": "674a36c37e337550f02dcda2",
+            "name": "John Saxon",
+            "role": "Roper"
+        },
+        {
+            "_id": "674a36c37e337550f02dcda3",
+            "name": "Jim Kelly",
+            "role": "Williams"
+        }
+    ],
+    "_id": "67488ec6f9495208cdfdecf3"
 }
-                            </pre>
-                        </td>
-                    </tr>                                                     
-                    <tr>
-                        <td>Add a new user</td>
-                        <td>/users</td>
-                        <td>POST</td>
-                        <td>
-                            **JSON object** with new user's data. Example:
-                            <pre>{ name: 'Alex Ribeira', email: 'alex@example.com' }</pre>
-                        </td>
-                        <td>
-                            If the 'name' and 'email' fields are present and valid, the new user is created and a 201 status is returned. If any required field is missing, or if the user already exists, a 400 error is returned. Example:
-                            <pre>{'User created with name: 'Alex Ribeira' and email: 'alex@example.com', name: 'Alex Ribeira', email: 'alex@example.com' }</pre>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Update user information by ID</td>
-                        <td>/users/{id}</td>
-                        <td>PUT</td>
-                        <td>
-                            **JSON object** with updated user data. Example:
-                            <pre>{ username: 'Shadow_Shinobi' }</pre>
-                        </td>
-                        <td>
-                            If the user exists, their data is updated and a 201 status with the updated user data is returned. If the user does not exist, a 404 error is returned. Example:
-                            <pre>{'Updated information for user with ID: 5', username: 'Shadow_Shinobi' }</pre>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Add a movie to user's favourites list</td>
-                        <td>/users/{id}/favourites/{movieTitle}</td>
-                        <td>POST</td>
-                        <td>
-                            No body required. The movie title is passed as a URL parameter. Example:
-                            <pre>/users/{id}/favourites/Enter%20the%20Dragon%20</pre>    
-                        </td>
-                        <td>
-                            If the user and movie both exist, the movie is added to the user's favorites list. If the movie is already on the list, a message is returned stating it is already added. If either the user or movie is not found, a 404 error is returned. Example:
-                            <pre>{'Enter the Dragon added to favourites.' }</pre>
-                            if the movie is already in the list:
-                            <pre>{'Enter the Dragon is already in favourites.' }</pre>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Remove a movie from user's favourites list</td>
-                        <td>/users/{id}/favourites/{movieTitle}</td>
-                        <td>DELETE</td>
-                        <td>None</td>
-                        <td>
-                            If the user and movie both exist, the movie is removed from the favorites list. If the movie is not in the list, a message is returned stating the movie was not found. If the user does not exist, a 404 error is returned. Example:
-                            <pre>{'Movie removed to favourites.' }</pre>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Remove user</td>
-                        <td>/users/{id}</td>
-                        <td>DELETE</td>
-                        <td>None</td>
-                        <td>
-                            If the user exists, they are removed and a confirmation message is returned. If the user does not exist, a 404 error is returned. Example:
-                            <pre>{'User with ID: 5 successfully removed.' }</pre>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
-</body>
-
+                                </pre>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Get movies by release year</td>
+                            <td>/movies/release-year/{year}</td>
+                            <td>GET</td>
+                            <td>none</td>
+                            <td>
+                                A **JSON array** of movies released in the specified year. If no movies are found for the year, a 404 error is returned.
+                                <br>
+                                Example:
+                                <pre>
+[
+    {
+        "title": "Crouching Tiger, Hidden Dragon",
+        "releaseYear": 2000,
+        "description": "This epic film tells the story of a stolen sword, forbidden love, and a martial arts journey. It blends action with deep emotional storytelling.",
+        "genre": "Action",
+        "director": "Ang Lee",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/c/cf/Maruyama_Okyo_-_Tiger_and_Dragon%2C_Tiger_-_81.693.1_-_Detroit_Institute_of_Arts.jpg",
+        "actors": [
+            {
+                "_id": "674aea4cfd5e4c481ae0bd28",
+                "name": "Chow Yun-fat",
+                "role": "Li Mu Bai"
+            },
+            {
+                "_id": "674aea4cfd5e4c481ae0bd29",
+                "name": "Michelle Yeoh",
+                "role": "Yu Shu Lien"
+            },
+            {
+                "_id": "674aea4cfd5e4c481ae0bd2a",
+                "name": "Zhang Ziyi",
+                "role": "Jen Yu"
+            }
+        ],
+        "_id": "67489000f9495208cdfdecf5"
+    }
+]
+                                </pre>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>GET data about an actor by name</td>
+                            <td>/actors/{actor}</td>
+                            <td>GET</td>
+                            <td>none</td>
+                            <td>
+                                A **JSON object** with details about actor, including movies in which they appeared and their role. If no movies are found, a 404 error is returned.
+                                <br>
+                                Example:
+                                <pre>
+{
+    "name": "bruce lee",
+    "roles": [
+        {
+            "movieTitle": "Enter the Dragon",
+            "role": "Lee",
+            "_id": "67488ec6f9495208cdfdecf3"
+        },
+        {
+            "movieTitle": "The Way of the Dragon",
+            "role": "Tang Lung",
+            "_id": "67489214f9495208cdfdecf9"
+        }
+    ]
+}
+                                </pre>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>GET data about a genre by name</td>
+                            <td>/movies/genres/{genre}</td>
+                            <td>GET</td>
+                            <td>none</td>
+                            <td>
+                                A **JSON array** with details about a genre, including movies of that genre. If no movies are found, a 404 error is returned.
+                                <br>
+                                Example:
+                                <pre>
+{
+    "name": "Action",
+    description": "High-energy films packed with intense fight scenes, fast-paced choreography, and adrenaline-pumping sequences that showcase the power and skill of martial artists in combat.",
+    "movies": [
+        {
+            "title": "Enter the Dragon",
+            "releaseYear": 1973,
+            "_id": "67488ec6f9495208cdfdecf3"
+        },
+        {
+            "title": "Drunken Master",
+            "releaseYear": 1978,
+            "_id": "67488fd4f9495208cdfdecf4"
+        },
+        {...}
+    ]
+}
+                                </pre>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Get data about a director by name</td>
+                            <td>/directors/{director}</td>
+                            <td>GET</td>
+                            <td>none</td>
+                            <td>
+                                A **JSON array** with director’s details, including movies directed by them. If the director is not found, a 404 error is returned.
+                                <br>
+                                Example:
+                                <pre>
+{
+    "name": "Stephen Chow",
+    "bio": "Stephen Chow is a Hong Kong filmmaker, actor, and comedian, known for his unique blend of slapstick humor, visual effects, and martial arts.",
+    "birthYear": 1962,
+    "deathYear": null,
+    "movies": [
+        {
+            "title": "Kung Fu Hustle",
+            "releaseYear": 2004,
+            "genre": "Action",
+            "_id": "674890f7f9495208cdfdecf8"
+        },
+        {
+            "title": "Shaolin Soccer",
+            "releaseYear": 2001,
+            "genre": "Action",
+            "_id": "6748a0aff9495208cdfded02"
+        }
+    ]
+}
+                                </pre>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Add a new user</td>
+                            <td>/users</td>
+                            <td>POST</td>
+                            <td>
+                                **JSON object** with required fields (username, password,email) and optional birthday.
+                                <br>
+                                Example:
+                                <pre>
+{ 
+    "username": "KarateKid",
+    "email": "test@test.com",
+    "password": "strongPW",
+    "birthday": "2020-05-10"
+}
+                                </pre>
+                            </td>
+                            <td>
+                                A **JSON object** with new user's data. If a required field is missing or already exists, a 400 error is returned.
+                                <br>
+                                Example:
+                                <pre>
+{
+    "message": "User created",
+    "user": {
+        "username": "KarateKid",
+        "password": "strongPW",
+        "email": "test@test.com",
+        "birthday": "2020-05-10T00:00:00.000Z",
+        "_id": "674b6fbdd6d0e506d241e319",
+        "favourites": [],
+        "__v": 0
+    }
+}
+                                </pre>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Update user information by username</td>
+                            <td>/users/{username}</td>
+                            <td>PUT</td>
+                            <td>
+                                **JSON object** with new user data.
+                                <br>
+                                Example:
+                                <pre>
+                                    { 
+                                "newUsername": "new_Kick",
+                                "newEmail": "new_Kick@example.com"
+                            }
+                                </pre>
+                            </td>
+                            <td>
+                                If the user exists, their data is updated. If the user does not exist, a 404 error is returned.
+                                <br>
+                                Example:
+                                <pre>
+{
+    "message": "User updated successfully.",
+    "user": {
+        "_id": "674b3f901e813c4615888e5c",
+        "username": "new_Kick",
+        "password": "strongerPassword",
+        "email": "new_Kick@example.com",
+        "birthday": "2024-11-30T00:00:00.000Z",
+        "favourites": [],
+        "__v": 0
+    }
+}
+                                </pre>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Add a movie to user's favourites list</td>
+                            <td>/users/{username}/favourites</td>
+                            <td>PUT</td>
+                            <td>
+                                **JSON object** with movie title
+                                <br>
+                                Example:
+                                <pre>
+                                    { 
+                                "title": "Drunken Master"
+                            }
+                                </pre>
+                            </td>
+                            <td>
+                                If the user and movie both exist, the movie is added to the user's favorites list. If the movie is already on the list, a 400 error is returned. If either the user or movie is not found, a 404 error is returned.
+                                <br>
+                                Example:
+                                <pre>
+{
+    "username": "NinjaWarrior",
+    "favourites": [
+    "message": "Movie with the title \"ip man\" added to favourites.",
+        {
+            "movieId": "67489232f9495208cdfdecfa",
+            "title": "The Monkey King"
+        },
+        {
+            "movieId": "6748901bf9495208cdfdecf6",
+            "title": "Ip Man"
+        }
+    ]
+}
+                                </pre>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Remove a movie from user's favourites list</td>
+                            <td>/users/{username}/favourites</td>
+                            <td>DELETE</td>
+                            <td>
+                                **JSON object** with movie title
+                                <br>
+                                Example:
+                                <pre>
+{ 
+    "title": "The Monkey King"
+}
+                                </pre>
+                            </td>
+                            <td>
+                                If the user and movie both exist, the movie is removed from the user's favorites list. If either user or movie is not found, a 404 error is returned.
+                                <br>
+                                Example:
+                                <pre>
+{
+    "message": "Movie with the title \"The Monkey King\" removed from favourites.",
+    "username": "NinjaWarrior",
+    "favourites": "No favourite movies yet"
+}
+                                </pre>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Remove user by username</td>
+                            <td>/users/{username}</td>
+                            <td>DELETE</td>
+                            <td>None</td>
+                            <td>
+                                If the user exists, they are removed and a confirmation message is returned. If the user does not exist, a 404 error is returned.
+                                <br>
+                                Example:
+                                <pre>
+{
+    "message": "User with the username \"ChopChop\" has been removed."
+}
+                                </pre>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </body>
 </html>
