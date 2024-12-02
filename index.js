@@ -21,10 +21,10 @@ app.get('/', (req, res) => {res.send(`Welcome to DojoDB - Let's kick things off!
 
 // GET list of all movies
 
-app.get('/movies', async (req, res) => {
+app.get('/movies', passport.authenticate("jwt", {session: false}), async (req, res) => {
 	await Movies.find()
 		.then((movies) => {
-			const orderMovies = movies.map((movie) => ({
+			const orderedMovies = movies.map((movie) => ({
 				// Reorder to display nicely
 				title: movie.title,
 				description: movie.description,
@@ -35,7 +35,7 @@ app.get('/movies', async (req, res) => {
 				actors: movie.actors,
 				_id: movie._id,
 			}));
-			res.status(200).json(orderMovies);
+			res.status(200).json(orderedMovies);
 		}) // Return all movies (ordered)
 		.catch((err) => {
 			console.error(err);
@@ -541,9 +541,9 @@ app.delete('/users/:username', async (req, res) => {
 
 // Undefefined routes
 
-app.use((req, res) => {
-	res.status(404).send('No route found.');
-});
+// app.use((req, res) => {
+// 	res.status(404).send('No route found.');
+// }); 
 
 // Log errors
 
