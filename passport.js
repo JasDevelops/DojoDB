@@ -28,9 +28,9 @@ passport.use (
                 console.log("finished");
                 return callback(null, user);
             })
-            .catch((err) => {
-                if (err) {
-                    console.log(err); return callback(err);
+            .catch((error) => {
+                if (error) {
+                    console.log(error); return callback(error);
                 }
             })
         }
@@ -43,6 +43,15 @@ passport.use(new JWTStrategy ({
 }, async (jwtPayload, callback) => {
     return await Users.findById(jwtPayload._id)
     .then((user) => {
-        return callback(err)
+        if (!user) {
+            // If user is not found, return an error
+            return callback(new Error('User not found'), false);
+        }
+        // If user is found, pass the user object to callback
+        return callback(null, user);
+    })
+    .catch((err) => {
+        // Catch any errors from the database query
+        return callback(err, false);
     });
 }));
