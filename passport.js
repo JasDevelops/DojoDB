@@ -1,13 +1,12 @@
 const passport = require("passport");
 
-passport = require("passport"),
 LocalStrategy = require("passport-local").Strategy,
 Models = require("./models.js"),
 passportJWT = require("passport-jwt");
 
 let Users = Models.User,
 JWTStrategy = passportJWT.Strategy,
-ExtractJWT = passportJWT.ExtractJWT;
+ExtractJWT = passportJWT.ExtractJwt;
 
 // Local Strategy for basic HTTP authentication
 passport.use (
