@@ -1,9 +1,10 @@
 const express = require('express'); // Import Express
 const app = express(); // Initialize Express app
 app.use(express.json()); // Import body parser
-app.use(express.urlencoded({
-	extended: true
-})); // Import body parser
+app.use(express.urlencoded({extended: true})); // Import body parser
+let auth = require("./auth")(app);
+const passport = require("passport");
+require("./passport");
 const morgan = require('morgan'); // Import Morgan for logging requests
 const fs = require('fs'); // Import built-in modules fs to help to create and append logs
 const uuid = require('uuid'); // uuid package to generate unique IDs
@@ -13,16 +14,10 @@ mongoose.connect('mongodb://localhost:27017/db');
 const Models = require('./models.js'); // Import Mongoose-Models
 const Movies = Models.Movie; // Movie-Model
 const Users = Models.User; // User-Model
-const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {
-	flags: 'a'
-}); // Create a write stream (in append mode) and create a "log.txt" file in the root directory. Appended via path.join
-app.use(morgan('combined', {
-	stream: accessLogStream
-})); // Use morgan middleware to log requests and view logs in log.txt
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a'}); // Create a write stream (in append mode) and create a "log.txt" file in the root directory. Appended via path.join
+app.use(morgan('combined', {stream: accessLogStream})); // Use morgan middleware to log requests and view logs in log.txt
 app.use(express.static('public')); // Automatically serve all static files from "public"-folder
-app.get('/', (req, res) => {
-	res.send(`Welcome to DojoDB - Let's kick things off!`);
-}); // Sends response text for root - endpoint});
+app.get('/', (req, res) => {res.send(`Welcome to DojoDB - Let's kick things off!`);}); // Sends response text for root - endpoint});
 
 // GET list of all movies
 
