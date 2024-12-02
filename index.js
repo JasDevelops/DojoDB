@@ -47,7 +47,7 @@ app.get('/movies', passport.authenticate("jwt", {session: false}), async (req, r
 
 // GET data about specific movie by title
 
-app.get('/movies/:title', async (req, res) => {
+app.get('/movies/:title', passport.authenticate("jwt", {session: false}), async (req, res) => {
 	const movieTitle = req.params.title.trim().toLowerCase(); // Clean up title from URL
 	await Movies.findOne({
 			title: {
@@ -83,7 +83,7 @@ app.get('/movies/:title', async (req, res) => {
 
 // GET movies by release year
 
-app.get('/movies/release-year/:year', async (req, res) => {
+app.get('/movies/release-year/:year', passport.authenticate("jwt", {session: false}), async (req, res) => {
 	const year = req.params.year.trim(); // Cleaned-up year from URL
 	await Movies.find({
 			releaseYear: year
@@ -117,7 +117,7 @@ app.get('/movies/release-year/:year', async (req, res) => {
 
 // GET data about an actor by name
 
-app.get('/actors/:name', async (req, res) => {
+app.get('/actors/:name', passport.authenticate("jwt", {session: false}), async (req, res) => {
 	const actorName = req.params.name.trim().toLowerCase(); // Cleaned-up actor name from URL
 	await Movies.find({
 			'actors.name': {
@@ -164,7 +164,7 @@ app.get('/actors/:name', async (req, res) => {
 
 // GET data about a genre by name
 
-app.get('/genres/:name', async (req, res) => {
+app.get('/genres/:name', passport.authenticate("jwt", {session: false}), async (req, res) => {
 	const genreName = req.params.name.trim().toLowerCase(); // Cleaned-up genre name from URL
 	await Movies.find({
 			'genre.name': {
@@ -201,7 +201,7 @@ app.get('/genres/:name', async (req, res) => {
 
 // GET data about a director by name
 
-app.get('/directors/:name', async (req, res) => {
+app.get('/directors/:name', passport.authenticate("jwt", {session: false}), async (req, res) => {
 	const directorName = req.params.name.trim().toLowerCase(); // Cleaned-up director name from URL
 	await Movies.find({
 			'director.name': {
@@ -298,7 +298,7 @@ app.post('/users', async (req, res) => {
 
 // UPDATE user by username
 
-app.put('/users/:username', (req, res) => {
+app.put('/users/:username', passport.authenticate("jwt", {session: false}), (req, res) => {
 	const {
 		username
 	} = req.params; // Get username from the URL
@@ -308,7 +308,11 @@ app.put('/users/:username', (req, res) => {
 		newPassword,
 		newBirthday
 	} = req.body; // Get data from request body
-
+	if (req.user.username !== username) {  // Check if the authenticated user matches the username in the URL
+		return res.status(403).json({
+			message: 'Permission denied. You can only modify your own account.'
+		});
+	}
 	// Find the user by their username
 	Users.findOne({
 			username
@@ -374,13 +378,19 @@ app.put('/users/:username', (req, res) => {
 
 /// PUT (add) movie to favorites by title
 
-app.put('/users/:username/favourites', async (req, res) => {
+app.put('/users/:username/favourites', passport.authenticate("jwt", {session: false}), async (req, res) => {
 	const {
 		username
 	} = req.params; // Username from URL
 	const {
 		title
 	} = req.body; // Movie title from the request body
+	
+	if (req.user.username !== username) {  // Check if the authenticated user matches the username in the URL
+			return res.status(403).json({
+				message: 'Permission denied. You can only modify your own favourites.'
+			});
+		}
 	if (!title) {
 		return res.status(400).json({
 			message: 'Please provide a movie title.'
@@ -446,13 +456,18 @@ app.put('/users/:username/favourites', async (req, res) => {
 
 // DELETE a movie from the user's favourites
 
-app.delete('/users/:username/favourites', async (req, res) => {
+app.delete('/users/:username/favourites', passport.authenticate("jwt", {session: false}), async (req, res) => {
 	const {
 		username
 	} = req.params; // Username from URL
 	const {
 		title
 	} = req.body; // Movie title from the request body
+	if (req.user.username !== username) {  // Check if the authenticated user matches the username in the URL
+		return res.status(403).json({
+			message: 'Permission denied. You can only modify your own favourites.'
+		});
+	}
 	if (!title) {
 		return res.status(400).json({
 			message: 'Please provide a movie title.'
@@ -514,10 +529,15 @@ app.delete('/users/:username/favourites', async (req, res) => {
 
 // DELETE a user by username
 
-app.delete('/users/:username', async (req, res) => {
+app.delete('/users/:username', passport.authenticate("jwt", {session: false}), async (req, res) => {
 	const {
 		username
 	} = req.params; // Get the username from the URL
+	if (req.user.username !== username) {  // Check if the authenticated user matches the username in the URL
+		return res.status(403).json({
+			message: 'Permission denied. You can only delete your own account.'
+		});
+	}
 	await Users.findOneAndDelete({
 			username
 		}) // Use an object with { username } as the filter
@@ -539,7 +559,7 @@ app.delete('/users/:username', async (req, res) => {
 		});
 });
 
-// Undefefined routes
+// Undefined routes
 
 // app.use((req, res) => {
 // 	res.status(404).send('No route found.');
