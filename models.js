@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const jwt = require("jsonwebtoken");
+const jwtSecret = "mySecretJWT"; // Same as in passport.js
 
 // Movies schema
 let movieSchema = mongoose.Schema({
@@ -41,6 +43,19 @@ let userSchema = mongoose.Schema({
     },
   ],
 });
+
+// JWT generation method 
+userSchema.methods.generateJWTToken = function () {
+  return jwt.sign (
+    { id: this._id},
+    jwtSecret, 
+    { 
+      subject: this.username, 
+      expiresIn: '7d', 
+      algorithm: 'HS256'
+    }
+   );
+};
 
 let Movie = mongoose.model('Movie', movieSchema);
 let User = mongoose.model('User', userSchema);

@@ -1,19 +1,9 @@
 // Login endpoint for registered users
-const jwtSecret = "mySecretJWT"; // Same as in passport.js
 
-const jwt = require("jsonwebtoken"),
-    passport = require("passport");
+const passport = require("passport");
 
 require("./passport.js");
 
-// Function to generate a JWT token
-let generateJWTToken = (user) => {
-    return jwt.sign({id:user._id}, jwtSecret, {
-        subject: user.username, // Username encoded in the token
-        expiresIn: "7d",       // Token expiration time
-        algorithm: "HS256"     // Signing algorithm
-    });
-};
 
 // POST login
 module.exports = (router) => {
@@ -24,7 +14,7 @@ module.exports = (router) => {
             }
             req.login(user, { session: false }, (error) => {
                 if (error) { return res.send(error);}
-                let token = generateJWTToken(user.toJSON());
+                let token = user.generateJWTToken();
                 return res.json({ 
                     message: "Login successful", user: {_id:user._id, username: user.username}, token });
             });
