@@ -362,21 +362,50 @@
                                 </pre>
                             </td>
                             <td>
-                                A **JSON object** with new user's data. If a required field is missing or already exists, a 400 error is returned.
+                                A **JSON object** with new user's data. If a field is faulty, a 422 error is returned. If a required field is missing or already exists, a 400 error is returned.
                                 <br>
                                 Example:
                                 <pre>
 {
     "message": "User created",
     "user": {
-        "username": "KarateKid",
-        "password": "strongPW",
-        "email": "test@test.com",
-        "birthday": "2020-05-10T00:00:00.000Z",
-        "_id": "674b6fbdd6d0e506d241e319",
+        "username": "SmallDragon",
+        "password": "$2b$10$SmFO7hi5Zqh9DboRryuXeOiDAwALOz.vPhb.br5.8MAt7FZ/K9e2W",
+        "email": "sd@email.com",
+        "birthday": null,
+        "_id": "67507dd3b8582ef0828f0c14",
         "favourites": [],
         "__v": 0
     }
+}
+                                </pre>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Login registered User</td>
+                            <td>/login</td>
+                            <td>POST</td>
+                            <td>
+                               Enter username and password (keys) and their values in query params. Copy created token and add to authorization (Bearer Token)
+                                <br>
+                                Example:
+                                <pre>
+    Key: username Value: KarateKid
+    Key: password Value: strongPW
+                                </pre>
+                            </td>
+                            <td>
+                                A **JSON object** of succesful login with userId and username and token. If login fails, a 400 error is returned.
+                                <br>
+                                Example:
+                                <pre>
+{
+    "message": "Login successful",
+    "user": {
+        "_id": "674b2d51d87b33e25fa0714d",
+        "username": "kungfu_fighting"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGIyZDUxZDg3YjMzZTI1ZmEwNzE0ZCIsImlhdCI6MTczMzMwOTczNSwiZXhwIjoxNzMzOTE0NTM1LCJzdWIiOiJrdW5nZnVfZmlnaHRpbmcifQ.B7KC5BRtiMxSwDe7i76vYpjxbEqwiSrnTYamiRcHVwM"
 }
                                 </pre>
                             </td>
@@ -397,20 +426,19 @@
                                 </pre>
                             </td>
                             <td>
-                                If the user exists, their data is updated. If the user does not exist, a 404 error is returned.
+                                A **JSON object** with updated data. If a field is faulty, a 422 error is returned. If a required field is missing or already exists, a 400 error is returned.
                                 <br>
                                 Example:
                                 <pre>
 {
     "message": "User updated successfully.",
+    "updatedFields": {
+        "email": "email updated successfully"
+    },
     "user": {
-        "_id": "674b3f901e813c4615888e5c",
-        "username": "new_Kick",
-        "password": "strongerPassword",
-        "email": "new_Kick@example.com",
-        "birthday": "2024-11-30T00:00:00.000Z",
-        "favourites": [],
-        "__v": 0
+        "username": "SmallDragon",
+        "email": "new@email.com",
+        "birthday": "2010-11-03T00:00:00.000Z"
     }
 }
                                 </pre>
@@ -418,7 +446,7 @@
                         </tr>
                         <tr>
                             <td>Add a movie to user's favourites list</td>
-                            <td>/users/{username}/favourites</td>
+                            <td>/users/{username}/favourites/{movieId}</td>
                             <td>PUT</td>
                             <td>
                                 **JSON object** with movie title
@@ -436,9 +464,9 @@
                                 Example:
                                 <pre>
 {
-    "username": "NinjaWarrior",
+    "message": "Movie \"Ip Man\" with the ID \"6748901bf9495208cdfdecf6\" added to favourites.",
+    "username": "SmallDragon",
     "favourites": [
-    "message": "Movie with the title \"ip man\" added to favourites.",
         {
             "movieId": "67489232f9495208cdfdecfa",
             "title": "The Monkey King"
@@ -454,7 +482,7 @@
                         </tr>
                         <tr>
                             <td>Remove a movie from user's favourites list</td>
-                            <td>/users/{username}/favourites</td>
+                            <td>/users/{username}/favourites/{movieId}</td>
                             <td>DELETE</td>
                             <td>
                                 **JSON object** with movie title
@@ -472,9 +500,14 @@
                                 Example:
                                 <pre>
 {
-    "message": "Movie with the title \"The Monkey King\" removed from favourites.",
-    "username": "NinjaWarrior",
-    "favourites": "No favourite movies yet"
+    "message": "Movie with twith the ID \"6748901bf9495208cdfdecf6\" removed from favourites.",
+    "username": "SmallDragon",
+    "favourites": [
+        {
+            "movieId": "67489232f9495208cdfdecfa",
+            "title": "The Monkey King"
+        }
+    ]
 }
                                 </pre>
                             </td>
