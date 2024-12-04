@@ -4,7 +4,7 @@
   "description": "Enter the world of movies, directors, and genres! *DojoDB* provides users with access to information about movies, directors, and genres, and includes features such as user registration and profile management.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",

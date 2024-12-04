@@ -2,12 +2,15 @@ const express = require("express"); // Import Express
 const bcrypt = require("bcrypt"); // Import bcrypt
 const { check, param, validationResult } = require("express-validator"); // Import express validator
 const app = express(); // Initialize Express app
+
 app.use(express.json()); // Import body parser
 app.use(express.urlencoded({extended: true})); // Import body parser
+
 const cors = require("cors");
 let auth = require("./auth")(app);
 const passport = require("passport");
 require("./passport");
+
 const morgan = require("morgan"); // Import Morgan for logging requests
 const fs = require("fs"); // Import built-in modules fs to help to create and append logs
 const uuid = require("uuid"); // uuid package to generate unique IDs
@@ -24,6 +27,7 @@ app.use(morgan("combined", {stream: accessLogStream})); // Use morgan middleware
 app.use(express.static("public")); // Automatically serve all static files from "public"-folder
 app.get("/", (req, res) => {res.send(`Welcome to DojoDB - Let's kick things off!`);}); // Sends response text for root - endpoint});
 const allowedOrigin =["http://localhost:3000"];
+
 app.use(cors({
 	origin:(origin, callback) => {
 		if(!origin) return callback(null, true); 	// Allow requests without any origin (e.g. mobile apps)
@@ -562,8 +566,10 @@ app.use((err, req, res, next) => {
 	res.status(500).send("Something went wrong at the dojo. Try again later."); // Send error message
 });
 
-// Start server on port 3000
+// Start server 
 
-app.listen(3000, () => {
-	console.log("Your server is running on port 3000");
+const port = process.env.PORT || 3000;
+app.listen(port, '0.0.0.0',() => {
+ console.log('Listening on Port ' + port);
 });
+
