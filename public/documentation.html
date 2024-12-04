@@ -367,16 +367,14 @@
                                 Example:
                                 <pre>
 {
-    "message": "User created",
+    "message": "User created successfully.",
     "user": {
-        "username": "SmallDragon",
-        "password": "$2b$10$SmFO7hi5Zqh9DboRryuXeOiDAwALOz.vPhb.br5.8MAt7FZ/K9e2W",
-        "email": "sd@email.com",
-        "birthday": null,
-        "_id": "67507dd3b8582ef0828f0c14",
-        "favourites": [],
-        "__v": 0
-    }
+        "_id": "67508ed6924d779c83462d97",
+        "username": "Jackie",
+        "email": "chan@test.com",
+        "birthday": "2011-02-01T00:00:00.000Z"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzUwOGVkNjkyNGQ3NzljODM0NjJkOTciLCJpYXQiOjE3MzMzMzI2OTQsImV4cCI6MTczMzkzNzQ5NCwic3ViIjoiSmFja2llIn0.sG4DKOCuHnfhWmYDagivJW-bP4kotQ7_zRtFvdFG8hQ"
 }
                                 </pre>
                             </td>
@@ -386,7 +384,7 @@
                             <td>/login</td>
                             <td>POST</td>
                             <td>
-                               Enter username and password (keys) and their values in query params. Copy created token and add to authorization (Bearer Token)
+                                Enter username and password (keys) and their values in query params. Copy created token and add to authorization (Bearer Token)
                                 <br>
                                 Example:
                                 <pre>
