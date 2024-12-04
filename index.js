@@ -282,9 +282,16 @@ app.post("/users",
 	}); 
 	newUser 	// Save new user to database
 		.save().then((savedUser) => {
-			res.status(201).json({
-				message: "User created",
-				user: savedUser
+			const token = savedUser.generateJWTToken();
+			res.status(200).json({
+				message: "User created successfully.",
+				user: {
+					_id: savedUser._id,
+					username: savedUser.username,
+					email: savedUser.email,
+					birthday: savedUser.birthday,
+				},
+				token
 			});
 		})
 		.catch((err) => {

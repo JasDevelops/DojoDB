@@ -573,3 +573,7 @@ Timestamp: Mon Nov 18 2024 18:15:43 GMT+0100 (Mitteleuropäische Normalzeit)
 ::1 - - [04/Dec/2024:16:43:25 +0000] "PUT /users/SmallDragon/favourites/67489232f9495208cdfdecfa HTTP/1.1" 400 95 "-" "PostmanRuntime/7.43.0"
 ::1 - - [04/Dec/2024:16:43:58 +0000] "PUT /users/SmallDragon/favourites/6748901bf9495208cdfdecf6 HTTP/1.1" 200 253 "-" "PostmanRuntime/7.43.0"
 ::1 - - [04/Dec/2024:16:44:45 +0000] "DELETE /users/SmallDragon/favourites/6748901bf9495208cdfdecf6 HTTP/1.1" 200 196 "-" "PostmanRuntime/7.43.0"
+::1 - - [04/Dec/2024:17:15:55 +0000] "POST /users/ HTTP/1.1" 422 360 "-" "PostmanRuntime/7.43.0"
+::1 - - [04/Dec/2024:17:16:09 +0000] "POST /users/ HTTP/1.1" 422 200 "-" "PostmanRuntime/7.43.0"
+::1 - - [04/Dec/2024:17:16:29 +0000] "POST /users/ HTTP/1.1" 200 421 "-" "PostmanRuntime/7.43.0"
+::1 - - [04/Dec/2024:17:18:14 +0000] "POST /users/ HTTP/1.1" 200 367 "-" "PostmanRuntime/7.43.0"
