@@ -1,4 +1,5 @@
 const express = require('express'); // Import Express
+const bcrypt = require('bcrypt'); // Import bcrypt
 const app = express(); // Initialize Express app
 app.use(express.json()); // Import body parser
 app.use(express.urlencoded({extended: true})); // Import body parser
@@ -19,7 +20,17 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {f
 app.use(morgan('combined', {stream: accessLogStream})); // Use morgan middleware to log requests and view logs in log.txt
 app.use(express.static('public')); // Automatically serve all static files from "public"-folder
 app.get('/', (req, res) => {res.send(`Welcome to DojoDB - Let's kick things off!`);}); // Sends response text for root - endpoint});
-
+const allowedOrigin =["http://localhost:3000"];
+app.use(cors({
+	origin:(origin, callback) => {
+		if(!origin) return callback(null, true); 	// Allow requests without any origin (e.g. mobile apps)
+		if(allowedOrigin.indexOf(origin) === -1) { 	// If origin not in allowed list
+			let message = `The CORS Policy for this application doesn't allow access from origin ` + origin;
+			return callback(new Error(message), false);
+		}
+		return callback (null, true);
+	}
+}));
 // GET list of all movies
 
 app.get('/movies', passport.authenticate("jwt", {session: false}), async (req, res) => {
@@ -241,44 +252,39 @@ app.get('/directors/:name', passport.authenticate("jwt", {session: false}), asyn
 		});
 });
 
-// PUT (add) new user
+// POST (add) new user
 
 app.post('/users', async (req, res) => {
-	const {
-		username,
-		email,
-		password,
-		birthday
-	} = req.body; // Get user data from request body
+	const { username, email, password, birthday } = req.body; // Get user data from request body
 	if (!username || !email || !password) {
 		// Validation
 		return res.status(400).json({
 			message: 'Please provide username, email, and password.'
 		});
 	}
-	if (await Users.findOne({
-			email
-		})) {
+	if (await Users.findOne({ email })) {
 		// Check if user already exists by email
 		return res.status(400).json({
 			message: 'User with this email already exists.'
 		});
 	}
-	if (await Users.findOne({
-			username
-		})) {
+	if (await Users.findOne({ username })) {
 		// Check if user already exists by username
 		return res.status(400).json({
 			message: 'User with this username already exists.'
 		});
 	}
-	const newUser = new Users({
+	try {
+		// Hash password
+		const hashedPassword = Users.hashPassword(req.body.password);
+		// Create new user
+		const newUser = new Users({ 
 		username,
 		email,
-		password,
-		birthday: birthday || null
-	}); // Create new user, if birthday not provided set it to null
-	newUser
+		password: hashedPassword, 	// Store hashed password
+		birthday: birthday || null  // If birthday not provided set it to null
+	}); 
+	newUser 	// Save new user to database
 		.save()
 		.then((savedUser) => {
 			res.status(201).json({
@@ -288,12 +294,16 @@ app.post('/users', async (req, res) => {
 		})
 		.catch((err) => {
 			console.error(err);
-			res
-				.status(500)
-				.json({
+			res.status(500).json({
 					message: 'Something went wrong while creating user. Please try again later.'
 				});
 		});
+} catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: 'Error hashing password. Please try again later.'
+    });
+  }
 });
 
 

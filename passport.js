@@ -1,12 +1,11 @@
 const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const Models = require("./models.js");
+const passportJWT = require("passport-jwt");
 
-LocalStrategy = require("passport-local").Strategy,
-Models = require("./models.js"),
-passportJWT = require("passport-jwt");
-
-let Users = Models.User,
-JWTStrategy = passportJWT.Strategy,
-ExtractJWT = passportJWT.ExtractJwt;
+let Users = Models.User; 
+let JWTStrategy = passportJWT.Strategy;
+let ExtractJWT = passportJWT.ExtractJwt;
 
 // Local Strategy for basic HTTP authentication
 passport.use (
@@ -16,11 +15,17 @@ passport.use (
             passwordField: "password",
         },
         async (username, password, callback) => {
-            console.log(`${username} ${password}`);
             await Users.findOne({username: username})
-            .then((user) => {
+            .then(async(user) => {
                 if (!user){
                     console.log("wrong username");
+                    return callback(null, false, {
+                        message: "Wrong username or password.",
+                    });
+                }
+                const isMatch = await user.validatePassword(password);
+                if (!isMatch) {
+                    console.log("wrong password");
                     return callback(null, false, {
                         message: "Wrong username or password.",
                     });
@@ -30,7 +35,8 @@ passport.use (
             })
             .catch((error) => {
                 if (error) {
-                    console.log(error); return callback(error);
+                    console.log(error); 
+                    return callback(error);
                 }
             })
         }
