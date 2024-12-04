@@ -30,9 +30,9 @@ let movieSchema = mongoose.Schema({
 
 // Users schema
 let userSchema = mongoose.Schema({
-  username: { type: String, required: true },
+  username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  email: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
   birthday: { type: Date, default: null },
   favourites: [
     {
