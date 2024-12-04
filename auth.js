@@ -8,7 +8,7 @@ require("./passport.js");
 
 // Function to generate a JWT token
 let generateJWTToken = (user) => {
-    return jwt.sign(user, jwtSecret, {
+    return jwt.sign({id:user._id}, jwtSecret, {
         subject: user.username, // Username encoded in the token
         expiresIn: "7d",       // Token expiration time
         algorithm: "HS256"     // Signing algorithm
@@ -26,7 +26,7 @@ module.exports = (router) => {
                 if (error) { return res.send(error);}
                 let token = generateJWTToken(user.toJSON());
                 return res.json({ 
-                    message: "Login successful", user, token });
+                    message: "Login successful", user: {_id:user._id, username: user.username}, token });
             });
         })(req, res);
     });
