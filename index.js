@@ -1,29 +1,29 @@
-const express = require('express'); // Import Express
-const bcrypt = require('bcrypt'); // Import bcrypt
-const { check, param, validationResult } = require('express-validator'); // Import express validator
+const express = require("express"); // Import Express
+const bcrypt = require("bcrypt"); // Import bcrypt
+const { check, param, validationResult } = require("express-validator"); // Import express validator
 const app = express(); // Initialize Express app
 app.use(express.json()); // Import body parser
 app.use(express.urlencoded({extended: true})); // Import body parser
-const cors = require('cors');
-let auth = require('./auth')(app);
-const passport = require('passport');
-require('./passport');
-const morgan = require('morgan'); // Import Morgan for logging requests
-const fs = require('fs'); // Import built-in modules fs to help to create and append logs
-const uuid = require('uuid'); // uuid package to generate unique IDs
-const path = require('path'); // Import built-in modules path to help file paths work
+const cors = require("cors");
+let auth = require("./auth")(app);
+const passport = require("passport");
+require("./passport");
+const morgan = require("morgan"); // Import Morgan for logging requests
+const fs = require("fs"); // Import built-in modules fs to help to create and append logs
+const uuid = require("uuid"); // uuid package to generate unique IDs
+const path = require("path"); // Import built-in modules path to help file paths work
 
-const mongoose = require('mongoose'); // Import Mongoose
-mongoose.connect('mongodb://localhost:27017/db');
-const Models = require('./models.js'); // Import Mongoose-Models
+const mongoose = require("mongoose"); // Import Mongoose
+mongoose.connect("mongodb://localhost:27017/db");
+const Models = require("./models.js"); // Import Mongoose-Models
 const Movies = Models.Movie; // Movie-Model
 const Users = Models.User; // User-Model
 
-const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a'}); // Create a write stream (in append mode) and create a "log.txt" file in the root directory. Appended via path.join
-app.use(morgan('combined', {stream: accessLogStream})); // Use morgan middleware to log requests and view logs in log.txt
-app.use(express.static('public')); // Automatically serve all static files from "public"-folder
-app.get('/', (req, res) => {res.send(`Welcome to DojoDB - Let's kick things off!`);}); // Sends response text for root - endpoint});
-const allowedOrigin =['http://localhost:3000'];
+const accessLogStream = fs.createWriteStream(path.join(__dirname, "log.txt"), {flags: "a"}); // Create a write stream (in append mode) and create a "log.txt" file in the root directory. Appended via path.join
+app.use(morgan("combined", {stream: accessLogStream})); // Use morgan middleware to log requests and view logs in log.txt
+app.use(express.static("public")); // Automatically serve all static files from "public"-folder
+app.get("/", (req, res) => {res.send(`Welcome to DojoDB - Let's kick things off!`);}); // Sends response text for root - endpoint});
+const allowedOrigin =["http://localhost:3000"];
 app.use(cors({
 	origin:(origin, callback) => {
 		if(!origin) return callback(null, true); 	// Allow requests without any origin (e.g. mobile apps)
@@ -36,7 +36,7 @@ app.use(cors({
 }));
 // GET list of all movies
 
-app.get('/movies', passport.authenticate("jwt", {session: false}), async (req, res) => {
+app.get("/movies", passport.authenticate("jwt", {session: false}), async (req, res) => {
 	await Movies.find()
 		.then((movies) => {
 			const orderedMovies = movies.map((movie) => ({
@@ -55,16 +55,16 @@ app.get('/movies', passport.authenticate("jwt", {session: false}), async (req, r
 		.catch((err) => {
 			console.error(err);
 			res.status(500).json({
-				message: 'Something went wrong while fetching the movies. Please try again later.',
+				message: "Something went wrong while fetching the movies. Please try again later.",
 			});
 		}); // Return server error
 });
 
 // GET data about specific movie by title
 
-app.get('/movies/:title', passport.authenticate("jwt", {session: false}), async (req, res) => {
+app.get("/movies/:title", passport.authenticate("jwt", {session: false}), async (req, res) => {
 	const movieTitle = req.params.title.trim().toLowerCase(); // Clean up title from URL
-	await Movies.findOne({ title: { $regex: new RegExp('^' + movieTitle + '$', 'i') } }) // Find specific movie (case insensitive)
+	await Movies.findOne({ title: { $regex: new RegExp("^" + movieTitle + "$", "i") } }) // Find specific movie (case insensitive)
 		.then((movie) => {
 			if (!movie) {
 				return res.status(404).json({
@@ -86,14 +86,14 @@ app.get('/movies/:title', passport.authenticate("jwt", {session: false}), async 
 		.catch((err) => {
 			console.error(err);
 			res.status(500).json({
-				message: 'Something went wrong while fetching the movie details. Please try again later.',
+				message: "Something went wrong while fetching the movie details. Please try again later.",
 			});
 		});
 });
 
 // GET movies by release year
 
-app.get('/movies/release-year/:year', passport.authenticate("jwt", {session: false}), async (req, res) => {
+app.get("/movies/release-year/:year", passport.authenticate("jwt", {session: false}), async (req, res) => {
 	const year = req.params.year.trim(); // Cleaned-up year from URL
 	await Movies.find({
 			releaseYear: year
@@ -119,16 +119,16 @@ app.get('/movies/release-year/:year', passport.authenticate("jwt", {session: fal
 		.catch((err) => {
 			console.error(err);
 			res.status(500).json({
-				message: 'Something went wrong while fetching the movies by release year. Please try again later.',
+				message: "Something went wrong while fetching the movies by release year. Please try again later.",
 			});
 		});
 });
 
 // GET data about an actor by name
 
-app.get('/actors/:name', passport.authenticate("jwt", {session: false}), async (req, res) => {
+app.get("/actors/:name", passport.authenticate("jwt", {session: false}), async (req, res) => {
 	const actorName = req.params.name.trim().toLowerCase(); // Cleaned-up actor name from URL
-	await Movies.find({ 'actors.name': { $regex: new RegExp(actorName, 'i') } })
+	await Movies.find({ "actors.name": { $regex: new RegExp(actorName, "i") } })
 		.then((movies) => {
 			if (movies.length === 0) {
 				return res
@@ -159,16 +159,16 @@ app.get('/actors/:name', passport.authenticate("jwt", {session: false}), async (
 		.catch((err) => {
 			console.error(err);
 			res.status(500).json({
-				message: 'Something went wrong while fetching actor data. Please try again later.',
+				message: "Something went wrong while fetching actor data. Please try again later.",
 			});
 		});
 });
 
 // GET data about a genre by name
 
-app.get('/genres/:name', passport.authenticate("jwt", {session: false}), async (req, res) => {
+app.get("/genres/:name", passport.authenticate("jwt", {session: false}), async (req, res) => {
 	const genreName = req.params.name.trim().toLowerCase(); // Cleaned-up genre name from URL
-	await Movies.find({ 'genre.name': { $regex: new RegExp(genreName, 'i') } })
+	await Movies.find({ "genre.name": { $regex: new RegExp(genreName, "i") } })
 		.then((movies) => {
 			if (movies.length === 0) {
 				return res.status(404).json({
@@ -190,16 +190,16 @@ app.get('/genres/:name', passport.authenticate("jwt", {session: false}), async (
 		.catch((err) => {
 			console.error(err);
 			res.status(500).json({
-				message: 'Something went wrong while fetching genre data. Please try again later.',
+				message: "Something went wrong while fetching genre data. Please try again later.",
 			});
 		});
 });
 
 // GET data about a director by name
 
-app.get('/directors/:name', passport.authenticate("jwt", {session: false}), async (req, res) => {
+app.get("/directors/:name", passport.authenticate("jwt", {session: false}), async (req, res) => {
 	const directorName = req.params.name.trim().toLowerCase(); // Cleaned-up director name from URL
-	await Movies.find({ 'director.name': { $regex: new RegExp(directorName, 'i') } }) // Find movies with matching director name (case insensitive)
+	await Movies.find({ "director.name": { $regex: new RegExp(directorName, "i") } }) // Find movies with matching director name (case insensitive)
 		.then((movies) => {
 			if (movies.length === 0) {
 				return res.status(404).json({
@@ -224,52 +224,52 @@ app.get('/directors/:name', passport.authenticate("jwt", {session: false}), asyn
 		.catch((err) => {
 			console.error(err);
 			res.status(500).json({
-				message: 'Something went wrong while fetching the director data. Please try again later.',
+				message: "Something went wrong while fetching the director data. Please try again later.",
 			});
 		});
 });
 
 // POST (register) new user
 
-app.post('/users',
+app.post("/users",
 	[
-	check('username') 				
+	check("username") 				
 		.isLength({ min: 5 })
-		.withMessage('Username must have atleast 5 characters.'), 			 
-    check('email')								
+		.withMessage("Username must have atleast 5 characters."), 			 
+    check("email")								
 		.matches(/.+@.+\..+/)
 		.isEmail()			
-		.withMessage('Please provide a valid email.'),         								
-    check('password') 	
+		.withMessage("Please provide a valid email."),         								
+    check("password") 	
 		.isLength({ min: 8 })
-		.withMessage('Password must be at least 8 characters long.'), 
-    check('birthday')				
+		.withMessage("Password must be at least 8 characters long."), 
+    check("birthday")				
 		.optional()
 		.isDate()
-		.isISO8601().withMessage('Birthday must be a valid date (YYYY-mm-dd).'),
+		.isISO8601().withMessage("Birthday must be a valid date (YYYY-mm-dd)."),
 	],  				
 	async (req, res) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		return res.status(422).json({
-			message: 'There were validation errors with the provided data.',
+			message: "There were validation errors with the provided data.",
 			errors: errors.array()
 		});
 	}
 	const { username, email, password, birthday } = req.body; // Get user data from request body
 	if (!username || !email || !password) { // Validation
 		return res.status(400).json({
-			message: 'Please provide username, email, and password.'
+			message: "Please provide username, email, and password."
 		});
 	}
 	if (await Users.findOne({ email })) { // Check if user already exists by email
 		return res.status(400).json({
-			message: 'User with this email already exists.'
+			message: "User with this email already exists."
 		});
 	}
 	if (await Users.findOne({ username })) { // Check if user already exists by username
 		return res.status(400).json({
-			message: 'User with this username already exists.'
+			message: "User with this username already exists."
 		});
 	}
 	try {
@@ -283,20 +283,20 @@ app.post('/users',
 	newUser 	// Save new user to database
 		.save().then((savedUser) => {
 			res.status(201).json({
-				message: 'User created',
+				message: "User created",
 				user: savedUser
 			});
 		})
 		.catch((err) => {
 			console.error(err);
 			res.status(500).json({
-					message: 'Something went wrong while creating user. Please try again later.'
+					message: "Something went wrong while creating user. Please try again later."
 				});
 		});
 } catch (error) {
     console.error(error);
     res.status(500).json({ 
-		message: 'Error hashing password. Please try again later.'
+		message: "Error hashing password. Please try again later."
     });
 	}
 });
@@ -304,36 +304,36 @@ app.post('/users',
 
 // UPDATE user by username
 
-app.put('/users/:username', 
+app.put("/users/:username", 
 	passport.authenticate("jwt", {session: false}), 
     [ // Validate updated data
-        param('username')		
+        param("username")		
 			.isAlphanumeric()
-			.withMessage('Username must be alphanumeric.'), 
-        check('newUsername') 
+			.withMessage("Username must be alphanumeric."), 
+        check("newUsername") 
             .optional()
             .isAlphanumeric()
-			.withMessage('New username must be alphanumeric.')
+			.withMessage("New username must be alphanumeric.")
             .isLength({ min: 5 })
-			.withMessage('New username must be at least 5 characters long.'),
-        check('newEmail') 
+			.withMessage("New username must be at least 5 characters long."),
+        check("newEmail") 
             .optional()
 			.matches(/.+@.+\..+/)
             .isEmail()
-			.withMessage('New email must be a valid email address.'),
-        check('newPassword') 
+			.withMessage("New email must be a valid email address."),
+        check("newPassword") 
             .optional()
             .isLength({ min: 8 })
-			.withMessage('New password must be at least 8 characters long.'),
-        check('newBirthday')
+			.withMessage("New password must be at least 8 characters long."),
+        check("newBirthday")
             .optional()
             .isISO8601()
-			.withMessage('New birthday must be a valid date (YYYY-mm-dd).'),
+			.withMessage("New birthday must be a valid date (YYYY-mm-dd)."),
     ],
     async (req, res) => { const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(422).json({
-                message: 'Validation failed',
+                message: "Validation failed",
                 errors: errors.array()  // Return detailed error messages
             });
         }
@@ -348,7 +348,7 @@ app.put('/users/:username',
 
 	if (req.user.username !== username) {  // Check if the authenticated user matches the username in the URL
 		return res.status(403).json({
-			message: 'Permission denied. You can only modify your own account.'
+			message: "Permission denied. You can only modify your own account."
 		});
 	}
 
@@ -357,7 +357,7 @@ app.put('/users/:username',
 		const existingUser = await Users.findOne({username})
 			if (!existingUser) {
 				return res.status(404).json({
-					message: 'No user found.'
+					message: "No user found."
 				});
 			}
 
@@ -367,25 +367,25 @@ app.put('/users/:username',
 			// Update fields if new values are provided and not equal to the existing ones
 			if (newUsername && newUsername !== existingUser.username) {
 				updateData.username = newUsername;
-				updatedFields.push('username');
+				updatedFields.push("username");
 			}
 			if (newEmail && newEmail !== existingUser.email) {
 				updateData.email = newEmail;
-				updatedFields.push('email');
+				updatedFields.push("email");
 			}
 			if (newPassword && newPassword !== existingUser.password) {
 				const hashedPassword = await Users.hashPassword(newPassword); // Hash the new password
                 updateData.password = hashedPassword;
-				updatedFields.push('password');
+				updatedFields.push("password");
             }
 			if (newBirthday && newBirthday !== existingUser.birthday) {
 				updateData.birthday = newBirthday;
-				updatedFields.push('birthday');
+				updatedFields.push("birthday");
 			}
 
 			if (Object.keys(updateData).length === 0) { // If no fields were updated, return an error
 				return res.status(400).json({
-					message: 'No new data to update.'
+					message: "No new data to update."
 				});
 			}
             // Perform the update
@@ -393,7 +393,7 @@ app.put('/users/:username',
 
             // Return the updated user data
             res.status(200).json({
-                message: 'User updated successfully.',
+                message: "User updated successfully.",
 				updatedFields: updatedFields.reduce((acc, field) => {
                     acc[field] = `${field} updated successfully`;
                     return acc;
@@ -408,19 +408,19 @@ app.put('/users/:username',
         } catch (err) {
             console.error(err);
             res.status(500).json({
-                message: 'Something went wrong while updating user. Please try again later.'
+                message: "Something went wrong while updating user. Please try again later."
             });
         }
     });
 
 /// PUT (add) movie to favorites by title by movieID
 
-app.put('/users/:username/favourites/:movieID', passport.authenticate("jwt", {session: false}), async (req, res) => {
+app.put("/users/:username/favourites/:movieID", passport.authenticate("jwt", {session: false}), async (req, res) => {
 	const {username, movieID} = req.params; // MovieID and Username from URL
 
 	if (req.user.username !== username) {  // Check if the authenticated user matches the username in the URL
 			return res.status(403).json({
-				message: 'Permission denied. You can only modify your own favourites.'
+				message: "Permission denied. You can only modify your own favourites."
 			});
 		}
 
@@ -437,7 +437,7 @@ app.put('/users/:username/favourites/:movieID', passport.authenticate("jwt", {se
 				message: `No user with the username "${username}" found.`
 			});
 		}
-		const movieExistsInFavourites = user.favourites.some((fav) => { // Check if the movie is already in the user's favourites
+		const movieExistsInFavourites = user.favourites.some((fav) => { // Check if the movie is already in the user"s favourites
 			if (fav.movieId) {  // Check if movieId exists
 				return fav.movieId.toString() === movie._id.toString();
 			}
@@ -467,19 +467,19 @@ app.put('/users/:username/favourites/:movieID', passport.authenticate("jwt", {se
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({
-				message: 'Something went wrong while adding the movie. Please try again later.'
+				message: "Something went wrong while adding the movie. Please try again later."
 			});
 	}
 });
 
 // DELETE a movie from the user's favourites by movieID
 
-app.delete('/users/:username/favourites/:movieID', passport.authenticate("jwt", {session: false}), async (req, res) => {
+app.delete("/users/:username/favourites/:movieID", passport.authenticate("jwt", {session: false}), async (req, res) => {
 	const {username, movieID} = req.params; // Username and movieID from URL
 
 	if (req.user.username !== username) {  // Check if the authenticated user matches the username in the URL
 		return res.status(403).json({
-			message: 'Permission denied. You can only modify your own favourites.'
+			message: "Permission denied. You can only modify your own favourites."
 		});
 	}
 	try {
@@ -504,7 +504,7 @@ app.delete('/users/:username/favourites/:movieID', passport.authenticate("jwt", 
 			updatedUser.favourites.map((fav) => ({
 				movieId: fav.movieId,
 				title: fav.title,
-			})) : 'No favourite movies yet';
+			})) : "No favourite movies yet";
 		return res.status(200).json({
 			message: `Movie with twith the ID "${movieID}" removed from favourites.`,
 			username: updatedUser.username,
@@ -515,18 +515,18 @@ app.delete('/users/:username/favourites/:movieID', passport.authenticate("jwt", 
 		res
 			.status(500)
 			.json({
-				message: 'Something went wrong while removing the movie. Please try again later.'
+				message: "Something went wrong while removing the movie. Please try again later."
 			});
 	}
 });
 
 // DELETE a user by username
 
-app.delete('/users/:username', passport.authenticate("jwt", {session: false}), async (req, res) => {
+app.delete("/users/:username", passport.authenticate("jwt", {session: false}), async (req, res) => {
 	const { username } = req.params; // Get the username from the URL
 	if (req.user.username !== username) {  // Check if the authenticated user matches the username in the URL
 		return res.status(403).json({
-			message: 'Permission denied. You can only delete your own account.'
+			message: "Permission denied. You can only delete your own account."
 		});
 	}
 	await Users.findOneAndDelete({ username })
@@ -543,26 +543,20 @@ app.delete('/users/:username', passport.authenticate("jwt", {session: false}), a
 		.catch((err) => {
 			console.error(err);
 			res.status(500).json({
-				message: 'Something went wrong while deleting user. Please try again later.', // Error response
+				message: "Something went wrong while deleting user. Please try again later.", // Error response
 			});
 		});
 });
-
-// Undefined routes
-
-// app.use((req, res) => {
-// 	res.status(404).send('No route found.');
-// }); 
 
 // Log errors
 
 app.use((err, req, res, next) => {
 	console.error(err.stack);
-	res.status(500).send('Something went wrong at the dojo. Try again later.'); // Send error message
+	res.status(500).send("Something went wrong at the dojo. Try again later."); // Send error message
 });
 
 // Start server on port 3000
 
 app.listen(3000, () => {
-	console.log('Your server is running on port 3000');
+	console.log("Your server is running on port 3000");
 });

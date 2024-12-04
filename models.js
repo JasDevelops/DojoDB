@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const jwtSecret = "mySecretJWT"; // Same as in passport.js
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 
 // Movies schema
 let movieSchema = mongoose.Schema({
@@ -39,7 +39,7 @@ let userSchema = mongoose.Schema({
   birthday: { type: Date, default: null },
   favourites: [
     {
-      movieId: { type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }, // ObjectId reference to the movie
+      movieId: { type: mongoose.Schema.Types.ObjectId, ref: "Movie" }, // ObjectId reference to the movie
       title: { type: String } // Title of the movie (for user-friendly display)
     },
   ],
@@ -52,10 +52,10 @@ userSchema.methods.generateJWTToken = function () {
     jwtSecret, 
     { 
       subject: this.username, 
-      expiresIn: '7d', 
-      algorithm: 'HS256'
+      expiresIn: "7d", 
+      algorithm: "HS256"
     }
-   );
+  );
 };
 // Hash Password
 userSchema.statics.hashPassword = (password) => {
@@ -65,9 +65,8 @@ userSchema.methods.validatePassword = function(password) {
   return bcrypt.compareSync(password, this.password);   // Compares submitted and stored password
 }
 
-
-let Movie = mongoose.model('Movie', movieSchema);
-let User = mongoose.model('User', userSchema);
+let Movie = mongoose.model("Movie", movieSchema);
+let User = mongoose.model("User", userSchema);
 
 module.exports.Movie = Movie;
 module.exports.User = User;

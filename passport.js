@@ -18,24 +18,20 @@ passport.use (
             await Users.findOne({username: username})
             .then(async(user) => {
                 if (!user){
-                    console.log("wrong username");
                     return callback(null, false, {
                         message: "Wrong username or password.",
                     });
                 }
                 const isMatch = await user.validatePassword(password);
                 if (!isMatch) {
-                    console.log("wrong password");
                     return callback(null, false, {
                         message: "Wrong username or password.",
                     });
                 }
-                console.log("finished");
                 return callback(null, user);
             })
             .catch((error) => {
                 if (error) {
-                    console.log(error); 
                     return callback(error);
                 }
             })
@@ -51,7 +47,7 @@ passport.use(new JWTStrategy ({
     .then((user) => {
         if (!user) {
             // If user is not found, return an error
-            return callback(new Error('User not found'), false);
+            return callback(new Error("User not found"), false);
         }
         // If user is found, pass the user object to callback
         return callback(null, user);

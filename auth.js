@@ -1,9 +1,6 @@
 // Login endpoint for registered users
-
 const passport = require("passport");
-
 require("./passport.js");
-
 
 // POST login
 module.exports = (router) => {
