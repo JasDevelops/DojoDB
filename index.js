@@ -17,7 +17,7 @@ const uuid = require("uuid"); // uuid package to generate unique IDs
 const path = require("path"); // Import built-in modules path to help file paths work
 
 const mongoose = require("mongoose"); // Import Mongoose
-mongoose.connect("mongodb://localhost:27017/db");
+mongoose.connect("process.env.CONNECTION_URI");
 const Models = require("./models.js"); // Import Mongoose-Models
 const Movies = Models.Movie; // Movie-Model
 const Users = Models.User; // User-Model
@@ -26,7 +26,7 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname, "log.txt"), {f
 app.use(morgan("combined", {stream: accessLogStream})); // Use morgan middleware to log requests and view logs in log.txt
 app.use(express.static("public")); // Automatically serve all static files from "public"-folder
 app.get("/", (req, res) => {res.send(`Welcome to DojoDB - Let's kick things off!`);}); // Sends response text for root - endpoint});
-const allowedOrigin =["http://localhost:3000"];
+const allowedOrigin =["http://localhost:3000", "https://dojo-db-e5c2cf5a1b56.herokuapp.com/"];
 
 app.use(cors({
 	origin:(origin, callback) => {
@@ -569,7 +569,7 @@ app.use((err, req, res, next) => {
 // Start server 
 
 const port = process.env.PORT || 3000;
-app.listen(port, '0.0.0.0',() => {
- console.log('Listening on Port ' + port);
+app.listen(port, "0.0.0.0",() => {
+	console.log("Listening on Port " + port);
 });
 

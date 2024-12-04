@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
-const jwtSecret = "mySecretJWT"; // Same as in passport.js
+const jwtSecret = process.env.JWT_SECRET; // Same as in passport.js
 const bcrypt = require("bcrypt");
 
 // Movies schema
