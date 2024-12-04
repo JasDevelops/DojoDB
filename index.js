@@ -2,9 +2,10 @@ const express = require('express'); // Import Express
 const app = express(); // Initialize Express app
 app.use(express.json()); // Import body parser
 app.use(express.urlencoded({extended: true})); // Import body parser
-let auth = require("./auth")(app);
-const passport = require("passport");
-require("./passport");
+const cors = require('cors');
+let auth = require('./auth')(app);
+const passport = require('passport');
+require('./passport');
 const morgan = require('morgan'); // Import Morgan for logging requests
 const fs = require('fs'); // Import built-in modules fs to help to create and append logs
 const uuid = require('uuid'); // uuid package to generate unique IDs
@@ -376,56 +377,45 @@ app.put('/users/:username', passport.authenticate("jwt", {session: false}), (req
 		});
 });
 
-/// PUT (add) movie to favorites by title
+/// PUT (add) movie to favorites by title by movieID
 
-app.put('/users/:username/favourites', passport.authenticate("jwt", {session: false}), async (req, res) => {
-	const {
-		username
-	} = req.params; // Username from URL
-	const {
-		title
-	} = req.body; // Movie title from the request body
-	
+app.put('/users/:username/favourites/:movieID', passport.authenticate("jwt", {session: false}), async (req, res) => {
+	const {username, movieID} = req.params; // MovieID and Username from URL
+
 	if (req.user.username !== username) {  // Check if the authenticated user matches the username in the URL
 			return res.status(403).json({
 				message: 'Permission denied. You can only modify your own favourites.'
 			});
 		}
-	if (!title) {
-		return res.status(400).json({
-			message: 'Please provide a movie title.'
-		});
-	}
+
 	try {
-		// Find the movie by title (case-insensitive)
-		const movie = await Movies.findOne({
-			title: {
-				$regex: new RegExp('^' + title + '$', 'i')
-			}
-		});
+		// Find the movie by movieID
+		const movie = await Movies.findById(movieID); 	// User movieID to find movie
 		if (!movie) {
 			return res.status(404).json({
-				message: `No movie with the title "${title}" found.`
+				message: `No movie with the ID "${movieID}" found.`
 			});
 		}
 		// Find the user by username
-		const user = await Users.findOne({
-			username
-		});
+		const user = await Users.findOne({username});
 		if (!user) {
 			return res.status(404).json({
 				message: `No user with the username "${username}" found.`
 			});
 		}
 		// Check if the movie is already in the user's favourites
-		const movieExistsInFavourites = user.favourites.some(
-			(fav) => fav.movieId.toString() === movie._id.toString() // Compare ObjectIds to avoid redundancy
-		);
+		const movieExistsInFavourites = user.favourites.some((fav) => {
+			if (fav.movieId) {  // Check if movieId exists
+				return fav.movieId.toString() === movie._id.toString();
+			}
+			return false;  // If movieId is undefined, skip comparison
+		});
+		
 		if (movieExistsInFavourites) {
 			return res
 				.status(400)
 				.json({
-					message: `Movie with the title "${title}" is already in the favourites list.`
+					message: `Movie with the ID "${movieID}" is already in the favourites list.`
 				});
 		}
 		// Add the movie to favourites
@@ -435,12 +425,13 @@ app.put('/users/:username/favourites', passport.authenticate("jwt", {session: fa
 		});
 		// Save the updated user document
 		const updatedUser = await user.save();
+		// Send back updated favourites list
 		const updatedFavourites = updatedUser.favourites.map((fav) => ({
 			movieId: fav.movieId,
 			title: fav.title,
 		}));
 		res.status(200).json({
-			message: `Movie with the title "${title}" added to favourites.`,
+			message: `Movie "${movie.title}" with the ID "${movieID}" added to favourites.`,
 			username: updatedUser.username,
 			favourites: updatedFavourites,
 		});
@@ -454,51 +445,30 @@ app.put('/users/:username/favourites', passport.authenticate("jwt", {session: fa
 	}
 });
 
-// DELETE a movie from the user's favourites
+// DELETE a movie from the user's favourites by movieID
 
-app.delete('/users/:username/favourites', passport.authenticate("jwt", {session: false}), async (req, res) => {
-	const {
-		username
-	} = req.params; // Username from URL
-	const {
-		title
-	} = req.body; // Movie title from the request body
+app.delete('/users/:username/favourites/:movieID', passport.authenticate("jwt", {session: false}), async (req, res) => {
+	const {username, movieID} = req.params; // Username and movieID from URL
+
 	if (req.user.username !== username) {  // Check if the authenticated user matches the username in the URL
 		return res.status(403).json({
 			message: 'Permission denied. You can only modify your own favourites.'
 		});
 	}
-	if (!title) {
-		return res.status(400).json({
-			message: 'Please provide a movie title.'
-		});
-	}
+	
 	try {
-		// Find the movie by title (case-insensitive)
-		const movie = await Movies.findOne({
-			title: {
-				$regex: new RegExp('^' + title + '$', 'i')
-			},
-		});
+		// Find the movie by movieID
+		const movie = await Movies.findById(movieID); // Use movieID to find movie
 		if (!movie) {
 			return res.status(404).json({
-				message: `No movie with the title "${title}" found.`
+				message: `No movie with the ID "${movieID}" found.`
 			});
 		}
-		// Find the user by username and remove the favorite in one step
-		const updatedUser = await Users.findOneAndUpdate({
-				username
-			}, // Find the user
-			{
-				$pull: {
-					favourites: {
-						movieId: movie._id
-					}
-				}
-			}, // Remove from favourites
-			{
-				new: true
-			} // Return the updated document
+		// Find the user by username and remove the favorite
+		const updatedUser = await Users.findOneAndUpdate(
+			{ username}, // Find the user
+			{$pull: { favourites: {movieId: movie._id} } }, // Remove from favourites
+			{ new: true } // Return the updated document
 		);
 		if (!updatedUser) {
 			return res.status(404).json({
@@ -513,7 +483,7 @@ app.delete('/users/:username/favourites', passport.authenticate("jwt", {session:
 			})) :
 			'No favourite movies yet';
 		return res.status(200).json({
-			message: `Movie with the title "${title}" removed from favourites.`,
+			message: `Movie with twith the ID "${movieID}" removed from favourites.`,
 			username: updatedUser.username,
 			favourites: updatedFavourites,
 		});
