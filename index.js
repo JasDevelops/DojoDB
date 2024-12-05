@@ -17,7 +17,7 @@ const uuid = require("uuid"); // uuid package to generate unique IDs
 const path = require("path"); // Import built-in modules path to help file paths work
 
 const mongoose = require("mongoose"); // Import Mongoose
-mongoose.connect("process.env.CONNECTION_URI");
+mongoose.connect(process.env.CONNECTION_URI);
 const Models = require("./models.js"); // Import Mongoose-Models
 const Movies = Models.Movie; // Movie-Model
 const Users = Models.User; // User-Model
