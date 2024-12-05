@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
-const jwtSecret = process.env.JWT_SECRET; // Same as in passport.js
 const bcrypt = require("bcrypt");
 
 // Movies schema
@@ -49,7 +48,7 @@ let userSchema = mongoose.Schema({
 userSchema.methods.generateJWTToken = function () {
   return jwt.sign (
     { _id: this._id},
-    jwtSecret, 
+    process.env.JWT_SECRET, 
     { 
       subject: this.username, 
       expiresIn: "7d", 
