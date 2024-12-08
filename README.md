@@ -33,7 +33,7 @@
 ## Setup
 *local*
 1. Clone the repository: `git clone https://github.com/JasDevelops/DojoDB`
-2. Navigate to Project folder: `cd <project-folder>`
+2. Navigate to Project folder: `cd DojoDB`
 3. Install dependencies: `npm install`
 4. Start application locally: `npm start`
 5. Access in browser `http://localhost:3000`
