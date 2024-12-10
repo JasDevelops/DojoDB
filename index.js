@@ -28,8 +28,8 @@ app.use(express.static("public")); // Automatically serve all static files from 
 app.get("/", (req, res) => {res.send(`Welcome to DojoDB - Let's kick things off!`);}); // Sends response text for root - endpoint});
 const allowedOrigin = [
     "http://localhost:3000", 
-    "https://dojo-db-e5c2cf5a1b56.herokuapp.com/", 
-    "http://localhost:1234/"
+    "https://dojo-db-e5c2cf5a1b56.herokuapp.com", 
+    "http://localhost:1234"
 ];
 
 app.use(cors({
