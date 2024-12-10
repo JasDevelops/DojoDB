@@ -40,7 +40,9 @@ app.use(cors({
 }));
 // GET list of all movies
 
-app.get("/movies", passport.authenticate("jwt", {session: false}), async (req, res) => {
+app.get("/movies", 
+	// passport.authenticate("jwt", {session: false}), 
+	async (req, res) => {
 	await Movies.find()
 		.then((movies) => {
 			const orderedMovies = movies.map((movie) => ({
@@ -66,7 +68,9 @@ app.get("/movies", passport.authenticate("jwt", {session: false}), async (req, r
 
 // GET data about specific movie by title
 
-app.get("/movies/:title", passport.authenticate("jwt", {session: false}), async (req, res) => {
+app.get("/movies/:title", 
+	passport.authenticate("jwt", {session: false}), 
+	async (req, res) => {
 	const movieTitle = req.params.title.trim().toLowerCase(); // Clean up title from URL
 	await Movies.findOne({ title: { $regex: new RegExp("^" + movieTitle + "$", "i") } }) // Find specific movie (case insensitive)
 		.then((movie) => {
@@ -97,7 +101,9 @@ app.get("/movies/:title", passport.authenticate("jwt", {session: false}), async 
 
 // GET movies by release year
 
-app.get("/movies/release-year/:year", passport.authenticate("jwt", {session: false}), async (req, res) => {
+app.get("/movies/release-year/:year", 
+	passport.authenticate("jwt", {session: false}), 
+	async (req, res) => {
 	const year = req.params.year.trim(); // Cleaned-up year from URL
 	await Movies.find({
 			releaseYear: year
@@ -130,7 +136,9 @@ app.get("/movies/release-year/:year", passport.authenticate("jwt", {session: fal
 
 // GET data about an actor by name
 
-app.get("/actors/:name", passport.authenticate("jwt", {session: false}), async (req, res) => {
+app.get("/actors/:name", 
+	passport.authenticate("jwt", {session: false}), 
+	async (req, res) => {
 	const actorName = req.params.name.trim().toLowerCase(); // Cleaned-up actor name from URL
 	await Movies.find({ "actors.name": { $regex: new RegExp(actorName, "i") } })
 		.then((movies) => {
@@ -170,7 +178,9 @@ app.get("/actors/:name", passport.authenticate("jwt", {session: false}), async (
 
 // GET data about a genre by name
 
-app.get("/genres/:name", passport.authenticate("jwt", {session: false}), async (req, res) => {
+app.get("/genres/:name", 
+	passport.authenticate("jwt", {session: false}), 
+	async (req, res) => {
 	const genreName = req.params.name.trim().toLowerCase(); // Cleaned-up genre name from URL
 	await Movies.find({ "genre.name": { $regex: new RegExp(genreName, "i") } })
 		.then((movies) => {
@@ -201,7 +211,9 @@ app.get("/genres/:name", passport.authenticate("jwt", {session: false}), async (
 
 // GET data about a director by name
 
-app.get("/directors/:name", passport.authenticate("jwt", {session: false}), async (req, res) => {
+app.get("/directors/:name", 
+	passport.authenticate("jwt", {session: false}), 
+	async (req, res) => {
 	const directorName = req.params.name.trim().toLowerCase(); // Cleaned-up director name from URL
 	await Movies.find({ "director.name": { $regex: new RegExp(directorName, "i") } }) // Find movies with matching director name (case insensitive)
 		.then((movies) => {
@@ -426,7 +438,9 @@ app.put("/users/:username",
 
 /// PUT (add) movie to favorites by title by movieID
 
-app.put("/users/:username/favourites/:movieID", passport.authenticate("jwt", {session: false}), async (req, res) => {
+app.put("/users/:username/favourites/:movieID", 
+	passport.authenticate("jwt", {session: false}),
+	async (req, res) => {
 	const {username, movieID} = req.params; // MovieID and Username from URL
 
 	if (req.user.username !== username) {  // Check if the authenticated user matches the username in the URL
@@ -485,7 +499,9 @@ app.put("/users/:username/favourites/:movieID", passport.authenticate("jwt", {se
 
 // DELETE a movie from the user's favourites by movieID
 
-app.delete("/users/:username/favourites/:movieID", passport.authenticate("jwt", {session: false}), async (req, res) => {
+app.delete("/users/:username/favourites/:movieID", 
+	passport.authenticate("jwt", {session: false}), 
+	async (req, res) => {
 	const {username, movieID} = req.params; // Username and movieID from URL
 
 	if (req.user.username !== username) {  // Check if the authenticated user matches the username in the URL
@@ -533,7 +549,9 @@ app.delete("/users/:username/favourites/:movieID", passport.authenticate("jwt", 
 
 // DELETE a user by username
 
-app.delete("/users/:username", passport.authenticate("jwt", {session: false}), async (req, res) => {
+app.delete("/users/:username", 
+	passport.authenticate("jwt", {session: false}), 
+	async (req, res) => {
 	const { username } = req.params; // Get the username from the URL
 	if (req.user.username !== username) {  // Check if the authenticated user matches the username in the URL
 		return res.status(403).json({

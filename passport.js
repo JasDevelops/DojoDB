@@ -7,7 +7,6 @@ let Users = Models.User;
 let JWTStrategy = passportJWT.Strategy;
 let ExtractJWT = passportJWT.ExtractJwt;
 
-console.log('JWT_SECRET:', process.env.JWT_SECRET);
 // Local Strategy for basic HTTP authentication
 passport.use (
     new LocalStrategy(
