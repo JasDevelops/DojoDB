@@ -26,7 +26,11 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname, "log.txt"), {f
 app.use(morgan("combined", {stream: accessLogStream})); // Use morgan middleware to log requests and view logs in log.txt
 app.use(express.static("public")); // Automatically serve all static files from "public"-folder
 app.get("/", (req, res) => {res.send(`Welcome to DojoDB - Let's kick things off!`);}); // Sends response text for root - endpoint});
-const allowedOrigin =["http://localhost:3000", "https://dojo-db-e5c2cf5a1b56.herokuapp.com/"];
+const allowedOrigin = [
+    "http://localhost:3000", 
+    "https://dojo-db-e5c2cf5a1b56.herokuapp.com/", 
+    "http://localhost:1234/"
+];
 
 app.use(cors({
 	origin:(origin, callback) => {
