@@ -46,6 +46,10 @@ app.use(cors({
 }));
 app.options('*', cors()); // Enable pre-flight for all routes
 
+app.get('/test-cors', (req, res) => {
+    res.json({ message: "CORS works!" });
+});
+
 // GET list of all movies
 
 app.get("/movies", 
