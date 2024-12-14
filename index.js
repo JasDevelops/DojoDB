@@ -40,7 +40,9 @@ app.use(cors({
 			return callback(new Error(message), false);
 		}
 		return callback (null, true);
-	}
+	},
+	methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
 }));
 app.options('*', cors()); // Enable pre-flight for all routes
 
