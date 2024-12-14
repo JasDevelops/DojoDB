@@ -42,6 +42,8 @@ app.use(cors({
 		return callback (null, true);
 	}
 }));
+app.options('*', cors()); // Enable pre-flight for all routes
+
 // GET list of all movies
 
 app.get("/movies", 
