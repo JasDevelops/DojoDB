@@ -251,7 +251,7 @@ app.get("/directors/:name",
 
 // POST (register) new user
 
-app.post("/users",
+app.post("/signup",
 	[
 	check("username") 				
 		.isLength({ min: 5 })
