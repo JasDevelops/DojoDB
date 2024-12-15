@@ -38,8 +38,9 @@ app.use(cors({
 		}
 		return callback (null, true);
 	},
-	methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
-    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+	methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allow headers
+	credentials: true, // Allow credentials
 }));
 
 app.options('*', cors()); // Enable pre-flight for all routes
