@@ -5,6 +5,7 @@ const app = express(); // Initialize Express app
 
 app.use(express.json()); // Import body parser
 app.use(express.urlencoded({extended: true})); // Import body parser
+app.use(router);
 
 const cors = require("cors");
 let auth = require("./auth")(app);
@@ -45,10 +46,6 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
 }));
 app.options('*', cors()); // Enable pre-flight for all routes
-
-app.get('/test-cors', (req, res) => {
-    res.json({ message: "CORS works!" });
-});
 
 // GET list of all movies
 
