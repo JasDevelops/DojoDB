@@ -7,10 +7,7 @@ app.use(express.json()); // Import body parser
 app.use(express.urlencoded({extended: true})); // Import body parser
 
 const cors = require("cors");
-let auth = require("./auth")(app);
 const passport = require("passport");
-require("./passport");
-
 const morgan = require("morgan"); // Import Morgan for logging requests
 const fs = require("fs"); // Import built-in modules fs to help to create and append logs
 const uuid = require("uuid"); // uuid package to generate unique IDs
@@ -18,14 +15,14 @@ const path = require("path"); // Import built-in modules path to help file paths
 
 const mongoose = require("mongoose"); // Import Mongoose
 mongoose.connect(process.env.CONNECTION_URI);
+
 const Models = require("./models.js"); // Import Mongoose-Models
 const Movies = Models.Movie; // Movie-Model
 const Users = Models.User; // User-Model
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname, "log.txt"), {flags: "a"}); // Create a write stream (in append mode) and create a "log.txt" file in the root directory. Appended via path.join
 app.use(morgan("combined", {stream: accessLogStream})); // Use morgan middleware to log requests and view logs in log.txt
-app.use(express.static("public")); // Automatically serve all static files from "public"-folder
-app.get("/", (req, res) => {res.send(`Welcome to DojoDB - Let's kick things off!`);}); // Sends response text for root - endpoint});
+
 const allowedOrigin = [
     "http://localhost:3000", 
     "https://dojo-db-e5c2cf5a1b56.herokuapp.com", 
@@ -44,7 +41,15 @@ app.use(cors({
 	methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
     allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
 }));
+
 app.options('*', cors()); // Enable pre-flight for all routes
+
+let auth = require("./auth")(app);
+require("./passport");
+
+app.use(express.static("public")); // Automatically serve all static files from "public"-folder
+app.get("/", (req, res) => {res.send(`Welcome to DojoDB - Let's kick things off!`);}); // Sends response text for root - endpoint});
+
 
 // GET list of all movies
 
