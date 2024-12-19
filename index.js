@@ -419,7 +419,7 @@ app.put("/users/:username",
 				updatedFields.push("password");
 			}
 			if (newBirthday && newBirthday !== existingUser.birthday) {
-				updateData.birthday = newBirthday;
+				updateData.birthday = newBirthday || null;
 				updatedFields.push("birthday");
 			}
 
