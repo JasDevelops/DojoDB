@@ -264,15 +264,14 @@ app.get("/directors/:name",
 app.post("/users",
 	[
 	check("username") 				
-		.isLength({ min: 5 })
-		.withMessage("Username must have atleast 5 characters."), 			 
+		.withMessage("Please provide a username."), 			 
     check("email")								
 		.matches(/.+@.+\..+/)
 		.isEmail()			
 		.withMessage("Please provide a valid email."),         								
     check("password") 	
-		.isLength({ min: 8 })
-		.withMessage("Password must be at least 8 characters long."), 
+		.isLength({ min: 3 })
+		.withMessage("Password must be at least 3 characters long."), 
     check("birthday")				
 		.optional()
 		.isDate()
@@ -350,9 +349,7 @@ app.put("/users/:username",
         check("newUsername") 
             .optional()
             .isAlphanumeric()
-			.withMessage("New username must be alphanumeric.")
-            .isLength({ min: 5 })
-			.withMessage("New username must be at least 5 characters long."),
+			.withMessage("New username must be alphanumeric."),
         check("newEmail") 
             .optional()
 			.matches(/.+@.+\..+/)
@@ -361,7 +358,7 @@ app.put("/users/:username",
         check("newPassword") 
             .optional()
             .isLength({ min: 8 })
-			.withMessage("New password must be at least 8 characters long."),
+			.withMessage("New password must be at least 3 characters long."),
         check("newBirthday")
             .optional()
             .isISO8601()
