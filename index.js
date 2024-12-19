@@ -40,7 +40,7 @@ app.use(cors({
 	},
 	methods: ['GET', 'POST', 'PUT', 'DELETE'],
 	allowedHeaders: ['Content-Type', 'Authorization'],
-	credentials: true
+	credentials: true,
 }));
 
 
@@ -265,6 +265,7 @@ app.get("/directors/:name",
 app.post("/users",
 	[
 		check("username")
+			.isLength({ min: 1 })
 			.withMessage("Please provide a username."),
 		check("email")
 			.matches(/.+@.+\..+/)
@@ -313,6 +314,7 @@ app.post("/users",
 			newUser 	// Save new user to database
 				.save().then((savedUser) => {
 					const token = savedUser.generateJWTToken();
+
 					res.status(200).json({
 						message: "User created successfully.",
 						user: {
@@ -346,10 +348,12 @@ app.put("/users/:username",
 	[ // Validate updated data
 		param("username")
 			.isAlphanumeric()
+			.isLength({ min: 1 })
 			.withMessage("Username must be alphanumeric."),
 		check("newUsername")
 			.optional()
 			.isAlphanumeric()
+			.isLength({ min: 1 })
 			.withMessage("New username must be alphanumeric."),
 		check("newEmail")
 			.optional()
