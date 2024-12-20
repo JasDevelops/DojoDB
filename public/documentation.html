@@ -345,6 +345,25 @@
                             </td>
                         </tr>
                         <tr>
+                            <td>Get user profile</td>
+                            <td>/users/{username}</td>
+                            <td>GET</td>
+                            <td>none</td>
+                            <td>
+                                A **JSON array** with user's profile. If the user is not found, a 404 error is returned.
+                                <br>
+                                Example:
+                                <pre>
+{ 
+    "username": "KarateKid",
+    "email": "test@test.com",
+    "birthday": "2020-05-10",
+    "favourites": "Enter the Dragon"
+}
+                                </pre>
+                            </td>
+                        </tr>
+                        <tr>
                             <td>Add a new user</td>
                             <td>/users</td>
                             <td>POST</td>

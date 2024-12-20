@@ -260,6 +260,35 @@ app.get("/directors/:name",
 			});
 	});
 
+//GET user profile
+
+app.get("/users/:username",
+	passport.authenticate("jwt", { session: false }),
+	async (req, res) => {
+		try {
+			const username = req.user.username;
+			const user = await Users.findOne({ username });
+
+			if (!user) {
+				return res.status(404).json({
+					message: `No user with the username "${username}" found.`
+				});
+			}
+			res.status(200).json({
+				user: {
+					username: user.username,
+					email: user.email,
+					birthday: user.birthday,
+					favourites: user.favourites || [],
+				}
+			});
+		} catch (err) {
+			console.error(err);
+			res.status(500).json({
+				message: "Something went wrong while fetching your profile. Please try again later.",
+			});
+		}
+	});
 // POST (register) new user
 
 app.post("/users",
@@ -383,7 +412,8 @@ app.put("/users/:username",
 			newUsername,
 			newEmail,
 			newPassword,
-			newBirthday
+			newBirthday,
+			favourites
 		} = req.body; // Get data from request body
 
 		if (req.user.username !== username) {  // Check if the authenticated user matches the username in the URL
@@ -397,7 +427,7 @@ app.put("/users/:username",
 			const existingUser = await Users.findOne({ username })
 			if (!existingUser) {
 				return res.status(404).json({
-					message: "No user found."
+					message: `No user with the username "${username}" found.`
 				});
 			}
 
@@ -422,8 +452,22 @@ app.put("/users/:username",
 				updateData.birthday = newBirthday || null;
 				updatedFields.push("birthday");
 			}
+			if (favourites && favourites.length > 0) {
+				const addFavourites = favourites.filter((movie) => movie.action === 'add');
+				const removeFavourites = favourites.filter((movie) => movie.action === 'remove');
+			}
+			if (addFavourites.length > 0) {
+				const titlesToAdd = addFavourites.map((movie) => movie.title);
+				updateData.favourites = { $addToSet: { title: { $each: titlesToAdd } } };
+				updatedFields.push("favourites (added movies)");
+			}
 
-			if (Object.keys(updateData).length === 0) { // If no fields were updated, return an error
+			if (removeFavourites.length > 0) {
+				const titlesToRemove = removeFavourites.map((movie) => movie.title);
+				updateData.favourites = { $pull: { title: { $in: titlesToRemove } } };
+				updatedFields.push("favourites (removed movies)");
+			}
+			if (Object.keys(updateData).length === 0) { // If no fields were updated
 				return res.status(400).json({
 					message: "No new data to update."
 				});
@@ -442,6 +486,7 @@ app.put("/users/:username",
 					username: updatedUser.username,
 					email: updatedUser.email,
 					birthday: updatedUser.birthday,
+					favourites: updatedUser.favourites || [],
 				}
 			});
 
