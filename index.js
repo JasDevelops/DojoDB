@@ -86,8 +86,8 @@ app.get("/movies",
 app.get("/movies/:title",
 	passport.authenticate("jwt", { session: false }),
 	async (req, res) => {
-		const movieTitle = req.params.title.trim().toLowerCase(); // Clean up title from URL
-		await Movies.findOne({ title: { $regex: new RegExp("^" + movieTitle + "$", "i") } }) // Find specific movie (case insensitive)
+		const movieTitle = decodeURIComponent(req.params.title).trim().toLowerCase();
+		await Movies.findOne({ title: { $regex: new RegExp(movieTitle, "i"), } }) // Find specific movie (case insensitive)
 			.then((movie) => {
 				if (!movie) {
 					return res.status(404).json({
@@ -154,7 +154,7 @@ app.get("/movies/release-year/:year",
 app.get("/actors/:name",
 	passport.authenticate("jwt", { session: false }),
 	async (req, res) => {
-		const actorName = req.params.name.trim().toLowerCase(); // Cleaned-up actor name from URL
+		const actorName = decodeURIComponent(req.params.name).trim().toLowerCase(); // Cleaned-up actor name from URL
 		await Movies.find({ "actors.name": { $regex: new RegExp(actorName, "i") } })
 			.then((movies) => {
 				if (movies.length === 0) {
@@ -196,7 +196,7 @@ app.get("/actors/:name",
 app.get("/genres/:name",
 	passport.authenticate("jwt", { session: false }),
 	async (req, res) => {
-		const genreName = req.params.name.trim().toLowerCase(); // Cleaned-up genre name from URL
+		const genreName = decodeURIComponent(req.params.name).trim().toLowerCase(); // Cleaned-up genre name from URL
 		await Movies.find({ "genre.name": { $regex: new RegExp(genreName, "i") } })
 			.then((movies) => {
 				if (movies.length === 0) {
@@ -229,7 +229,7 @@ app.get("/genres/:name",
 app.get("/directors/:name",
 	passport.authenticate("jwt", { session: false }),
 	async (req, res) => {
-		const directorName = req.params.name.trim().toLowerCase(); // Cleaned-up director name from URL
+		const directorName = decodeURIComponent(req.params.name).trim().toLowerCase(); // Cleaned-up director name from URL
 		await Movies.find({ "director.name": { $regex: new RegExp(directorName, "i") } }) // Find movies with matching director name (case insensitive)
 			.then((movies) => {
 				if (movies.length === 0) {
