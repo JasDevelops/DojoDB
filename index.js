@@ -455,18 +455,21 @@ app.put("/users/:username",
 			if (favourites && favourites.length > 0) {
 				const addFavourites = favourites.filter((movie) => movie.action === 'add');
 				const removeFavourites = favourites.filter((movie) => movie.action === 'remove');
-			}
-			if (addFavourites.length > 0) {
-				const titlesToAdd = addFavourites.map((movie) => movie.title);
-				updateData.favourites = { $addToSet: { title: { $each: titlesToAdd } } };
-				updatedFields.push("favourites (added movies)");
+
+				if (addFavourites.length > 0) {
+					const addMovieIds = addFavourites.map((movie) => movie._id);  // Extract the movie IDs
+					updateData.favourites = [...existingUser.favourites, ...addMovieIds];  // Add the new movies to the existing favourites
+					updatedFields.push("favourites (added movies)");  // Track the update
+				}
+
+				if (removeFavourites.length > 0) {
+					const removeMovieIds = removeFavourites.map((movie) => movie._id);  // Extract the movie IDs
+					updateData.favourites = existingUser.favourites.filter((movie) => !removeMovieIds.includes(movie._id));  // Remove the selected movies
+					updatedFields.push("favourites (removed movies)");  // Track the update
+				}
 			}
 
-			if (removeFavourites.length > 0) {
-				const titlesToRemove = removeFavourites.map((movie) => movie.title);
-				updateData.favourites = { $pull: { title: { $in: titlesToRemove } } };
-				updatedFields.push("favourites (removed movies)");
-			}
+
 			if (Object.keys(updateData).length === 0) { // If no fields were updated
 				return res.status(400).json({
 					message: "No new data to update."
