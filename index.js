@@ -93,13 +93,13 @@ app.get(
 					image: result.image,
 					releaseYear: result.releaseYear,
 					actors: result.actors,
-					_id: movie._id,
+					_id: result._id,
 				};
 			});
 
 			res.status(200).json(searchResults);
 		} catch (error) {
-			console.error(error);
+			console.error('Error in search route:', error); 
 			res.status(500).json({
 				message: 'Something went wrong while searching. Please try again later.',
 			});
