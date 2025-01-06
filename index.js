@@ -62,29 +62,29 @@ app.get(
 		console.log('Searching for:', searchTerm);
 
 		try {
-			const regex = new RegExp(searchTerm, 'i'); 
+			const regex = new RegExp(searchTerm, 'i');
 			const results = await Movies.find({
 				$or: [
-				  { title: { $regex: regex } },
-				  { 'actors.name': { $regex: regex } },
-				  { 'director.name': { $regex: regex } },
-				  { 'genre.name': { $regex: regex } },
-				  { releaseYear: searchTerm }
-				]
-			  });
+					{ title: { $regex: regex } },
+					{ 'actors.name': { $regex: regex } },
+					{ 'director.name': { $regex: regex } },
+					{ 'genre.name': { $regex: regex } },
+					{ releaseYear: !isNaN(searchTerm) ? parseInt(searchTerm, 10) : null },
+				],
+			});
 			console.log('Results found:', results);
 
 			if (results.length === 0) {
 				return res.status(404).json({
-					message: `No results for the search term "${searchTerm}" found.`
+					message: `No results for the search term "${searchTerm}" found.`,
 				});
 			}
 
-			let searchResults = results.map(result => {
+			let searchResults = results.map((result) => {
 				let type = 'movie';
 
 				// Check if actor name or director name matched
-				if (result.actors.some(actor => actor.name.toLowerCase().includes(searchTerm))) {
+				if (result.actors.some((actor) => actor.name.toLowerCase().includes(searchTerm))) {
 					type = 'actor';
 				} else if (result.director.name.toLowerCase().includes(searchTerm)) {
 					type = 'director';
@@ -106,12 +106,15 @@ app.get(
 
 			res.status(200).json(searchResults);
 		} catch (error) {
-			console.error('Error in search route:', error); 
+			console.error('Error in search route:', error);
+			console.error('Error in search route:', error.message);
+			console.error('Stack trace:', error.stack);
 			res.status(500).json({
 				message: 'Something went wrong while searching. Please try again later.',
 			});
 		}
-	});
+	}
+);
 
 app.use(express.static('public')); // Automatically serve all static files from "public"-folder
 app.get('/', (req, res) => {
