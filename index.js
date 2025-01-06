@@ -50,6 +50,62 @@ app.options('*', cors()); // Enable pre-flight for all routes
 let auth = require('./auth')(app);
 require('./passport');
 
+// Search for Movies, Actors, Directors, Genres, or Release Year
+
+app.get(
+	'/search/:searchTerm',
+	passport.authenticate('jwt', { session: false }),
+	async (req, res) => {
+		const searchTerm = decodeURIComponent(req.params.searchTerm).trim().toLowerCase();
+		try {
+			const results = await Movies.find({
+				$or: [
+					{ title: { $regex: new RegExp(searchTerm, 'i') } },
+					{ 'actors.name': { $regex: new RegExp(searchTerm, 'i') } },
+					{ 'director.name': { $regex: new RegExp(searchTerm, 'i') } },
+					{ 'genre.name': { $regex: new RegExp(searchTerm, 'i') } },
+					{ releaseYear: searchTerm }
+				]
+			});
+			if (results.length === 0) {
+				return res.status(404).json({
+					message: `No results for the search term "${searchTerm}" found.`
+				});
+			}
+
+			let searchResults = results.map(result => {
+				let type = 'movie';
+
+				// Check if actor name or director name matched
+				if (result.actors.some(actor => actor.name.toLowerCase().includes(searchTerm))) {
+					type = 'actor';
+				} else if (result.director.name.toLowerCase().includes(searchTerm)) {
+					type = 'director';
+				} else if (result.genre.name.toLowerCase().includes(searchTerm)) {
+					type = 'genre';
+				}
+				return {
+					type,
+					title: result.title,
+					description: result.description,
+					genre: result.genre,
+					director: result.director,
+					image: result.image,
+					releaseYear: result.releaseYear,
+					actors: result.actors,
+					_id: movie._id,
+				};
+			});
+
+			res.status(200).json(searchResults);
+		} catch (error) {
+			console.error(error);
+			res.status(500).json({
+				message: 'Something went wrong while searching. Please try again later.',
+			});
+		}
+	});
+
 app.use(express.static('public')); // Automatically serve all static files from "public"-folder
 app.get('/', (req, res) => {
 	res.send(`Welcome to DojoDB - Let's kick things off!`);
@@ -258,62 +314,6 @@ app.get('/directors/:name', passport.authenticate('jwt', { session: false }), as
 			});
 		});
 });
-
-// Search for Movies, Actors, Directors, Genres, or Release Year
-
-app.get(
-	'/search/:searchTerm',
-	passport.authenticate('jwt', { session: false }),
-	async (req, res) => {
-		const searchTerm = decodeURIComponent(req.params.searchTerm).trim().toLowerCase();
-		try {
-			const results = await Movies.find({
-				$or: [
-					{ title: { $regex: new RegExp(searchTerm, 'i') } },
-					{ 'actors.name': { $regex: new RegExp(searchTerm, 'i') } },
-					{ 'director.name': { $regex: new RegExp(searchTerm, 'i') } },
-					{ 'genre.name': { $regex: new RegExp(searchTerm, 'i') } },
-					{ releaseYear: searchTerm }
-				]
-			});
-			if (results.length === 0) {
-				return res.status(404).json({
-					message: `No results for the search term "${searchTerm}" found.`
-				});
-			}
-
-			let searchResults = results.map(result => {
-				let type = 'movie';
-
-				// Check if actor name or director name matched
-				if (result.actors.some(actor => actor.name.toLowerCase().includes(searchTerm))) {
-					type = 'actor';
-				} else if (result.director.name.toLowerCase().includes(searchTerm)) {
-					type = 'director';
-				} else if (result.genre.name.toLowerCase().includes(searchTerm)) {
-					type = 'genre';
-				}
-				return {
-					type,
-					title: result.title,
-					description: result.description,
-					genre: result.genre,
-					director: result.director,
-					image: result.image,
-					releaseYear: result.releaseYear,
-					actors: result.actors,
-					_id: movie._id,
-				};
-			});
-
-			res.status(200).json(searchResults);
-		} catch (error) {
-			console.error(error);
-			res.status(500).json({
-				message: 'Something went wrong while searching. Please try again later.',
-			});
-		}
-	});
 
 //GET user profile
 
