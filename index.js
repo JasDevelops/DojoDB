@@ -62,16 +62,16 @@ app.get(
 		console.log('Searching for:', searchTerm);
 
 		try {
-
+			const regex = new RegExp(searchTerm, 'i'); 
 			const results = await Movies.find({
 				$or: [
-					{ title: { $regex: new RegExp(searchTerm, 'i') } },
-					{ 'actors.name': { $regex: new RegExp(searchTerm, 'i') } },
-					{ 'director.name': { $regex: new RegExp(searchTerm, 'i') } },
-					{ 'genre.name': { $regex: new RegExp(searchTerm, 'i') } },
-					{ releaseYear: searchTerm }
+				  { title: { $regex: regex } },
+				  { 'actors.name': { $regex: regex } },
+				  { 'director.name': { $regex: regex } },
+				  { 'genre.name': { $regex: regex } },
+				  { releaseYear: searchTerm }
 				]
-			});
+			  });
 			console.log('Results found:', results);
 
 			if (results.length === 0) {
