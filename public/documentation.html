@@ -213,6 +213,47 @@
                             </td>
                         </tr>
                         <tr>
+                            <td>Search</td>
+                            <td>/search/{searchTerm}</td>
+                            <td>GET</td>
+                            <td>none</td>
+                            <td>
+                                A **JSON array** of movies , actors, directors, genres, or release year. If nothing is found a 404 error is returned.
+                                <br>
+                                Example:
+                                <pre>
+[
+    {
+        "title": "Crouching Tiger, Hidden Dragon",
+        "releaseYear": 2000,
+        "description": "This epic film tells the story of a stolen sword, forbidden love, and a martial arts journey. It blends action with deep emotional storytelling.",
+        "genre": "Action",
+        "director": "Ang Lee",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/c/cf/Maruyama_Okyo_-_Tiger_and_Dragon%2C_Tiger_-_81.693.1_-_Detroit_Institute_of_Arts.jpg",
+        "actors": [
+            {
+                "_id": "674aea4cfd5e4c481ae0bd28",
+                "name": "Chow Yun-fat",
+                "role": "Li Mu Bai"
+            },
+            {
+                "_id": "674aea4cfd5e4c481ae0bd29",
+                "name": "Michelle Yeoh",
+                "role": "Yu Shu Lien"
+            },
+            {
+                "_id": "674aea4cfd5e4c481ae0bd2a",
+                "name": "Zhang Ziyi",
+                "role": "Jen Yu"
+            }
+        ],
+        "_id": "67489000f9495208cdfdecf5"
+    }
+]
+                                </pre>
+                            </td>
+                        </tr>
+                        <tr>
                             <td>Get movies by release year</td>
                             <td>/movies/release-year/{year}</td>
                             <td>GET</td>
