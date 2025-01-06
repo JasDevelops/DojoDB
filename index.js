@@ -57,7 +57,10 @@ app.get(
 	passport.authenticate('jwt', { session: false }),
 	async (req, res) => {
 		const searchTerm = decodeURIComponent(req.params.searchTerm).trim().toLowerCase();
+		console.log('Searching for:', searchTerm);
+
 		try {
+
 			const results = await Movies.find({
 				$or: [
 					{ title: { $regex: new RegExp(searchTerm, 'i') } },
@@ -67,6 +70,8 @@ app.get(
 					{ releaseYear: searchTerm }
 				]
 			});
+			console.log('Results found:', results);
+
 			if (results.length === 0) {
 				return res.status(404).json({
 					message: `No results for the search term "${searchTerm}" found.`
