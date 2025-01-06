@@ -56,6 +56,8 @@ app.get(
 	'/search/:searchTerm',
 	passport.authenticate('jwt', { session: false }),
 	async (req, res) => {
+		console.log('Search route hit');
+
 		const searchTerm = decodeURIComponent(req.params.searchTerm).trim().toLowerCase();
 		console.log('Searching for:', searchTerm);
 
