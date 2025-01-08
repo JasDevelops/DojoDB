@@ -280,9 +280,10 @@ app.get('/genres/:name', passport.authenticate('jwt', { session: false }), async
 					// List of all movies of this genre
 					title: movie.title,
 					actors: movie.actors,
+					director: movie.director,
 					releaseYear: movie.releaseYear,
 					description: movie.description,
-					director: movie.director,
+					genre: movie.genre.name,
 					image: movie.image,
 					_id: movie._id,
 				})),
@@ -318,6 +319,7 @@ app.get('/directors/:name', passport.authenticate('jwt', { session: false }), as
 					// List of movies directed by this director
 					title: movie.title,
 					actors: movie.actors,
+					director: movie.director,
 					releaseYear: movie.releaseYear,
 					description: movie.description,
 					genre: movie.genre.name,
