@@ -198,7 +198,7 @@ app.get(
 					description: movie.description,
 					genre: movie.genre.name,
 					director: movie.director.name,
-					image: movie.image.imageUrl,
+					image: movie.image,
 					actors: movie.actors,
 					_id: movie._id,
 				}));
