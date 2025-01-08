@@ -66,7 +66,7 @@ app.get(
 					{ 'actors.name': { $regex: regex } },
 					{ 'director.name': { $regex: regex } },
 					{ 'genre.name': { $regex: regex } },
-					{ releaseYear: !isNaN(searchTerm) ? parseInt(searchTerm, 10) : null },
+					...(isNaN(searchTerm) ? [] : [{ releaseYear: parseInt(searchTerm, 10) }]),
 				],
 			});
 
