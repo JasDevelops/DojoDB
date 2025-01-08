@@ -234,8 +234,14 @@ app.get('/actors/:name', passport.authenticate('jwt', { session: false }), async
 						movie.actors
 							.filter((actor) => actor.name.toLowerCase() === actorName)
 							.map((actor) => ({
-								movieTitle: movie.title,
+								title: movie.title,
+								actors: movie.actors,
 								role: actor.role,
+								releaseYear: movie.releaseYear,
+								description: movie.description,
+								genre: movie.genre.name,
+								director: movie.director.name,
+								image: movie.image,
 								_id: movie._id,
 							}))
 				),
@@ -273,6 +279,12 @@ app.get('/genres/:name', passport.authenticate('jwt', { session: false }), async
 				movies: movies.map((movie) => ({
 					// List of all movies of this genre
 					title: movie.title,
+					actors: movie.actors,
+					role: actor.role,
+					releaseYear: movie.releaseYear,
+					description: movie.description,
+					director: movie.director.name,
+					image: movie.image,
 					_id: movie._id,
 				})),
 			};
@@ -306,8 +318,12 @@ app.get('/directors/:name', passport.authenticate('jwt', { session: false }), as
 				movies: movies.map((movie) => ({
 					// List of movies directed by this director
 					title: movie.title,
+					actors: movie.actors,
+					role: actor.role,
 					releaseYear: movie.releaseYear,
+					description: movie.description,
 					genre: movie.genre.name,
+					image: movie.image,
 					_id: movie._id,
 				})),
 			};
