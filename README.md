@@ -15,9 +15,10 @@
 **GET /movies/:title**: Fetches a movie by its title.
 **GET /movies/release-year/:year**: Fetches all movies by their release year.
 **GET /actors/:name**:Fetches movies featuring a specific actor.
-**GET /genres/:name**: Fetches movies belonging to a specific genre.
-**GET /directors/:name**: Fetches movies directed by a specific director.
-**POST /users**: Registers a new user with a username, email, password, and optional birthday.
+**GET /genres/:name**: Fetches movies belonging to a specific genre and extra information on the genre.
+**GET /directors/:name**: Fetches movies directed by a specific director and extra information on the director.
+**GET /search/:searchterm**: Fetches search for Movies, Actors, Directors, Genres, or Release Year.
+**POST /signup**: Registers a new user with a username, email, password, and optional birthday.
 **PUT /users/:username**: Updates the user profile by username, with optional fields like newUsername, newEmail, newPassword, and newBirthday.
 **PUT /users/:username/favourites/:movieID**: Adds a movie to the user's favorites list by movie ID.
 **POST /login**: Logs in a user by email and password, returns a JWT token.
@@ -27,8 +28,8 @@
 ## Usage:
 - Navigate the movie list
 - Click on a movie to view its details
-- Use the search bar to find specific movies
-- Sort the list by release date or rating
+- Use the search bar to find specific movies, actors, genres, or directors
+- Sort the list by release year, actor, director, title or genre
 
 ## Setup
 *local*
@@ -50,6 +51,8 @@
 - **CORS** - To enable cross-origin requests from allowed origins.
 - **GitHub** - Version control and repository hosting.
 - **Heroku** - Platform as a Service (PaaS) for hosting and deploying the app.
+- **MongoDB Atlas** - Cloud database service for storing movie and user data.
+- **Netlify** - Used to deploy the frontend .
 
 ## Contributing
 
@@ -61,7 +64,8 @@ MIT License. See LICENSE for more information.
 
 ## Acknowledgment
 
- **MongoDB Atlas** for the cloud database service
+- **MongoDB Atlas** for the cloud database service
 - **Heroku** for hosting the app
+- **Netlify** for frontend deployment.
 - **GitHub** for version control and repository management
 - **CareerFoundry** for guidance and support during development

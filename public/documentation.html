@@ -95,7 +95,7 @@
                                 <br>
                                 Example:
                                 <pre>
-[
+                                    [
     {
         "title": "Enter the Dragon",
         "description": "Bruce Lee stars as a martial artist recruited by a secret British agency to infiltrate a crime lord's island fortress for a deadly tournament. This classic is one of the most influential martial arts films ever.",
@@ -180,7 +180,7 @@
                                 <br>
                                 Example:
                                 <pre>
-{
+                                    {
     "title": "Enter the Dragon",
     "description": "Bruce Lee stars as a martial artist recruited by a secret British agency to infiltrate a crime lord's island fortress for a deadly tournament. This classic is one of the most influential martial arts films ever.",
     "genre": "Action",
@@ -220,34 +220,41 @@
                             <td>
                                 A **JSON array** of movies , actors, directors, genres, or release year. If nothing is found a 404 error is returned.
                                 <br>
-                                Example:
+                                Example (search for "kung"):
                                 <pre>
-[
+                                    [
     {
-        "title": "Crouching Tiger, Hidden Dragon",
-        "releaseYear": 2000,
-        "description": "This epic film tells the story of a stolen sword, forbidden love, and a martial arts journey. It blends action with deep emotional storytelling.",
-        "genre": "Action",
-        "director": "Ang Lee",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/c/cf/Maruyama_Okyo_-_Tiger_and_Dragon%2C_Tiger_-_81.693.1_-_Detroit_Institute_of_Arts.jpg",
+        "type": "movie",
+        "title": "Kung Fu Hustle",
+        "description": "A hapless petty thief in 1940s China unwittingly gets caught up in a battle between rival gangs and legendary martial artists. Set in a vibrant, exaggerated world, the film combines slapstick comedy with stylized action, featuring epic fight sequences and over-the-top characters. ",
+        "genre": {
+            "name": "Action",
+            "description": "High-energy films packed with intense fight scenes, fast-paced choreography, and adrenaline-pumping sequences that showcase the power and skill of martial artists in combat."
+        },
+        "director": {
+            "name": "Stephen Chow",
+            "bio": "Stephen Chow is a Hong Kong filmmaker, actor, and comedian, known for his unique blend of slapstick humor, visual effects, and martial arts.",
+            "birthYear": 1962,
+            "deathYear": null
+        },
+        "image": {
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/75/Tamausagi_songok%C5%AB_LCCN2008660102.jpg",
+            "imageAttribution": "Department of Foreign Affairs and Trade website – www.dfat.gov.au, CC BY 4.0, via Wikimedia Commons"
+        },
+        "releaseYear": 2004,
         "actors": [
             {
-                "_id": "674aea4cfd5e4c481ae0bd28",
-                "name": "Chow Yun-fat",
-                "role": "Li Mu Bai"
+                "_id": "677fb09b2bcd8a5ddc924aac",
+                "name": "Stephen Chow",
+                "role": "Sing"
             },
             {
-                "_id": "674aea4cfd5e4c481ae0bd29",
-                "name": "Michelle Yeoh",
-                "role": "Yu Shu Lien"
-            },
-            {
-                "_id": "674aea4cfd5e4c481ae0bd2a",
-                "name": "Zhang Ziyi",
-                "role": "Jen Yu"
+                "_id": "677fb09b2bcd8a5ddc924aad",
+                "name": "Chi Chung Lam",
+                "role": "Bone"
             }
         ],
-        "_id": "67489000f9495208cdfdecf5"
+        "_id": "674890f7f9495208cdfdecf8"
     }
 ]
                                 </pre>
@@ -263,27 +270,35 @@
                                 <br>
                                 Example:
                                 <pre>
-[
+                                    [
     {
         "title": "Crouching Tiger, Hidden Dragon",
         "releaseYear": 2000,
         "description": "This epic film tells the story of a stolen sword, forbidden love, and a martial arts journey. It blends action with deep emotional storytelling.",
         "genre": "Action",
-        "director": "Ang Lee",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/c/cf/Maruyama_Okyo_-_Tiger_and_Dragon%2C_Tiger_-_81.693.1_-_Detroit_Institute_of_Arts.jpg",
+        "director": {
+            "name": "Ang Lee",
+            "bio": "Ang Lee is a Taiwanese-American filmmaker known for his versatile approach to storytelling. His work often explores themes of identity and human emotion.",
+            "birthYear": 1954,
+            "deathYear": null
+        },
+        "image": {
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cf/Maruyama_Okyo_-_Tiger_and_Dragon%2C_Tiger_-_81.693.1_-_Detroit_Institute_of_Arts.jpg",
+            "imageAttribution": "Maruyama Ōkyo, Public domain, via Wikimedia Commons"
+        },
         "actors": [
             {
-                "_id": "674aea4cfd5e4c481ae0bd28",
+                "_id": "677fb1232bcd8a5ddc924ab0",
                 "name": "Chow Yun-fat",
                 "role": "Li Mu Bai"
             },
             {
-                "_id": "674aea4cfd5e4c481ae0bd29",
+                "_id": "677fb1232bcd8a5ddc924ab1",
                 "name": "Michelle Yeoh",
                 "role": "Yu Shu Lien"
             },
             {
-                "_id": "674aea4cfd5e4c481ae0bd2a",
+                "_id": "677fb1232bcd8a5ddc924ab2",
                 "name": "Zhang Ziyi",
                 "role": "Jen Yu"
             }
@@ -304,18 +319,38 @@
                                 <br>
                                 Example:
                                 <pre>
-{
-    "name": "bruce lee",
+                                    {
+    "name": "tony jaa",
     "roles": [
         {
-            "movieTitle": "Enter the Dragon",
-            "role": "Lee",
-            "_id": "67488ec6f9495208cdfdecf3"
-        },
-        {
-            "movieTitle": "The Way of the Dragon",
-            "role": "Tang Lung",
-            "_id": "67489214f9495208cdfdecf9"
+            "title": "Ong Bak: The Thai Warrior",
+            "actors": [
+                {
+                    "_id": "677fb1d22bcd8a5ddc924ac7",
+                    "name": "Tony Jaa",
+                    "role": "Ting"
+                },
+                {
+                    "_id": "677fb1d22bcd8a5ddc924ac8",
+                    "name": "Pumwaree Yodkamol",
+                    "role": "Muay"
+                }
+            ],
+            "role": "Ting",
+            "releaseYear": 2003,
+            "description": "A young Thai man travels to Bangkok to recover a stolen artifact and uncovers a plot involving criminals and corruption. The film is known for its intense martial arts sequences.",
+            "genre": "Action",
+            "director": {
+                "name": "Prachya Pinkaew",
+                "bio": "Prachya Pinkaew is a Thai film director, best known for his work on action films like Ong Bak, which brought international attention to Thai martial arts.",
+                "birthYear": 1962,
+                "deathYear": null
+            },
+            "image": {
+                "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/97/Asian_Elephant_in_Thailand.jpg",
+                "imageAttribution": "James B Cutchin, CC BY 4.0, via Wikimedia Commons"
+            },
+            "_id": "67489260f9495208cdfdecfb"
         }
     ]
 }
@@ -332,21 +367,39 @@
                                 <br>
                                 Example:
                                 <pre>
-{
-    "name": "Action",
-    description": "High-energy films packed with intense fight scenes, fast-paced choreography, and adrenaline-pumping sequences that showcase the power and skill of martial artists in combat.",
+                                    {
+    "name": "Fantasy",
+    "description": "Martial arts set in magical or mythical worlds, where fighters wield extraordinary abilities, face mythical creatures, and engage in epic battles beyond the limits of reality.",
     "movies": [
         {
-            "title": "Enter the Dragon",
-            "releaseYear": 1973,
-            "_id": "67488ec6f9495208cdfdecf3"
-        },
-        {
-            "title": "Drunken Master",
-            "releaseYear": 1978,
-            "_id": "67488fd4f9495208cdfdecf4"
-        },
-        {...}
+            "title": "The Monkey King",
+            "actors": [
+                {
+                    "_id": "677fb2182bcd8a5ddc924aee",
+                    "name": "Donnie Yen",
+                    "role": "Monkey King"
+                },
+                {
+                    "_id": "677fb2182bcd8a5ddc924aef",
+                    "name": "Chow Yun-fat",
+                    "role": "Jade Emperor"
+                }
+            ],
+            "director": {
+                "name": "Soi Cheang",
+                "bio": "Soi Cheang is a Hong Kong director and screenwriter known for his work in both action and fantasy genres.",
+                "birthYear": 1971,
+                "deathYear": null
+            },
+            "releaseYear": 2014,
+            "description": "A fantasy adventure film based on the Chinese classic Journey to the West, following the Monkey King as he battles gods, demons, and discovers his true powers.",
+            "genre": "Fantasy",
+            "image": {
+                "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/75/Tamausagi_songok%C5%AB_LCCN2008660102.jpg",
+                "imageAttribution": "Taiso, Yoshitoshi, 1839-1892, artist, Public domain, via Wikimedia Commons"
+            },
+            "_id": "67489232f9495208cdfdecfa"
+        }
     ]
 }
                                 </pre>
@@ -362,23 +415,40 @@
                                 <br>
                                 Example:
                                 <pre>
-{
-    "name": "Stephen Chow",
-    "bio": "Stephen Chow is a Hong Kong filmmaker, actor, and comedian, known for his unique blend of slapstick humor, visual effects, and martial arts.",
+                                    {
+    "name": "Prachya Pinkaew",
+    "bio": "Prachya Pinkaew is a Thai film director, best known for his work on action films like Ong Bak, which brought international attention to Thai martial arts.",
     "birthYear": 1962,
     "deathYear": null,
     "movies": [
         {
-            "title": "Kung Fu Hustle",
-            "releaseYear": 2004,
+            "title": "Ong Bak: The Thai Warrior",
+            "actors": [
+                {
+                    "_id": "677fb24c2bcd8a5ddc924afc",
+                    "name": "Tony Jaa",
+                    "role": "Ting"
+                },
+                {
+                    "_id": "677fb24c2bcd8a5ddc924afd",
+                    "name": "Pumwaree Yodkamol",
+                    "role": "Muay"
+                }
+            ],
+            "director": {
+                "name": "Prachya Pinkaew",
+                "bio": "Prachya Pinkaew is a Thai film director, best known for his work on action films like Ong Bak, which brought international attention to Thai martial arts.",
+                "birthYear": 1962,
+                "deathYear": null
+            },
+            "releaseYear": 2003,
+            "description": "A young Thai man travels to Bangkok to recover a stolen artifact and uncovers a plot involving criminals and corruption. The film is known for its intense martial arts sequences.",
             "genre": "Action",
-            "_id": "674890f7f9495208cdfdecf8"
-        },
-        {
-            "title": "Shaolin Soccer",
-            "releaseYear": 2001,
-            "genre": "Action",
-            "_id": "6748a0aff9495208cdfded02"
+            "image": {
+                "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/97/Asian_Elephant_in_Thailand.jpg",
+                "imageAttribution": "James B Cutchin, CC BY 4.0, via Wikimedia Commons"
+            },
+            "_id": "67489260f9495208cdfdecfb"
         }
     ]
 }
@@ -395,11 +465,13 @@
                                 <br>
                                 Example:
                                 <pre>
-{ 
-    "username": "KarateKid",
-    "email": "test@test.com",
-    "birthday": "2020-05-10",
-    "favourites": "Enter the Dragon"
+                                    {
+    "user": {
+        "username": "JojoFu",
+        "email": "test@1234.com",
+        "birthday": null,
+        "favourites": []
+    }
 }
                                 </pre>
                             </td>
@@ -413,7 +485,7 @@
                                 <br>
                                 Example:
                                 <pre>
-{ 
+                                    { 
     "username": "KarateKid",
     "email": "test@test.com",
     "password": "strongPW",
@@ -426,7 +498,7 @@
                                 <br>
                                 Example:
                                 <pre>
-{
+                                    {
     "message": "User created successfully.",
     "user": {
         "_id": "67508ed6924d779c83462d97",
@@ -448,7 +520,7 @@
                                 <br>
                                 Example:
                                 <pre>
-    Key: username Value: KarateKid
+                                    Key: username Value: KarateKid
     Key: password Value: strongPW
                                 </pre>
                             </td>
@@ -457,7 +529,7 @@
                                 <br>
                                 Example:
                                 <pre>
-{
+                                    {
     "message": "Login successful",
     "user": {
         "_id": "674b2d51d87b33e25fa0714d",
@@ -488,7 +560,7 @@
                                 <br>
                                 Example:
                                 <pre>
-{
+                                    {
     "message": "User updated successfully.",
     "updatedFields": {
         "email": "email updated successfully"
@@ -521,7 +593,7 @@
                                 <br>
                                 Example:
                                 <pre>
-{
+                                    {
     "message": "Movie \"Ip Man\" with the ID \"6748901bf9495208cdfdecf6\" added to favourites.",
     "username": "SmallDragon",
     "favourites": [
@@ -547,7 +619,7 @@
                                 <br>
                                 Example:
                                 <pre>
-{ 
+                                    { 
     "title": "The Monkey King"
 }
                                 </pre>
@@ -557,7 +629,7 @@
                                 <br>
                                 Example:
                                 <pre>
-{
+                                    {
     "message": "Movie with twith the ID \"6748901bf9495208cdfdecf6\" removed from favourites.",
     "username": "SmallDragon",
     "favourites": [
@@ -580,7 +652,7 @@
                                 <br>
                                 Example:
                                 <pre>
-{
+                                    {
     "message": "User with the username \"ChopChop\" has been removed."
 }
                                 </pre>

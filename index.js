@@ -28,6 +28,7 @@ const allowedOrigin = [
 	'https://dojo-db-e5c2cf5a1b56.herokuapp.com',
 	'http://localhost:1234',
 	'https://www.dojo-db-e5c2cf5a1b56.herokuapp.com',
+	'https://dojodb.netlify.app',
 ];
 
 app.use(
