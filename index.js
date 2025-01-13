@@ -689,9 +689,9 @@ app.delete(
 			const updatedFavourites =
 				updatedUser.favourites.length > 0
 					? updatedUser.favourites.map((fav) => ({
-						movieId: fav.movieId,
-						title: fav.title,
-					}))
+							movieId: fav.movieId,
+							title: fav.title,
+						}))
 					: 'No favourite movies yet';
 			return res.status(200).json({
 				message: `Movie with twith the ID "${movieID}" removed from favourites.`,

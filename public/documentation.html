@@ -1,75 +1,88 @@
 <!doctype html>
 <html lang="en">
+
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>DojoDB - Documentation</title>
         <style>
-      table,
-      th {
-        text-align: left;
-      }
-      pre,
-      td,
-      th {
-        word-wrap: break-word;
-      }
-      body {
-        font-family: sans-serif;
-      }
-      .EndpointTable {
-        width: 100%;
-        overflow-x: auto;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        table-layout: fixed;
-        border-spacing: 1px;
-      }
-      td,
-      th {
-        border: 1px solid #eee;
-        padding: 8px;
-        vertical-align: top;
-        white-space: normal;
-      }
-      th {
-        background-color: #f4f4f4;
-      }
-      pre {
-        background-color: #f8f8f8;
-        padding: 10px;
-        border-radius: 5px;
-        overflow-x: auto;
-        white-space: pre-wrap;
-      }
-      @media (max-width: 768px) {
-        table {
-          width: 100%;
-          display: block;
-          overflow-x: auto;
-          white-space: nowrap;
-        }
-        td,
-        th {
-          padding: 10px;
-          text-align: left;
-        }
-      }
-      @media (max-width: 480px) {
-        td,
-        th {
-          padding: 6px;
-        }
-      }
+            table,
+            th {
+                text-align: left;
+            }
+
+            pre,
+            td,
+            th {
+                word-wrap: break-word;
+            }
+
+            body {
+                font-family: sans-serif;
+            }
+
+            .EndpointTable {
+                width: 100%;
+                overflow-x: auto;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                table-layout: fixed;
+                border-spacing: 1px;
+            }
+
+            td,
+            th {
+                border: 1px solid #eee;
+                padding: 8px;
+                vertical-align: top;
+                white-space: normal;
+            }
+
+            th {
+                background-color: #f4f4f4;
+            }
+
+            pre {
+                background-color: #f8f8f8;
+                padding: 10px;
+                border-radius: 5px;
+                overflow-x: auto;
+                white-space: pre-wrap;
+            }
+
+            @media (max-width: 768px) {
+                table {
+                    width: 100%;
+                    display: block;
+                    overflow-x: auto;
+                    white-space: nowrap;
+                }
+
+                td,
+                th {
+                    padding: 10px;
+                    text-align: left;
+                }
+            }
+
+            @media (max-width: 480px) {
+
+                td,
+                th {
+                    padding: 6px;
+                }
+            }
         </style>
     </head>
+
     <body>
         <section>
             <h1>DojoDB - Documentation</h1>
-            <p>
-                This web application allows users to explore information on movies with a special focus on martial arts films. Users can sign up, update their personal profiles, and curate a list of their favorite movies.
+            <p> This web application allows users to explore information on movies with a special focus on martial arts
+                films. Users can sign up, update their personal profiles, and curate a list of their favorite movies.
             </p>
         </section>
         <section>
@@ -90,9 +103,7 @@
                             <td>/movies</td>
                             <td>GET</td>
                             <td>none</td>
-                            <td>
-                                A **JSON array** of all movies. If no movies are available, returns a 500 error.
-                                <br>
+                            <td> A **JSON array** of all movies. If no movies are available, returns a 500 error. <br>
                                 Example:
                                 <pre>
                                     [
@@ -110,7 +121,7 @@
             "deathYear": 1997
         },
         "image": {
-            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Saxon_and_Kelly.jpg",
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Saxon_and_Kelly.jpg/400px-Saxon_and_Kelly.jpg",
             "imageAttribution": "Public domain, via Wikimedia Commons"
         },
         "releaseYear": 1973,
@@ -147,7 +158,7 @@
             "deathYear": null
         },
         "image": {
-            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/77/Yueng_Siu-tien.jpg",
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Yueng_Siu-tien.jpg/400px-Yueng_Siu-tien.jpg",
             "imageAttribution": "Yueng Siu-tien by Yuen Siu-tien, licensed under CC BY-SA 4.0"
         },
         "releaseYear": 1978,
@@ -175,10 +186,8 @@
                             <td>/movies/{title}</td>
                             <td>GET</td>
                             <td>none</td>
-                            <td>
-                                A **JSON object** of the specific movie. If the movie is not found, a 404 error is  returned.
-                                <br>
-                                Example:
+                            <td> A **JSON object** of the specific movie. If the movie is not found, a 404 error is
+                                returned. <br> Example:
                                 <pre>
                                     {
     "title": "Enter the Dragon",
@@ -186,7 +195,7 @@
     "genre": "Action",
     "director": "Robert Clouse",
     "image": {
-        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Saxon_and_Kelly.jpg",
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Saxon_and_Kelly.jpg/400px-Saxon_and_Kelly.jpg",
         "imageAttribution": "Public domain, via Wikimedia Commons"
     },
     "releaseYear": 1973,
@@ -217,10 +226,8 @@
                             <td>/search/{searchTerm}</td>
                             <td>GET</td>
                             <td>none</td>
-                            <td>
-                                A **JSON array** of movies , actors, directors, genres, or release year. If nothing is found a 404 error is returned.
-                                <br>
-                                Example (search for "kung"):
+                            <td> A **JSON array** of movies , actors, directors, genres, or release year. If nothing is
+                                found a 404 error is returned. <br> Example (search for "kung"):
                                 <pre>
                                     [
     {
@@ -238,7 +245,7 @@
             "deathYear": null
         },
         "image": {
-            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/75/Tamausagi_songok%C5%AB_LCCN2008660102.jpg",
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Tamausagi_songok%C5%AB_LCCN2008660102.jpg/400px-Tamausagi_songok%C5%AB_LCCN2008660102.jpg",
             "imageAttribution": "Department of Foreign Affairs and Trade website – www.dfat.gov.au, CC BY 4.0, via Wikimedia Commons"
         },
         "releaseYear": 2004,
@@ -265,10 +272,8 @@
                             <td>/movies/release-year/{year}</td>
                             <td>GET</td>
                             <td>none</td>
-                            <td>
-                                A **JSON array** of movies released in the specified year. If no movies are found for the year, a 404 error is returned.
-                                <br>
-                                Example:
+                            <td> A **JSON array** of movies released in the specified year. If no movies are found for
+                                the year, a 404 error is returned. <br> Example:
                                 <pre>
                                     [
     {
@@ -283,7 +288,7 @@
             "deathYear": null
         },
         "image": {
-            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cf/Maruyama_Okyo_-_Tiger_and_Dragon%2C_Tiger_-_81.693.1_-_Detroit_Institute_of_Arts.jpg",
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Maruyama_Okyo_-_Tiger_and_Dragon%2C_Tiger_-_81.693.1_-_Detroit_Institute_of_Arts.jpg/400px-Maruyama_Okyo_-_Tiger_and_Dragon%2C_Tiger_-_81.693.1_-_Detroit_Institute_of_Arts.jpg",
             "imageAttribution": "Maruyama Ōkyo, Public domain, via Wikimedia Commons"
         },
         "actors": [
@@ -314,10 +319,8 @@
                             <td>/actors/{actor}</td>
                             <td>GET</td>
                             <td>none</td>
-                            <td>
-                                A **JSON object** with details about actor, including movies in which they appeared and their role. If no movies are found, a 404 error is returned.
-                                <br>
-                                Example:
+                            <td> A **JSON object** with details about actor, including movies in which they appeared and
+                                their role. If no movies are found, a 404 error is returned. <br> Example:
                                 <pre>
                                     {
     "name": "tony jaa",
@@ -347,7 +350,8 @@
                 "deathYear": null
             },
             "image": {
-                "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/97/Asian_Elephant_in_Thailand.jpg",
+                "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Asian_Elephant_in_Thailand.jpg/400px-Asian_Elephant_in_Thailand.jpg
+                ",
                 "imageAttribution": "James B Cutchin, CC BY 4.0, via Wikimedia Commons"
             },
             "_id": "67489260f9495208cdfdecfb"
@@ -362,10 +366,8 @@
                             <td>/movies/genres/{genre}</td>
                             <td>GET</td>
                             <td>none</td>
-                            <td>
-                                A **JSON array** with details about a genre, including movies of that genre. If no movies are found, a 404 error is returned.
-                                <br>
-                                Example:
+                            <td> A **JSON array** with details about a genre, including movies of that genre. If no
+                                movies are found, a 404 error is returned. <br> Example:
                                 <pre>
                                     {
     "name": "Fantasy",
@@ -395,7 +397,7 @@
             "description": "A fantasy adventure film based on the Chinese classic Journey to the West, following the Monkey King as he battles gods, demons, and discovers his true powers.",
             "genre": "Fantasy",
             "image": {
-                "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/75/Tamausagi_songok%C5%AB_LCCN2008660102.jpg",
+                "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Tamausagi_songok%C5%AB_LCCN2008660102.jpg/400px-Tamausagi_songok%C5%AB_LCCN2008660102.jpg",
                 "imageAttribution": "Taiso, Yoshitoshi, 1839-1892, artist, Public domain, via Wikimedia Commons"
             },
             "_id": "67489232f9495208cdfdecfa"
@@ -410,10 +412,8 @@
                             <td>/directors/{director}</td>
                             <td>GET</td>
                             <td>none</td>
-                            <td>
-                                A **JSON array** with director’s details, including movies directed by them. If the director is not found, a 404 error is returned.
-                                <br>
-                                Example:
+                            <td> A **JSON array** with director’s details, including movies directed by them. If the
+                                director is not found, a 404 error is returned. <br> Example:
                                 <pre>
                                     {
     "name": "Prachya Pinkaew",
@@ -445,7 +445,7 @@
             "description": "A young Thai man travels to Bangkok to recover a stolen artifact and uncovers a plot involving criminals and corruption. The film is known for its intense martial arts sequences.",
             "genre": "Action",
             "image": {
-                "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/97/Asian_Elephant_in_Thailand.jpg",
+                "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Asian_Elephant_in_Thailand.jpg/400px-Asian_Elephant_in_Thailand.jpg",
                 "imageAttribution": "James B Cutchin, CC BY 4.0, via Wikimedia Commons"
             },
             "_id": "67489260f9495208cdfdecfb"
@@ -460,10 +460,8 @@
                             <td>/users/{username}</td>
                             <td>GET</td>
                             <td>none</td>
-                            <td>
-                                A **JSON array** with user's profile. If the user is not found, a 404 error is returned.
-                                <br>
-                                Example:
+                            <td> A **JSON array** with user's profile. If the user is not found, a 404 error is
+                                returned. <br> Example:
                                 <pre>
                                     {
     "user": {
@@ -480,10 +478,8 @@
                             <td>Add a new user</td>
                             <td>/users</td>
                             <td>POST</td>
-                            <td>
-                                **JSON object** with required fields (username, password,email) and optional birthday.
-                                <br>
-                                Example:
+                            <td> **JSON object** with required fields (username, password,email) and optional birthday.
+                                <br> Example:
                                 <pre>
                                     { 
     "username": "KarateKid",
@@ -493,10 +489,8 @@
 }
                                 </pre>
                             </td>
-                            <td>
-                                A **JSON object** with new user's data. If a field is faulty, a 422 error is returned. If a required field is missing or already exists, a 400 error is returned.
-                                <br>
-                                Example:
+                            <td> A **JSON object** with new user's data. If a field is faulty, a 422 error is returned.
+                                If a required field is missing or already exists, a 400 error is returned. <br> Example:
                                 <pre>
                                     {
     "message": "User created successfully.",
@@ -515,19 +509,15 @@
                             <td>Login registered User</td>
                             <td>/login</td>
                             <td>POST</td>
-                            <td>
-                                Enter username and password (keys) and their values in query params. Copy created token and add to authorization (Bearer Token)
-                                <br>
-                                Example:
+                            <td> Enter username and password (keys) and their values in query params. Copy created token
+                                and add to authorization (Bearer Token) <br> Example:
                                 <pre>
                                     Key: username Value: KarateKid
     Key: password Value: strongPW
                                 </pre>
                             </td>
-                            <td>
-                                A **JSON object** of succesful login with userId and username and token. If login fails, a 400 error is returned.
-                                <br>
-                                Example:
+                            <td> A **JSON object** of succesful login with userId and username and token. If login
+                                fails, a 400 error is returned. <br> Example:
                                 <pre>
                                     {
     "message": "Login successful",
@@ -544,10 +534,7 @@
                             <td>Update user information by username</td>
                             <td>/users/{username}</td>
                             <td>PUT</td>
-                            <td>
-                                **JSON object** with new user data.
-                                <br>
-                                Example:
+                            <td> **JSON object** with new user data. <br> Example:
                                 <pre>
                                     { 
                                 "newUsername": "new_Kick",
@@ -555,10 +542,8 @@
                             }
                                 </pre>
                             </td>
-                            <td>
-                                A **JSON object** with updated data. If a field is faulty, a 422 error is returned. If a required field is missing or already exists, a 400 error is returned.
-                                <br>
-                                Example:
+                            <td> A **JSON object** with updated data. If a field is faulty, a 422 error is returned. If
+                                a required field is missing or already exists, a 400 error is returned. <br> Example:
                                 <pre>
                                     {
     "message": "User updated successfully.",
@@ -578,20 +563,16 @@
                             <td>Add a movie to user's favourites list</td>
                             <td>/users/{username}/favourites/{movieId}</td>
                             <td>PUT</td>
-                            <td>
-                                **JSON object** with movie title
-                                <br>
-                                Example:
+                            <td> **JSON object** with movie title <br> Example:
                                 <pre>
                                     { 
                                 "title": "Drunken Master"
                             }
                                 </pre>
                             </td>
-                            <td>
-                                If the user and movie both exist, the movie is added to the user's favorites list. If the movie is already on the list, a 400 error is returned. If either the user or movie is not found, a 404 error is returned.
-                                <br>
-                                Example:
+                            <td> If the user and movie both exist, the movie is added to the user's favorites list. If
+                                the movie is already on the list, a 400 error is returned. If either the user or movie
+                                is not found, a 404 error is returned. <br> Example:
                                 <pre>
                                     {
     "message": "Movie \"Ip Man\" with the ID \"6748901bf9495208cdfdecf6\" added to favourites.",
@@ -614,20 +595,15 @@
                             <td>Remove a movie from user's favourites list</td>
                             <td>/users/{username}/favourites/{movieId}</td>
                             <td>DELETE</td>
-                            <td>
-                                **JSON object** with movie title
-                                <br>
-                                Example:
+                            <td> **JSON object** with movie title <br> Example:
                                 <pre>
                                     { 
     "title": "The Monkey King"
 }
                                 </pre>
                             </td>
-                            <td>
-                                If the user and movie both exist, the movie is removed from the user's favorites list. If either user or movie is not found, a 404 error is returned.
-                                <br>
-                                Example:
+                            <td> If the user and movie both exist, the movie is removed from the user's favorites list.
+                                If either user or movie is not found, a 404 error is returned. <br> Example:
                                 <pre>
                                     {
     "message": "Movie with twith the ID \"6748901bf9495208cdfdecf6\" removed from favourites.",
@@ -647,10 +623,8 @@
                             <td>/users/{username}</td>
                             <td>DELETE</td>
                             <td>None</td>
-                            <td>
-                                If the user exists, they are removed and a confirmation message is returned. If the user does not exist, a 404 error is returned.
-                                <br>
-                                Example:
+                            <td> If the user exists, they are removed and a confirmation message is returned. If the
+                                user does not exist, a 404 error is returned. <br> Example:
                                 <pre>
                                     {
     "message": "User with the username \"ChopChop\" has been removed."
@@ -663,4 +637,5 @@
             </div>
         </section>
     </body>
+
 </html>
