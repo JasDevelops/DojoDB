@@ -1,7 +1,18 @@
 # DojoDB
 *DojoDB* is a RESTful API built with Node.js, Express, MongoDB, and Passport for handling user authentication and managing movies, users, and their favorites. The API allows for user registration, login, and CRUD operations on movies and user profiles.
 
-## Features
+## Table of Contents
+
+1.  [Features](#features)
+2.  [API Endpoints](#endpoints)
+3.  [How to Use](#howToUse)
+4.  [Setup](#setup)
+5.  [Technology Used](#technology)
+6.  [Contribution](#contribution)
+7.  [License](#license)
+8.  [Acknowledgments](#acknowledgments)
+
+## <a name="features"></a>Features:
 - Fully functional movie listing app
 - Dynamically loads a list of movies from an external API
 - Allows viewing of detailed information about each movie (title, release year, genre, etc.)
@@ -10,7 +21,7 @@
 - Sort movies by release date or rating
 - Custom loading message while fetching data
 
-## API Endpoints
+## <a name="endpoints"></a>API Endpoints:
 - **GET /movies**: Fetches all movies in the database.
 - **GET /movies/:title**: Fetches a movie by its title.
 - **GET /movies/release-year/:year**: Fetches all movies by their release year.
@@ -25,13 +36,13 @@
 - **DELETE /users/:username**: Deletes a user by username.
 - **DELETE /users/:username/favourites/:movieID**: Deletes a movie from the user's favorites list by movie ID.
 
-## Usage:
+## <a name="howToUse"></a>How to Use:
 - Navigate the movie list
 - Click on a movie to view its details
 - Use the search bar to find specific movies, actors, genres, or directors
 - Sort the list by release year, actor, director, title or genre
 
-## Setup
+## <a name="setup"></a>Setup:
 *local*
 1. Clone the repository: `git clone https://github.com/JasDevelops/DojoDB`
 2. Navigate to Project folder: `cd DojoDB`
@@ -39,7 +50,7 @@
 4. Start application locally: `npm start`
 5. Access in browser `http://localhost:3000`
 
-## Technologies Used
+## <a name="technology"></a>Technology Used:
 - **Node.js**: Server-side runtime environment
 - **Express**: Framework to handle routing, log requests and serve static files
 - **Morgan**: HTTP request logger middleware
@@ -54,16 +65,13 @@
 - **MongoDB Atlas** - Cloud database service for storing movie and user data.
 - **Netlify** - Used to deploy the frontend.
 
-## Contributing
-
+## <a name="contributing"></a>Contributing:
 Feel free to fork this repository, create a branch, and submit a pull request. Please ensure you follow the code formatting guidelines and include tests for any new features.
 
-## License
-
+## <a name="license"></a>License:
 MIT License. See LICENSE for more information.
 
-## Acknowledgment
-
+## <a name="acknowledgments"></a>Acknowledgments:
 - **MongoDB Atlas** for the cloud database service
 - **Heroku** for hosting the app
 - **Netlify** for frontend deployment.
