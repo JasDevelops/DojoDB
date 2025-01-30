@@ -11,19 +11,19 @@
 - Custom loading message while fetching data
 
 ## API Endpoints
-**GET /movies**: Fetches all movies in the database.
-**GET /movies/:title**: Fetches a movie by its title.
-**GET /movies/release-year/:year**: Fetches all movies by their release year.
-**GET /actors/:name**:Fetches movies featuring a specific actor.
-**GET /genres/:name**: Fetches movies belonging to a specific genre and extra information on the genre.
-**GET /directors/:name**: Fetches movies directed by a specific director and extra information on the director.
-**GET /search/:searchterm**: Fetches search for Movies, Actors, Directors, Genres, or Release Year.
-**POST /signup**: Registers a new user with a username, email, password, and optional birthday.
-**PUT /users/:username**: Updates the user profile by username, with optional fields like newUsername, newEmail, newPassword, and newBirthday.
-**PUT /users/:username/favourites/:movieID**: Adds a movie to the user's favorites list by movie ID.
-**POST /login**: Logs in a user by email and password, returns a JWT token.
-**DELETE /users/:username**: Deletes a user by username.
-**DELETE /users/:username/favourites/:movieID**: Deletes a movie from the user's favorites list by movie ID.
+- **GET /movies**: Fetches all movies in the database.
+- **GET /movies/:title**: Fetches a movie by its title.
+- **GET /movies/release-year/:year**: Fetches all movies by their release year.
+- **GET /actors/:name**:Fetches movies featuring a specific actor.
+- **GET /genres/:name**: Fetches movies belonging to a specific genre and extra information on the genre.
+- **GET /directors/:name**: Fetches movies directed by a specific director and extra information on the director.
+- **GET /search/:searchterm**: Fetches search for Movies, Actors, Directors, Genres, or Release Year.
+- **POST /signup**: Registers a new user with a username, email, password, and optional birthday.
+- **PUT /users/:username**: Updates the user profile by username, with optional fields like newUsername, newEmail, newPassword, and newBirthday.
+- **PUT /users/:username/favourites/:movieID**: Adds a movie to the user's favorites list by movie ID.
+- **POST /login**: Logs in a user by email and password, returns a JWT token.
+- **DELETE /users/:username**: Deletes a user by username.
+- **DELETE /users/:username/favourites/:movieID**: Deletes a movie from the user's favorites list by movie ID.
 
 ## Usage:
 - Navigate the movie list
@@ -52,7 +52,7 @@
 - **GitHub** - Version control and repository hosting.
 - **Heroku** - Platform as a Service (PaaS) for hosting and deploying the app.
 - **MongoDB Atlas** - Cloud database service for storing movie and user data.
-- **Netlify** - Used to deploy the frontend .
+- **Netlify** - Used to deploy the frontend.
 
 ## Contributing
 
