@@ -25,6 +25,7 @@ app.use(morgan('combined', { stream: accessLogStream })); // Use morgan middlewa
 
 const allowedOrigin = [
 	'http://localhost:3000',
+	'http://localhost:4200',
 	'https://dojo-db-e5c2cf5a1b56.herokuapp.com',
 	'http://localhost:1234',
 	'https://www.dojo-db-e5c2cf5a1b56.herokuapp.com',
