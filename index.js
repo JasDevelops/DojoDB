@@ -30,7 +30,8 @@ const allowedOrigin = [
 	'http://localhost:1234',
 	'https://www.dojo-db-e5c2cf5a1b56.herokuapp.com',
 	'https://dojodb.netlify.app',
-	'https://jasdevelops.github.io'
+	'https://jasdevelops.github.io',
+	'https://jasdevelops.github.io/ShadowKick'
 ];
 
 app.use(
