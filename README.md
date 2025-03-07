@@ -1,5 +1,8 @@
 # DojoDB
-*DojoDB* is a RESTful API built with Node.js, Express, MongoDB, and Passport for handling user authentication and managing movies, users, and their favorites. The API allows for user registration, login, and CRUD operations on movies and user profiles.
+
+*DojoDB* is a RESTful API built with **Node.js**, **Express**, **MongoDB**, and **Passport** for handling user authentication and managing movies, users, and their favorites. The API allows for user registration, login, and CRUD operations on movies and user profiles.
+
+---
 
 ## Table of Contents
 
@@ -13,13 +16,25 @@
 8.  [Acknowledgments](#acknowledgments)
 
 ## <a name="features"></a>Features:
-- Fully functional movie listing app
-- Dynamically loads a list of movies from an external API
-- Allows viewing of detailed information about each movie (title, release year, genre, etc.)
-- Responsive design that works on various screen sizes
-- Search feature to find movies by title
-- Sort movies by release date or rating
-- Custom loading message while fetching data
+- **Fully Functional Movie Listing**  
+  Dynamically loads a list of movies from an external API.
+  
+- **Detailed Movie Information**  
+  View detailed information about each movie (title, release year, genre, etc.).
+
+- **Responsive Design**  
+  The app is fully responsive, working on various screen sizes.
+
+- **Search Feature**  
+  Find movies by title using the search bar.
+
+- **Sort Movies**  
+  Sort movies by release date or rating.
+
+- **Custom Loading Message**  
+  A loading message is displayed while fetching data.
+
+---
 
 ## <a name="endpoints"></a>API Endpoints:
 - **GET /movies**: Fetches all movies in the database.
@@ -36,19 +51,42 @@
 - **DELETE /users/:username**: Deletes a user by username.
 - **DELETE /users/:username/favourites/:movieID**: Deletes a movie from the user's favorites list by movie ID.
 
+---
+
 ## <a name="howToUse"></a>How to Use:
-- Navigate the movie list
-- Click on a movie to view its details
-- Use the search bar to find specific movies, actors, genres, or directors
-- Sort the list by release year, actor, director, title or genre
+- **Navigate the Movie List**  
+  View a list of movies on the main page.
+
+- **Click on a Movie to View Its Details**  
+  Each movie will have detailed information including its title, release year, genre, and more.
+
+- **Use the Search Bar**  
+  Search for movies by title, actor, director, genre, or release year.
+
+- **Sort the Movies**  
+  Use the sort options to view movies by release year, actor, director, title, or genre.
+
+---
 
 ## <a name="setup"></a>Setup:
-*local*
-1. Clone the repository: `git clone https://github.com/JasDevelops/DojoDB`
-2. Navigate to Project folder: `cd DojoDB`
-3. Install dependencies: `npm install`
-4. Start application locally: `npm start`
-5. Access in browser `http://localhost:3000`
+### Local Setup:
+1. **Clone the Repository**  
+   `git clone https://github.com/JasDevelops/DojoDB`
+
+2. **Navigate to the Project Folder**  
+   `cd DojoDB`
+
+3. **Install Dependencies**  
+   With npm: `npm install`  
+   With yarn: `yarn install`
+
+4. **Start Application Locally**  
+   `npm start`
+
+5. **Access in Browser**  
+   Go to `http://localhost:3000`
+
+---
 
 ## <a name="technology"></a>Technology Used:
 - **Node.js**: Server-side runtime environment
@@ -65,15 +103,21 @@
 - **MongoDB Atlas** - Cloud database service for storing movie and user data.
 - **Netlify** - Used to deploy the frontend.
 
+---
+
 ## <a name="contributing"></a>Contributing:
 Feel free to fork this repository, create a branch, and submit a pull request. Please ensure you follow the code formatting guidelines and include tests for any new features.
+
+---
 
 ## <a name="license"></a>License:
 MIT License. See LICENSE for more information.
 
+---
+
 ## <a name="acknowledgments"></a>Acknowledgments:
-- **MongoDB Atlas** for the cloud database service
-- **Heroku** for hosting the app
+- **MongoDB Atlas** for the cloud database service.
+- **Heroku** for hosting the app.
 - **Netlify** for frontend deployment.
-- **GitHub** for version control and repository management
-- **CareerFoundry** for guidance and support during development
+- **GitHub** for version control and repository management.
+- **CareerFoundry** for guidance and support during development.
