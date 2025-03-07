@@ -15,6 +15,8 @@
 7.  [License](#license)
 8.  [Acknowledgments](#acknowledgments)
 
+---
+
 ## <a name="features"></a>Features:
 - **Fully Functional Movie Listing**  
   Dynamically loads a list of movies from an external API.
@@ -37,19 +39,32 @@
 ---
 
 ## <a name="endpoints"></a>API Endpoints:
-- **GET /movies**: Fetches all movies in the database.
-- **GET /movies/:title**: Fetches a movie by its title.
-- **GET /movies/release-year/:year**: Fetches all movies by their release year.
-- **GET /actors/:name**:Fetches movies featuring a specific actor.
-- **GET /genres/:name**: Fetches movies belonging to a specific genre and extra information on the genre.
-- **GET /directors/:name**: Fetches movies directed by a specific director and extra information on the director.
-- **GET /search/:searchterm**: Fetches search for Movies, Actors, Directors, Genres, or Release Year.
-- **POST /signup**: Registers a new user with a username, email, password, and optional birthday.
-- **PUT /users/:username**: Updates the user profile by username, with optional fields like newUsername, newEmail, newPassword, and newBirthday.
-- **PUT /users/:username/favourites/:movieID**: Adds a movie to the user's favorites list by movie ID.
-- **POST /login**: Logs in a user by email and password, returns a JWT token.
-- **DELETE /users/:username**: Deletes a user by username.
-- **DELETE /users/:username/favourites/:movieID**: Deletes a movie from the user's favorites list by movie ID.
+- **GET /movies**:
+  Fetches all movies in the database.
+- **GET /movies/:title**:
+  Fetches a movie by its title.
+- **GET /movies/release-year/:year**:
+  Fetches all movies by their release year.
+- **GET /actors/:name**:
+  Fetches movies featuring a specific actor.
+- **GET /genres/:name**:
+  Fetches movies belonging to a specific genre and extra information on the genre.
+- **GET /directors/:name**:
+  Fetches movies directed by a specific director and extra information on the director.
+- **GET /search/:searchterm**:
+  Fetches search for Movies, Actors, Directors, Genres, or Release Year.
+- **POST /signup**:
+  Registers a new user with a username, email, password, and optional birthday.
+- **PUT /users/:username**:
+  Updates the user profile by username, with optional fields like newUsername, newEmail, newPassword, and newBirthday.
+- **PUT /users/:username/favourites/:movieID**:
+  Adds a movie to the user's favorites list by movie ID.
+- **POST /login**:
+  Logs in a user by email and password, returns a JWT token.
+- **DELETE /users/:username**:
+  Deletes a user by username.
+- **DELETE /users/:username/favourites/:movieID**:
+  Deletes a movie from the user's favorites list by movie ID.
 
 ---
 
