@@ -140,7 +140,7 @@ Please follow the code formatting guidelines and include tests for new features 
 
 ## <a name="license"></a>License:
 
-MIT License. See LICENSE for more information.
+This project is licensed under the MIT License. See the [License](./LICENSE) file for details.
 
 ---
 
