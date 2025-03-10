@@ -18,6 +18,7 @@
 ---
 
 ## <a name="features"></a>Features:
+
 - **Fully Functional Movie Listing**  
   Dynamically loads a list of movies from an external API.
   
@@ -39,6 +40,7 @@
 ---
 
 ## <a name="endpoints"></a>API Endpoints:
+
 - **GET /movies**:
   Fetches all movies in the database.
 - **GET /movies/:title**:
@@ -69,6 +71,7 @@
 ---
 
 ## <a name="howToUse"></a>How to Use:
+
 - **Navigate the Movie List**  
   View a list of movies on the main page.
 
@@ -84,6 +87,7 @@
 ---
 
 ## <a name="setup"></a>Setup:
+
 ### Local Setup:
 1. **Clone the Repository**  
    `git clone https://github.com/JasDevelops/DojoDB`
@@ -121,16 +125,27 @@
 ---
 
 ## <a name="contributing"></a>Contributing:
-Feel free to fork this repository, create a branch, and submit a pull request. Please ensure you follow the code formatting guidelines and include tests for any new features.
+
+You are very welcome to contribute! 
+
+1. Fork the repository.
+2. Create a feature branch: ```git checkout -b feature-branch```.
+3. Commit your changes: ```git commit -m 'Add new feature'```.
+4. Push the branch: ```git push origin feature-branch```.
+5. Submit a pull request.
+
+Please follow the code formatting guidelines and include tests for new features where applicable.
 
 ---
 
 ## <a name="license"></a>License:
+
 MIT License. See LICENSE for more information.
 
 ---
 
 ## <a name="acknowledgments"></a>Acknowledgments:
+
 - **MongoDB Atlas** for the cloud database service.
 - **Heroku** for hosting the app.
 - **Netlify** for frontend deployment.
